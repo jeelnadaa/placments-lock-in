@@ -1,0 +1,1202 @@
+[
+  {
+    "id": 1,
+    "title": "Two Sum",
+    "day": 1,
+    "order": 1,
+    "topic": "Arrays & Hashing",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/two-sum/",
+    "neetcodeUrl": "https://neetcode.io/problems/two-integer-sum",
+    "leetcodePremium": false,
+    "hints": [
+      "Checking every pair works, but what does that cost? Think about what you're really searching for at each element.",
+      "For the current number, exactly which other value would complete the target? Can you look that up instantly?",
+      "Scan once while remembering values already seen with their indices (hash map). Check for the complement before inserting. Target: O(n) time, O(n) space."
+    ]
+  },
+  {
+    "id": 125,
+    "title": "Valid Palindrome",
+    "day": 1,
+    "order": 2,
+    "topic": "Two Pointers",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/valid-palindrome/",
+    "neetcodeUrl": "https://neetcode.io/problems/is-palindrome",
+    "leetcodePremium": false,
+    "hints": [
+      "Ignore non-alphanumeric characters and case. What is the cheapest way to compare mirror positions?",
+      "You only need to look at the two ends and move inward.",
+      "Two indices, left and right; skip characters that aren't letters or digits; compare lowercase; stop when they cross."
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Valid Parentheses",
+    "day": 1,
+    "order": 3,
+    "topic": "Stack",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/valid-parentheses/",
+    "neetcodeUrl": "https://neetcode.io/problems/validate-parentheses",
+    "leetcodePremium": false,
+    "hints": [
+      "The most recently opened bracket must be the first one closed.",
+      "Which data structure gives you last-in, first-out?",
+      "Push openers; on a closer, the stack must be non-empty and its top must match. At the end the stack must be empty."
+    ]
+  },
+  {
+    "id": 121,
+    "title": "Best Time to Buy and Sell Stock",
+    "day": 1,
+    "order": 4,
+    "topic": "Sliding Window",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+    "neetcodeUrl": "https://neetcode.io/problems/buy-and-sell-crypto",
+    "leetcodePremium": false,
+    "hints": [
+      "You must buy before you sell, so order matters.",
+      "At each day, what single piece of past information would let you compute the best profit if you sold today?",
+      "Track the minimum price so far; profit today = price - minSoFar; keep the max profit. One pass, O(1) space."
+    ]
+  },
+  {
+    "id": 191,
+    "title": "Number of 1 Bits",
+    "day": 1,
+    "order": 5,
+    "topic": "Bit Manipulation",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/number-of-1-bits/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Look at the lowest bit of the number.",
+      "Is there a trick that removes only the lowest set bit?",
+      "Loop n &= (n - 1) and count iterations until n is 0."
+    ]
+  },
+  {
+    "id": 217,
+    "title": "Contains Duplicate",
+    "day": 2,
+    "order": 1,
+    "topic": "Arrays & Hashing",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/contains-duplicate/",
+    "neetcodeUrl": "https://neetcode.io/problems/duplicate-integer",
+    "leetcodePremium": false,
+    "hints": [
+      "Comparing every pair is the obvious approach. Is there a cheaper way to ask 'have I met this value before?'",
+      "You want a structure with constant-time membership checks.",
+      "One pass with a hash set: if the value is already in the set, return true. (Alternative: sort and compare neighbours.)"
+    ]
+  },
+  {
+    "id": 206,
+    "title": "Reverse Linked List",
+    "day": 2,
+    "order": 2,
+    "topic": "Linked List",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/reverse-linked-list/",
+    "neetcodeUrl": "https://neetcode.io/problems/reverse-a-linked-list",
+    "leetcodePremium": false,
+    "hints": [
+      "Every node's next pointer must end up pointing backwards.",
+      "If you overwrite next, you lose the rest of the list. What must you save first?",
+      "Iterate with prev (null), curr, and a temp for curr.next: save next, point curr.next to prev, advance both. Recursion also works."
+    ]
+  },
+  {
+    "id": 226,
+    "title": "Invert Binary Tree",
+    "day": 2,
+    "order": 3,
+    "topic": "Trees",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/invert-binary-tree/",
+    "neetcodeUrl": "https://neetcode.io/problems/invert-a-binary-tree",
+    "leetcodePremium": false,
+    "hints": [
+      "Every node's two children swap places.",
+      "The same operation applies to each subtree.",
+      "Recursively swap left and right at every node (base case: null). BFS/DFS iterative also works."
+    ]
+  },
+  {
+    "id": 70,
+    "title": "Climbing Stairs",
+    "day": 2,
+    "order": 4,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/climbing-stairs/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "To reach step n, which earlier steps could you have come from?",
+      "Does the count of ways remind you of a famous sequence?",
+      "ways(n) = ways(n-1) + ways(n-2); keep just two variables for O(1) space."
+    ]
+  },
+  {
+    "id": 53,
+    "title": "Maximum Subarray",
+    "day": 2,
+    "order": 5,
+    "topic": "Greedy",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/maximum-subarray/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "When is the running sum of a subarray hurting you?",
+      "If the running sum goes negative, should you continue it?",
+      "Kadane's: cur = max(x, cur + x); best = max(best, cur). O(n), O(1)."
+    ]
+  },
+  {
+    "id": 242,
+    "title": "Valid Anagram",
+    "day": 3,
+    "order": 1,
+    "topic": "Arrays & Hashing",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/valid-anagram/",
+    "neetcodeUrl": "https://neetcode.io/problems/is-anagram",
+    "leetcodePremium": false,
+    "hints": [
+      "Two strings are anagrams when they contain the same characters with the same frequencies.",
+      "You don't need to sort; you just need to compare counts.",
+      "Quick length check, then a 26-slot count array (or map): +1 for chars in s, -1 for chars in t, all zeros means anagram. O(n) time."
+    ]
+  },
+  {
+    "id": 21,
+    "title": "Merge Two Sorted Lists",
+    "day": 3,
+    "order": 2,
+    "topic": "Linked List",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/merge-two-sorted-lists/",
+    "neetcodeUrl": "https://neetcode.io/problems/merge-two-sorted-linked-lists",
+    "leetcodePremium": false,
+    "hints": [
+      "Compare the two current heads and take the smaller one.",
+      "A dummy starting node saves you from special-casing the first node.",
+      "Keep a tail pointer; attach the smaller head and advance; when one list ends, attach the rest of the other."
+    ]
+  },
+  {
+    "id": 104,
+    "title": "Maximum Depth of Binary Tree",
+    "day": 3,
+    "order": 3,
+    "topic": "Trees",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+    "neetcodeUrl": "https://neetcode.io/problems/depth-of-binary-tree",
+    "leetcodePremium": false,
+    "hints": [
+      "The depth of a tree is built from the depth of its parts.",
+      "What is the depth of an empty tree?",
+      "1 + max(depth(left), depth(right)), with null returning 0. BFS level counting is the iterative alternative."
+    ]
+  },
+  {
+    "id": 338,
+    "title": "Counting Bits",
+    "day": 3,
+    "order": 4,
+    "topic": "Bit Manipulation",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/counting-bits/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Computing bits per number from scratch repeats work.",
+      "Relate the count for i to the count of a smaller number.",
+      "bits[i] = bits[i >> 1] + (i & 1). O(n)."
+    ]
+  },
+  {
+    "id": 153,
+    "title": "Find Minimum in Rotated Sorted Array",
+    "day": 3,
+    "order": 5,
+    "topic": "Binary Search",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+    "neetcodeUrl": "https://neetcode.io/problems/find-minimum-in-rotated-sorted-array",
+    "leetcodePremium": false,
+    "hints": [
+      "The array was sorted, then rotated. Where does the order 'break'?",
+      "Compare the middle element with the right end to decide which half contains the smallest value.",
+      "Binary search: if nums[mid] > nums[right], the minimum is in (mid, right]; otherwise it's in [left, mid]. O(log n)."
+    ]
+  },
+  {
+    "id": 49,
+    "title": "Group Anagrams",
+    "day": 4,
+    "order": 1,
+    "topic": "Arrays & Hashing",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/group-anagrams/",
+    "neetcodeUrl": "https://neetcode.io/problems/anagram-groups",
+    "leetcodePremium": false,
+    "hints": [
+      "Anagrams look different but share something identical once you transform them.",
+      "What 'signature' is the same for every anagram of a word? Use that as a grouping key.",
+      "Hash map from signature (sorted string, or a 26-count key) to a list of words. Return the map's values."
+    ]
+  },
+  {
+    "id": 15,
+    "title": "3Sum",
+    "day": 4,
+    "order": 2,
+    "topic": "Two Pointers",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/3sum/",
+    "neetcodeUrl": "https://neetcode.io/problems/three-integer-sum",
+    "leetcodePremium": false,
+    "hints": [
+      "Trying all triples is O(n^3). What if you fix one number first? What's left to find?",
+      "After fixing one number, the rest is a pair-sum problem, which gets easy when the array is sorted.",
+      "Sort, loop i, then use left/right pointers on the rest. Skip duplicate values for i, left and right so triplets aren't repeated. O(n^2)."
+    ]
+  },
+  {
+    "id": 141,
+    "title": "Linked List Cycle",
+    "day": 4,
+    "order": 3,
+    "topic": "Linked List",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/linked-list-cycle/",
+    "neetcodeUrl": "https://neetcode.io/problems/linked-list-cycle-detection",
+    "leetcodePremium": false,
+    "hints": [
+      "A set of visited nodes works but uses extra memory. Is there an O(1)-space way?",
+      "Imagine two runners on a loop moving at different speeds.",
+      "Slow moves 1 step, fast moves 2. If they ever meet there's a cycle; if fast reaches null there isn't."
+    ]
+  },
+  {
+    "id": 100,
+    "title": "Same Tree",
+    "day": 4,
+    "order": 4,
+    "topic": "Trees",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/same-tree/",
+    "neetcodeUrl": "https://neetcode.io/problems/same-binary-tree",
+    "leetcodePremium": false,
+    "hints": [
+      "Two trees match when the roots match and both subtrees match.",
+      "Be careful about null cases: both null, one null.",
+      "Recursive: both null -> true; one null or values differ -> false; else same(left,left) && same(right,right)."
+    ]
+  },
+  {
+    "id": 198,
+    "title": "House Robber",
+    "day": 4,
+    "order": 5,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/house-robber/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "At each house you choose: take it or skip it.",
+      "If you take house i, what must be true about house i-1?",
+      "dp[i] = max(dp[i-1], dp[i-2] + nums[i]); two rolling variables are enough."
+    ]
+  },
+  {
+    "id": 347,
+    "title": "Top K Frequent Elements",
+    "day": 5,
+    "order": 1,
+    "topic": "Arrays & Hashing",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/top-k-frequent-elements/",
+    "neetcodeUrl": "https://neetcode.io/problems/top-k-elements-in-list",
+    "leetcodePremium": false,
+    "hints": [
+      "You need to know how often each value appears before you can rank anything.",
+      "Sorting by frequency works in O(n log n). Can you avoid a full sort, since frequency is bounded by n?",
+      "Count with a map, then either bucket values by frequency (index = count) and read from the highest bucket down, or keep a size-k min-heap."
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Longest Substring Without Repeating Characters",
+    "day": 5,
+    "order": 2,
+    "topic": "Sliding Window",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+    "neetcodeUrl": "https://neetcode.io/problems/longest-substring-without-duplicates",
+    "leetcodePremium": false,
+    "hints": [
+      "Checking every substring is too slow. Think about a range that grows and shrinks as you scan.",
+      "Maintain a range that never contains a repeated character. What do you do the moment a repeat appears?",
+      "Two pointers with a set (or map of last-seen index). On a duplicate, advance the left pointer past the earlier occurrence. Track max length. O(n)."
+    ]
+  },
+  {
+    "id": 33,
+    "title": "Search in Rotated Sorted Array",
+    "day": 5,
+    "order": 3,
+    "topic": "Binary Search",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+    "neetcodeUrl": "https://neetcode.io/problems/find-target-in-rotated-sorted-array",
+    "leetcodePremium": false,
+    "hints": [
+      "Even after rotation, at least one half around the middle is properly sorted.",
+      "Find which half is sorted, then check if the target falls inside that half's range.",
+      "Binary search: if left half sorted and target in it, go left, else go right (and mirror for the other case). O(log n)."
+    ]
+  },
+  {
+    "id": 56,
+    "title": "Merge Intervals",
+    "day": 5,
+    "order": 4,
+    "topic": "Intervals",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/merge-intervals/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Order matters. What would help if the intervals were arranged first?",
+      "Only the most recent merged interval can overlap with the next one.",
+      "Sort by start; if current.start <= last.end then last.end = max(last.end, current.end); otherwise append."
+    ]
+  },
+  {
+    "id": 268,
+    "title": "Missing Number",
+    "day": 5,
+    "order": 5,
+    "topic": "Bit Manipulation",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/missing-number/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "The numbers 0..n are present except one.",
+      "Something about the full range is known without looking at the array.",
+      "Use the sum formula n(n+1)/2 minus the array sum, or XOR all indices and values. O(n) time, O(1) space."
+    ]
+  },
+  {
+    "id": 238,
+    "title": "Product of Array Except Self",
+    "day": 6,
+    "order": 1,
+    "topic": "Arrays & Hashing",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/product-of-array-except-self/",
+    "neetcodeUrl": "https://neetcode.io/problems/products-of-array-discluding-self",
+    "leetcodePremium": false,
+    "hints": [
+      "Division isn't allowed, so think about what the answer at index i is actually made of.",
+      "The answer at i is (product of everything to the left) x (product of everything to the right).",
+      "First pass fills result[i] with the prefix product; second pass goes right to left with a running suffix product multiplied in. O(n) time, O(1) extra space."
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Container With Most Water",
+    "day": 6,
+    "order": 2,
+    "topic": "Two Pointers",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/container-with-most-water/",
+    "neetcodeUrl": "https://neetcode.io/problems/max-water-container",
+    "leetcodePremium": false,
+    "hints": [
+      "Area = width x the shorter of the two lines. What limits a wide container?",
+      "Start with the widest container. Which side would you have to change to possibly get a bigger area?",
+      "Pointers at both ends; compute area; move the pointer at the shorter line inward (moving the taller one can't help). Track the max. O(n)."
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Remove Nth Node From End of List",
+    "day": 6,
+    "order": 3,
+    "topic": "Linked List",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+    "neetcodeUrl": "https://neetcode.io/problems/remove-node-from-end-of-linked-list",
+    "leetcodePremium": false,
+    "hints": [
+      "Removing the nth from the end seems to need the length. Can you avoid a two-pass solution?",
+      "Use two pointers separated by a fixed gap.",
+      "Dummy node before head. Move fast n steps ahead, then move both until fast reaches the end; slow.next is the node to remove."
+    ]
+  },
+  {
+    "id": 572,
+    "title": "Subtree of Another Tree",
+    "day": 6,
+    "order": 4,
+    "topic": "Trees",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/subtree-of-another-tree/",
+    "neetcodeUrl": "https://neetcode.io/problems/subtree-of-a-binary-tree",
+    "leetcodePremium": false,
+    "hints": [
+      "You may already own a helper that tells you whether two trees are identical.",
+      "Where could the smaller tree's root appear in the bigger tree?",
+      "At every node of root, test sameTree(node, subRoot); otherwise recurse into the left and right children."
+    ]
+  },
+  {
+    "id": 55,
+    "title": "Jump Game",
+    "day": 6,
+    "order": 5,
+    "topic": "Greedy",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/jump-game/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "You only need to know if the end is reachable, not the path.",
+      "Track how far you can reach so far.",
+      "Loop i: if i > farthest return false; farthest = max(farthest, i + nums[i]). Return true at the end (or work backwards moving a 'goal')."
+    ]
+  },
+  {
+    "id": 271,
+    "title": "Encode and Decode Strings",
+    "day": 7,
+    "order": 1,
+    "topic": "Arrays & Hashing",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/encode-and-decode-strings/",
+    "neetcodeUrl": "https://neetcode.io/problems/string-encode-and-decode",
+    "leetcodePremium": true,
+    "hints": [
+      "A simple delimiter fails if strings can contain any character, including your delimiter.",
+      "Encode extra information with each string so the decoder knows exactly where it ends.",
+      "Write length + a separator + the string for each one. To decode, read the number up to the separator, then take exactly that many characters and repeat."
+    ]
+  },
+  {
+    "id": 424,
+    "title": "Longest Repeating Character Replacement",
+    "day": 7,
+    "order": 2,
+    "topic": "Sliding Window",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+    "neetcodeUrl": "https://neetcode.io/problems/longest-repeating-substring-with-replacement",
+    "leetcodePremium": false,
+    "hints": [
+      "A range is valid if (its length minus the count of its most frequent character) is at most k.",
+      "Grow the range from the right; only shrink when it becomes invalid.",
+      "Use a 26-slot count array and track the max frequency seen in the window. The window can stay at its best size and slide. O(n)."
+    ]
+  },
+  {
+    "id": 102,
+    "title": "Binary Tree Level Order Traversal",
+    "day": 7,
+    "order": 3,
+    "topic": "Trees",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+    "neetcodeUrl": "https://neetcode.io/problems/level-order-traversal-of-binary-tree",
+    "leetcodePremium": false,
+    "hints": [
+      "You need nodes grouped by depth.",
+      "Which traversal naturally processes a tree level by level?",
+      "BFS with a queue; at each round process exactly queue.size() nodes to form one level."
+    ]
+  },
+  {
+    "id": 322,
+    "title": "Coin Change",
+    "day": 7,
+    "order": 4,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/coin-change/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Taking the largest coin first can fail. Why?",
+      "The best answer for an amount depends on best answers for smaller amounts.",
+      "dp[0]=0; dp[a] = min over coins c of dp[a-c] + 1; initialise others to amount+1; if dp[amount] > amount return -1."
+    ]
+  },
+  {
+    "id": 57,
+    "title": "Insert Interval",
+    "day": 7,
+    "order": 5,
+    "topic": "Intervals",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/insert-interval/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "The existing intervals are sorted and don't overlap.",
+      "Split the work into three phases by how intervals relate to the new one.",
+      "Add all intervals ending before the new start; merge overlaps by taking min start / max end; then add the rest."
+    ]
+  },
+  {
+    "id": 143,
+    "title": "Reorder List",
+    "day": 8,
+    "order": 1,
+    "topic": "Linked List",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/reorder-list/",
+    "neetcodeUrl": "https://neetcode.io/problems/reorder-linked-list",
+    "leetcodePremium": false,
+    "hints": [
+      "Target order alternates: first, last, second, second-last, ...",
+      "Break it into three smaller list tasks you already know.",
+      "Find the middle (slow/fast), reverse the second half, then merge the two halves by alternating nodes."
+    ]
+  },
+  {
+    "id": 235,
+    "title": "Lowest Common Ancestor of a Binary Search Tree",
+    "day": 8,
+    "order": 2,
+    "topic": "Trees",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+    "neetcodeUrl": "https://neetcode.io/problems/lowest-common-ancestor-in-binary-search-tree",
+    "leetcodePremium": false,
+    "hints": [
+      "The BST ordering tells you which side each value lives on.",
+      "If both values are on the same side of the current node, where must the answer be?",
+      "Walk down from root: both smaller -> go left; both larger -> go right; otherwise this node is the answer. O(h)."
+    ]
+  },
+  {
+    "id": 213,
+    "title": "House Robber II",
+    "day": 8,
+    "order": 3,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/house-robber-ii/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "The houses form a circle, so first and last are neighbours.",
+      "You can never take both ends. What does that suggest about splitting the problem?",
+      "Run the linear House Robber twice: on nums[0..n-2] and on nums[1..n-1]; take the larger. Handle n = 1."
+    ]
+  },
+  {
+    "id": 48,
+    "title": "Rotate Image",
+    "day": 8,
+    "order": 4,
+    "topic": "Math & Geometry",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/rotate-image/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "A rotation can be broken down into simpler matrix operations.",
+      "Think of one flip across a diagonal and one reversal.",
+      "Transpose the matrix, then reverse each row (for 90 degrees clockwise). In place, O(1) extra space."
+    ]
+  },
+  {
+    "id": 190,
+    "title": "Reverse Bits",
+    "day": 8,
+    "order": 5,
+    "topic": "Bit Manipulation",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/reverse-bits/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Build the result one bit at a time.",
+      "Take the lowest bit of n, push it onto the result from the right.",
+      "Loop 32 times: result = (result << 1) | (n & 1); n >>>= 1 (use unsigned shift in Java)."
+    ]
+  },
+  {
+    "id": 128,
+    "title": "Longest Consecutive Sequence",
+    "day": 9,
+    "order": 1,
+    "topic": "Arrays & Hashing",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/longest-consecutive-sequence/",
+    "neetcodeUrl": "https://neetcode.io/problems/longest-consecutive-sequence",
+    "leetcodePremium": false,
+    "hints": [
+      "Sorting is O(n log n). The problem asks for better, so avoid ordering the data.",
+      "A consecutive run only needs to be counted once, from its very first number. How do you recognise a first number?",
+      "Put everything in a set. For each num where num-1 is absent, count upward (num+1, num+2, ...) while present; track the longest. O(n)."
+    ]
+  },
+  {
+    "id": 98,
+    "title": "Validate Binary Search Tree",
+    "day": 9,
+    "order": 2,
+    "topic": "Trees",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/validate-binary-search-tree/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Comparing each node only with its parent is not enough.",
+      "Every node must sit within a range inherited from all of its ancestors.",
+      "Recurse with (min, max) bounds, narrowing on each side (use long or null bounds to avoid int edge cases). Or check that in-order traversal is strictly increasing."
+    ]
+  },
+  {
+    "id": 200,
+    "title": "Number of Islands",
+    "day": 9,
+    "order": 3,
+    "topic": "Graphs",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/number-of-islands/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "An island is a group of connected land cells.",
+      "When you meet unvisited land, how do you make sure you never count that same island again?",
+      "Scan the grid; on land, increment count and flood-fill the whole island (DFS/BFS) marking cells visited."
+    ]
+  },
+  {
+    "id": 91,
+    "title": "Decode Ways",
+    "day": 9,
+    "order": 4,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/decode-ways/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "At each position, a single digit and a pair of digits might each form a letter.",
+      "Zeros need special care: when are they valid?",
+      "dp[i] = (s[i-1] != '0' ? dp[i-1] : 0) + (10 <= two-digit <= 26 ? dp[i-2] : 0). Two variables suffice."
+    ]
+  },
+  {
+    "id": 435,
+    "title": "Non-overlapping Intervals",
+    "day": 9,
+    "order": 5,
+    "topic": "Intervals",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/non-overlapping-intervals/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Removing the fewest is the same as keeping the most.",
+      "When two intervals overlap, which one should you keep?",
+      "Sort by end time; greedily keep intervals that start at/after the last kept end; count the ones you skip."
+    ]
+  },
+  {
+    "id": 230,
+    "title": "Kth Smallest Element in a BST",
+    "day": 10,
+    "order": 1,
+    "topic": "Trees",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "What traversal order visits a BST's values in sorted order?",
+      "You don't need to visit every node, you can stop early.",
+      "Iterative in-order using a stack; decrement k each time you pop; the kth pop is the answer."
+    ]
+  },
+  {
+    "id": 133,
+    "title": "Clone Graph",
+    "day": 10,
+    "order": 2,
+    "topic": "Graphs",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/clone-graph/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "You must produce new nodes without confusing them with originals.",
+      "Cycles can make you copy forever unless you remember what is already copied.",
+      "HashMap original -> clone; DFS/BFS: create clone if missing, then clone and link all neighbours."
+    ]
+  },
+  {
+    "id": 152,
+    "title": "Maximum Product Subarray",
+    "day": 10,
+    "order": 3,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/maximum-product-subarray/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Negatives can flip a very small product into a very large one.",
+      "Keeping only the max product ending here is not enough. What else do you need?",
+      "Track both max and min product ending at each index; new max/min come from {x, x*max, x*min}. Track the global max."
+    ]
+  },
+  {
+    "id": 54,
+    "title": "Spiral Matrix",
+    "day": 10,
+    "order": 4,
+    "topic": "Math & Geometry",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/spiral-matrix/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Walk in one direction until a boundary, then turn.",
+      "Keep four shrinking boundaries.",
+      "top/bottom/left/right pointers; traverse each edge in order and shrink; guard against a single leftover row or column."
+    ]
+  },
+  {
+    "id": 208,
+    "title": "Implement Trie (Prefix Tree)",
+    "day": 10,
+    "order": 5,
+    "topic": "Tries",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Each character on a path leads to the next one.",
+      "What should a single node store?",
+      "Node with children (array[26] or map) and an end-of-word flag. insert/search/startsWith all walk the path char by char."
+    ]
+  },
+  {
+    "id": 207,
+    "title": "Course Schedule",
+    "day": 11,
+    "order": 1,
+    "topic": "Graphs",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Courses and prerequisites form a graph.",
+      "When is it impossible to finish all courses?",
+      "Detect a cycle: DFS with unvisited/visiting/done states, or topological sort with indegrees (Kahn's). No cycle -> true."
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Longest Palindromic Substring",
+    "day": 11,
+    "order": 2,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/longest-palindromic-substring/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Palindromes mirror around a centre.",
+      "How many distinct centres can a string have (think odd and even length)?",
+      "Expand outward from each of the 2n-1 centres while characters match; keep the longest range. O(n^2) time, O(1) space."
+    ]
+  },
+  {
+    "id": 39,
+    "title": "Combination Sum",
+    "day": 11,
+    "order": 3,
+    "topic": "Backtracking",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/combination-sum/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Numbers can be reused, so what choices exist at each step?",
+      "At each step you either use the current candidate again or move to the next.",
+      "Backtracking with a start index (avoids duplicate combos) and remaining target; stop when remaining < 0, record when it hits 0."
+    ]
+  },
+  {
+    "id": 73,
+    "title": "Set Matrix Zeroes",
+    "day": 11,
+    "order": 4,
+    "topic": "Math & Geometry",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/set-matrix-zeroes/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Zeroing as you scan corrupts information about later cells.",
+      "You need to remember which rows and columns to clear. Where can you store that without extra space?",
+      "Use the first row and first column as markers, with two flags for whether they themselves need zeroing. O(1) space."
+    ]
+  },
+  {
+    "id": 371,
+    "title": "Sum of Two Integers",
+    "day": 11,
+    "order": 5,
+    "topic": "Bit Manipulation",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/sum-of-two-integers/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "You can't use + or -. How else can you add?",
+      "Addition splits into a sum without carry and the carry itself.",
+      "XOR gives the sum without carry; (a & b) << 1 gives the carry. Loop until carry is 0. Java ints handle negatives via two's complement."
+    ]
+  },
+  {
+    "id": 417,
+    "title": "Pacific Atlantic Water Flow",
+    "day": 12,
+    "order": 1,
+    "topic": "Graphs",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Checking every cell's route to both oceans repeats a lot of work.",
+      "Reverse the viewpoint: start from the oceans and walk uphill.",
+      "Multi-source DFS/BFS from each ocean's border, moving to cells with height >= current. Answer is the intersection of the two visited sets."
+    ]
+  },
+  {
+    "id": 647,
+    "title": "Palindromic Substrings",
+    "day": 12,
+    "order": 2,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/palindromic-substrings/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "It's closely related to finding the longest palindromic substring.",
+      "Instead of keeping only the longest, what should you do at every successful expansion?",
+      "Expand around each centre (odd and even) and add 1 to the count for every palindrome found."
+    ]
+  },
+  {
+    "id": 79,
+    "title": "Word Search",
+    "day": 12,
+    "order": 3,
+    "topic": "Backtracking",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/word-search/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Try every cell as a starting point.",
+      "A cell cannot be reused within one path. How do you mark it temporarily?",
+      "DFS with in-place marking (restore after returning); prune immediately on character mismatch or out of bounds."
+    ]
+  },
+  {
+    "id": 211,
+    "title": "Design Add and Search Words Data Structure",
+    "day": 12,
+    "order": 4,
+    "topic": "Tries",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/design-add-and-search-words-data-structure/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "It's the same structure as a prefix tree, plus one twist.",
+      "What do you do with a '.' when you can't know which child to take?",
+      "Trie plus DFS: for a letter follow that child; for '.' try every existing child recursively."
+    ]
+  },
+  {
+    "id": 252,
+    "title": "Meeting Rooms",
+    "day": 12,
+    "order": 5,
+    "topic": "Intervals",
+    "difficulty": "Easy",
+    "leetcodeUrl": "https://leetcode.com/problems/meeting-rooms/",
+    "neetcodeUrl": "https://neetcode.io/problems/meeting-schedule",
+    "leetcodePremium": true,
+    "hints": [
+      "If any two meetings overlap, attending all is impossible.",
+      "Sorting puts potential overlaps next to each other.",
+      "Sort by start; if any meeting starts before the previous one ends, return false."
+    ]
+  },
+  {
+    "id": 105,
+    "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+    "day": 13,
+    "order": 1,
+    "topic": "Trees",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Which element is always the root, according to the first traversal?",
+      "Where that root sits in the other traversal splits left and right subtrees.",
+      "Map value -> index for inorder (O(1) lookup). Build recursively using a moving preorder pointer and inorder bounds. O(n)."
+    ]
+  },
+  {
+    "id": 300,
+    "title": "Longest Increasing Subsequence",
+    "day": 13,
+    "order": 2,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/longest-increasing-subsequence/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "The best subsequence ending at i depends on earlier smaller elements.",
+      "An O(n^2) table is a fine first version. Can you improve it afterwards?",
+      "dp[i] = 1 + max(dp[j]) for j<i with nums[j]<nums[i]. Faster: maintain a 'tails' array and binary-search each element's position, O(n log n)."
+    ]
+  },
+  {
+    "id": 62,
+    "title": "Unique Paths",
+    "day": 13,
+    "order": 3,
+    "topic": "2-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/unique-paths/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "A robot can only enter a cell from two directions.",
+      "How do the paths into a cell relate to its two neighbours?",
+      "paths[r][c] = paths[r-1][c] + paths[r][c-1]; can be compressed to a single row. A combinatorics formula also exists."
+    ]
+  },
+  {
+    "id": 261,
+    "title": "Graph Valid Tree",
+    "day": 13,
+    "order": 4,
+    "topic": "Graphs",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/graph-valid-tree/",
+    "neetcodeUrl": "https://neetcode.io/problems/valid-tree",
+    "leetcodePremium": true,
+    "hints": [
+      "Count the edges first: how many does a connected acyclic graph on n nodes have?",
+      "If the count is right, only one more property needs checking.",
+      "Need exactly n-1 edges and connectivity (one DFS/BFS from node 0 reaches all), or union-find detects a cycle."
+    ]
+  },
+  {
+    "id": 253,
+    "title": "Meeting Rooms II",
+    "day": 13,
+    "order": 5,
+    "topic": "Intervals",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/meeting-rooms-ii/",
+    "neetcodeUrl": "https://neetcode.io/problems/meeting-schedule-ii",
+    "leetcodePremium": true,
+    "hints": [
+      "You want the largest number of meetings happening simultaneously.",
+      "Think about when rooms become free.",
+      "Sort by start and keep a min-heap of end times (pop if earliest end <= new start). Heap size peak = answer. Or sort starts and ends separately with two pointers."
+    ]
+  },
+  {
+    "id": 139,
+    "title": "Word Break",
+    "day": 14,
+    "order": 1,
+    "topic": "1-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/word-break/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Ask: can this prefix of the string be built from dictionary words?",
+      "Answer smaller prefixes first and reuse them.",
+      "dp[i] is true if some j < i has dp[j] true and s[j..i) is in the dictionary. dp[0] = true."
+    ]
+  },
+  {
+    "id": 1143,
+    "title": "Longest Common Subsequence",
+    "day": 14,
+    "order": 2,
+    "topic": "2-D Dynamic Programming",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/longest-common-subsequence/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Compare the last characters of the two prefixes.",
+      "If they match you extend something; if not you must drop one character from one side.",
+      "dp[i][j] = s1[i-1]==s2[j-1] ? dp[i-1][j-1]+1 : max(dp[i-1][j], dp[i][j-1])."
+    ]
+  },
+  {
+    "id": 323,
+    "title": "Number of Connected Components in an Undirected Graph",
+    "day": 14,
+    "order": 3,
+    "topic": "Graphs",
+    "difficulty": "Medium",
+    "leetcodeUrl": "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/",
+    "neetcodeUrl": "https://neetcode.io/problems/count-connected-components",
+    "leetcodePremium": true,
+    "hints": [
+      "You're counting separate groups of connected nodes.",
+      "Traverse each group once, or merge groups as edges arrive.",
+      "DFS/BFS from each unvisited node counting starts, or Union-Find starting with n components and decrementing on each successful union."
+    ]
+  },
+  {
+    "id": 297,
+    "title": "Serialize and Deserialize Binary Tree",
+    "day": 14,
+    "order": 4,
+    "topic": "Trees",
+    "difficulty": "Hard",
+    "leetcodeUrl": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "You need to preserve the structure, so null children must be recorded.",
+      "Choose one traversal and use it consistently for both directions.",
+      "Preorder with a marker like 'N' for null and a delimiter; deserialize by consuming tokens recursively from a queue/iterator."
+    ]
+  },
+  {
+    "id": 23,
+    "title": "Merge K Sorted Lists",
+    "day": 14,
+    "order": 5,
+    "topic": "Linked List",
+    "difficulty": "Hard",
+    "leetcodeUrl": "https://leetcode.com/problems/merge-k-sorted-lists/",
+    "neetcodeUrl": "https://neetcode.io/problems/merge-k-sorted-linked-lists",
+    "leetcodePremium": false,
+    "hints": [
+      "You already know how to merge two sorted lists. What's expensive about doing it k times in a row?",
+      "At each step you just need the smallest among k current heads.",
+      "Use a min-heap of the k heads, or merge lists pairwise in a divide-and-conquer fashion. O(N log k)."
+    ]
+  },
+  {
+    "id": 76,
+    "title": "Minimum Window Substring",
+    "day": 15,
+    "order": 1,
+    "topic": "Sliding Window",
+    "difficulty": "Hard",
+    "leetcodeUrl": "https://leetcode.com/problems/minimum-window-substring/",
+    "neetcodeUrl": "https://neetcode.io/problems/minimum-window-with-characters",
+    "leetcodePremium": false,
+    "hints": [
+      "You need counts of what's required versus what the current range holds.",
+      "Expand until the range satisfies the requirement, then shrink from the left as far as possible while it still does.",
+      "Keep need/have counters plus a 'formed' count of satisfied characters to check validity in O(1). Record the smallest valid range. O(n)."
+    ]
+  },
+  {
+    "id": 124,
+    "title": "Binary Tree Maximum Path Sum",
+    "day": 15,
+    "order": 2,
+    "topic": "Trees",
+    "difficulty": "Hard",
+    "leetcodeUrl": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "A best path may use both children of a node, but think about what a parent can use from that node.",
+      "A node can pass up only one downward branch to its parent, never both.",
+      "DFS returns node + max(0, bestLeft, bestRight) to the parent; update a global max with node + max(0,left) + max(0,right)."
+    ]
+  },
+  {
+    "id": 212,
+    "title": "Word Search II",
+    "day": 15,
+    "order": 3,
+    "topic": "Tries",
+    "difficulty": "Hard",
+    "leetcodeUrl": "https://leetcode.com/problems/word-search-ii/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "Running a grid search per word is too slow when there are many words.",
+      "Words that share prefixes can share work.",
+      "Build a trie of all words, DFS from every cell following trie edges, mark cells visited, collect words at end nodes, and prune exhausted branches."
+    ]
+  },
+  {
+    "id": 295,
+    "title": "Find Median from Data Stream",
+    "day": 15,
+    "order": 4,
+    "topic": "Heap / Priority Queue",
+    "difficulty": "Hard",
+    "leetcodeUrl": "https://leetcode.com/problems/find-median-from-data-stream/",
+    "neetcodeUrl": null,
+    "leetcodePremium": false,
+    "hints": [
+      "The median sits at the boundary between a lower half and an upper half.",
+      "Which two values do you need quick access to: the largest of the lower half and the smallest of the upper half?",
+      "Max-heap for the lower half, min-heap for the upper half; keep their sizes within 1 of each other; median from the tops."
+    ]
+  },
+  {
+    "id": 269,
+    "title": "Alien Dictionary",
+    "day": 15,
+    "order": 5,
+    "topic": "Advanced Graphs",
+    "difficulty": "Hard",
+    "leetcodeUrl": "https://leetcode.com/problems/alien-dictionary/",
+    "neetcodeUrl": "https://neetcode.io/problems/foreign-dictionary",
+    "leetcodePremium": true,
+    "hints": [
+      "Adjacent words in a sorted list reveal ordering between some characters.",
+      "Compare each neighbouring pair at the first position where they differ.",
+      "Build edges from those differences and topologically sort. Watch invalid input like 'abc' before 'ab', and return empty on a cycle."
+    ]
+  }
+]
