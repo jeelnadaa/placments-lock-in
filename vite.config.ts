@@ -11,6 +11,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    watch: {
+      ignored: ['**/.scratch/**'],
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

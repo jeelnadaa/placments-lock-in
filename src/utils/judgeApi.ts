@@ -1,8 +1,9 @@
-import { RunResponse, SubmitResponse } from '../types';
+import { RunResponse, SubmitResponse, SupportedLanguage } from '../types';
 
 export async function runJudgeCases(params: {
   problemId: number;
   code: string;
+  language?: SupportedLanguage;
   cases: { inputs: Record<string, unknown>; expected?: unknown }[];
 }): Promise<RunResponse> {
   const res = await fetch('/api/judge/run', {
@@ -27,6 +28,7 @@ export async function runJudgeCases(params: {
 export async function submitJudgeSolution(params: {
   problemId: number;
   code: string;
+  language?: SupportedLanguage;
 }): Promise<SubmitResponse> {
   const res = await fetch('/api/judge/submit', {
     method: 'POST',

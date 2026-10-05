@@ -4,8 +4,12 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import { createRequire } from 'module';
 import { executeJavaSolution, RawTestOutput, JudgeExecutionResult } from './judge/runner';
+import { executePythonSolution } from './judge/pythonRunner';
+import { executeCppSolution } from './judge/cppRunner';
+import { executeCSolution } from './judge/cRunner';
+import { executeGoSolution } from './judge/goRunner';
 import { compareResults } from './judge/comparators';
-import { ProblemMeta, RunResponse, SubmitResponse, TestResultItem } from '../src/types';
+import { ProblemMeta, RunResponse, SubmitResponse, TestResultItem, SupportedLanguage } from '../src/types';
 
 const execAsync = promisify(exec);
 const req = createRequire(import.meta.url);
@@ -57,9 +61,10 @@ export function loadCustomChecker(problemId: number): ((inputs: Record<string, u
 export async function handleRunCode(payload: {
   problemId: number;
   code: string;
+  language?: SupportedLanguage;
   cases: { inputs: Record<string, unknown>; expected?: unknown }[];
 }): Promise<RunResponse> {
-  const { problemId, code, cases } = payload;
+  const { problemId, code, language = 'java', cases } = payload;
   const meta = loadProblemMeta(problemId);
   const customChecker = loadCustomChecker(problemId);
 
@@ -98,13 +103,47 @@ export async function handleRunCode(payload: {
   // Execute user solution on all provided cases
   let execResult: JudgeExecutionResult;
   try {
-    execResult = await executeJavaSolution({
-      problemMeta: meta,
-      code,
-      tests: casesWithExpected.map((c, idx) => ({ index: idx, inputs: c.inputs })),
-      timeLimitMs: meta.timeLimitMs,
-      memoryLimitMb: meta.memoryLimitMb,
-    });
+    if (language === 'python') {
+      execResult = await executePythonSolution({
+        problemMeta: meta,
+        code,
+        tests: casesWithExpected.map((c, idx) => ({ index: idx, inputs: c.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    } else if (language === 'cpp') {
+      execResult = await executeCppSolution({
+        problemMeta: meta,
+        code,
+        tests: casesWithExpected.map((c, idx) => ({ index: idx, inputs: c.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    } else if (language === 'c') {
+      execResult = await executeCSolution({
+        problemMeta: meta,
+        code,
+        tests: casesWithExpected.map((c, idx) => ({ index: idx, inputs: c.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    } else if (language === 'go') {
+      execResult = await executeGoSolution({
+        problemMeta: meta,
+        code,
+        tests: casesWithExpected.map((c, idx) => ({ index: idx, inputs: c.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    } else {
+      execResult = await executeJavaSolution({
+        problemMeta: meta,
+        code,
+        tests: casesWithExpected.map((c, idx) => ({ index: idx, inputs: c.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    }
   } catch (err: any) {
     return {
       verdict: 'Runtime Error',
@@ -228,8 +267,9 @@ export async function handleRunCode(payload: {
 export async function handleSubmitCode(payload: {
   problemId: number;
   code: string;
+  language?: SupportedLanguage;
 }): Promise<SubmitResponse> {
-  const { problemId, code } = payload;
+  const { problemId, code, language = 'java' } = payload;
   const meta = loadProblemMeta(problemId);
   const hiddenTests = loadHiddenTests(problemId);
   const customChecker = loadCustomChecker(problemId);
@@ -249,13 +289,47 @@ export async function handleSubmitCode(payload: {
   // Execute user solution on all tests in order
   let execResult: JudgeExecutionResult;
   try {
-    execResult = await executeJavaSolution({
-      problemMeta: meta,
-      code,
-      tests: allTests.map((t, i) => ({ index: i, inputs: t.inputs })),
-      timeLimitMs: meta.timeLimitMs,
-      memoryLimitMb: meta.memoryLimitMb,
-    });
+    if (language === 'python') {
+      execResult = await executePythonSolution({
+        problemMeta: meta,
+        code,
+        tests: allTests.map((t, i) => ({ index: i, inputs: t.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    } else if (language === 'cpp') {
+      execResult = await executeCppSolution({
+        problemMeta: meta,
+        code,
+        tests: allTests.map((t, i) => ({ index: i, inputs: t.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    } else if (language === 'c') {
+      execResult = await executeCSolution({
+        problemMeta: meta,
+        code,
+        tests: allTests.map((t, i) => ({ index: i, inputs: t.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    } else if (language === 'go') {
+      execResult = await executeGoSolution({
+        problemMeta: meta,
+        code,
+        tests: allTests.map((t, i) => ({ index: i, inputs: t.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    } else {
+      execResult = await executeJavaSolution({
+        problemMeta: meta,
+        code,
+        tests: allTests.map((t, i) => ({ index: i, inputs: t.inputs })),
+        timeLimitMs: meta.timeLimitMs,
+        memoryLimitMb: meta.memoryLimitMb,
+      });
+    }
   } catch (err: any) {
     return {
       verdict: 'Runtime Error',

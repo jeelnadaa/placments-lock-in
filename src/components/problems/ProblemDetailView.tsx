@@ -31,17 +31,18 @@ import {
   CustomCase,
   RunResponse,
   SubmitResponse,
+  SupportedLanguage,
 } from '../../types';
 import { DifficultyBadge, StatusBadge } from '../common/Badge';
 import { SpoilerControl } from '../spoilers/SpoilerControl';
-import { JavaEditor } from '../editor/JavaEditor';
+import { CodeEditor } from '../editor/CodeEditor';
 import { CodeDiffViewer } from '../editor/CodeDiffViewer';
 import { Modal } from '../common/Modal';
 import { useToast } from '../common/Toast';
 import { Stopwatch } from '../workspace/Stopwatch';
 import { SubmissionsTable } from '../workspace/SubmissionsTable';
 import { ConsolePanel } from '../workspace/ConsolePanel';
-import { getProblemContent } from '../../contentRegistry';
+import { getProblemContent, getProblemStarterCode } from '../../contentRegistry';
 import { runJudgeCases, submitJudgeSolution } from '../../utils/judgeApi';
 import {
   COMMON_COMPLEXITIES,
@@ -109,32 +110,53 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
   const [interviewMode, setInterviewMode] = useState(false);
   const [stopwatchMs, setStopwatchMs] = useState(0);
 
-  // Editor states
-  const starterCode = content?.starterCode || `class Solution {\n    // Solution for ${problem.id}. ${problem.title}\n    \n}`;
-
-  // Helper to load persisted draft code across browser sessions
-  const getPersistedCode = (probId: number, starter: string): string => {
+  // Active language state
+  const [language, setLanguage] = useState<SupportedLanguage>(() => {
     try {
-      const savedLocal = localStorage.getItem(`lockedin_code_${probId}`);
+      const saved = localStorage.getItem('lockedin_preferred_lang') as SupportedLanguage;
+      if (saved === 'python' || saved === 'java') return saved;
+    } catch {}
+    return settings?.preferredLanguage || 'python';
+  });
+
+  // Helper to load persisted draft code across browser sessions per (problemId, language)
+  const getPersistedCode = (probId: number, lang: SupportedLanguage): string => {
+    try {
+      const savedLocal = localStorage.getItem(`lockedin_code_${probId}_${lang}`);
       if (savedLocal !== null && savedLocal !== undefined && savedLocal.length > 0) {
         return savedLocal;
+      }
+      if (lang === 'java') {
+        const legacyJava = localStorage.getItem(`lockedin_code_${probId}`);
+        if (legacyJava !== null && legacyJava !== undefined && legacyJava.length > 0) {
+          return legacyJava;
+        }
       }
     } catch {
       // ignore localStorage errors
     }
-    if (progress?.problemId === probId && progress?.currentCode && progress.currentCode.length > 0) {
-      return progress.currentCode;
+    if (progress?.problemId === probId) {
+      if (progress.codeByLanguage?.[lang]) {
+        return progress.codeByLanguage[lang]!;
+      }
+      if (lang === 'java' && progress.currentCode) {
+        return progress.currentCode;
+      }
     }
-    const latest = [...versions].filter((v) => v.problemId === probId).sort((a, b) => b.versionNumber - a.versionNumber)[0];
+    const latest = [...versions]
+      .filter((v) => v.problemId === probId && v.language === lang)
+      .sort((a, b) => b.versionNumber - a.versionNumber)[0];
     if (latest?.code && latest.code.length > 0) {
       return latest.code;
     }
-    return starter;
+    return getProblemStarterCode(probId, lang);
   };
 
-  const [editorCode, setEditorCode] = useState<string>(() => getPersistedCode(problem.id, starterCode));
+  const [editorCode, setEditorCode] = useState<string>(() => getPersistedCode(problem.id, language));
   const debounceSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const currentProblemIdRef = useRef(problem.id);
+  const languageRef = useRef(language);
+  languageRef.current = language;
   const editorCodeRef = useRef(editorCode);
   editorCodeRef.current = editorCode;
 
@@ -146,24 +168,48 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
         clearTimeout(debounceSaveTimerRef.current);
       }
       try {
-        localStorage.setItem(`lockedin_code_${currentProblemIdRef.current}`, editorCodeRef.current);
+        localStorage.setItem(`lockedin_code_${currentProblemIdRef.current}_${languageRef.current}`, editorCodeRef.current);
+        if (languageRef.current === 'java') {
+          localStorage.setItem(`lockedin_code_${currentProblemIdRef.current}`, editorCodeRef.current);
+        }
       } catch {
         // ignore
       }
       currentProblemIdRef.current = problem.id;
     }
 
-    const code = getPersistedCode(problem.id, starterCode);
+    const code = getPersistedCode(problem.id, language);
     setEditorCode(code);
     editorCodeRef.current = code;
-  }, [problem.id]);
+  }, [problem.id, language]);
+
+  // Language switch handler
+  const handleLanguageChange = (newLang: SupportedLanguage) => {
+    if (newLang === language) return;
+    try {
+      localStorage.setItem(`lockedin_code_${problem.id}_${language}`, editorCodeRef.current);
+      if (language === 'java') {
+        localStorage.setItem(`lockedin_code_${problem.id}`, editorCodeRef.current);
+      }
+      localStorage.setItem('lockedin_preferred_lang', newLang);
+    } catch {}
+
+    setLanguage(newLang);
+    languageRef.current = newLang;
+    const newCode = getPersistedCode(problem.id, newLang);
+    setEditorCode(newCode);
+    editorCodeRef.current = newCode;
+  };
 
   // Handler for all user keystrokes in editor
   const handleEditorCodeChange = (newCode: string) => {
     setEditorCode(newCode);
     editorCodeRef.current = newCode;
     try {
-      localStorage.setItem(`lockedin_code_${problem.id}`, newCode);
+      localStorage.setItem(`lockedin_code_${problem.id}_${language}`, newCode);
+      if (language === 'java') {
+        localStorage.setItem(`lockedin_code_${problem.id}`, newCode);
+      }
     } catch (e) {
       console.warn('Failed saving to localStorage', e);
     }
@@ -172,7 +218,14 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
       clearTimeout(debounceSaveTimerRef.current);
     }
     debounceSaveTimerRef.current = setTimeout(() => {
-      onUpdateProgress({ currentCode: newCode });
+      const codeByLanguage = {
+        ...(progress?.codeByLanguage || {}),
+        [language]: newCode,
+      };
+      onUpdateProgress({
+        currentCode: language === 'java' ? newCode : progress?.currentCode,
+        codeByLanguage,
+      });
     }, 500);
   };
 
@@ -180,11 +233,21 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
   useEffect(() => {
     const handleBeforeUnload = () => {
       try {
-        localStorage.setItem(`lockedin_code_${problem.id}`, editorCodeRef.current);
+        localStorage.setItem(`lockedin_code_${problem.id}_${language}`, editorCodeRef.current);
+        if (language === 'java') {
+          localStorage.setItem(`lockedin_code_${problem.id}`, editorCodeRef.current);
+        }
       } catch {
         // ignore
       }
-      onUpdateProgress({ currentCode: editorCodeRef.current });
+      const codeByLanguage = {
+        ...(progress?.codeByLanguage || {}),
+        [language]: editorCodeRef.current,
+      };
+      onUpdateProgress({
+        currentCode: language === 'java' ? editorCodeRef.current : progress?.currentCode,
+        codeByLanguage,
+      });
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -194,7 +257,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
         clearTimeout(debounceSaveTimerRef.current);
       }
     };
-  }, [problem.id, onUpdateProgress]);
+  }, [problem.id, language, onUpdateProgress]);
 
   // Editor Toolbar settings
   const [assistMode, setAssistMode] = useState(true);
@@ -453,6 +516,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
         problemId: problem.id,
         code: editorCode,
         cases: casesToRun,
+        language,
       });
 
       setRunResult(res);
@@ -490,6 +554,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
       const res = await submitJudgeSolution({
         problemId: problem.id,
         code: editorCode,
+        language,
       });
 
       setSubmitResult(res);
@@ -500,6 +565,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
         id: Math.random().toString(36).substring(2, 9),
         problemId: problem.id,
         code: editorCode,
+        language,
         verdict: res.verdict,
         passed: res.passed,
         total: res.total,
@@ -565,7 +631,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [editorCode, sampleCasesState, customCases]);
+  }, [editorCode, sampleCasesState, customCases, language]);
 
   // Save new code version submit
   const handleSaveVersion = async () => {
@@ -577,6 +643,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
       const v = createNewCodeVersion({
         problemId: problem.id,
         code: editorCode,
+        language,
         timeComplexity,
         spaceComplexity,
         label: versionLabel,
@@ -1014,6 +1081,9 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
                             <span className="px-2 py-0.5 rounded font-bold bg-mono-850 text-mono-200 border border-mono-700">
                               v{v.versionNumber}
                             </span>
+                            <span className="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold bg-mono-800 text-amber-300 border border-mono-700">
+                              {v.language || 'java'}
+                            </span>
                             <span className="font-semibold text-mono-100">{v.label || `v${v.versionNumber}`}</span>
                             {v.isBest && <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />}
                             <span className="text-mono-400 text-[11px]">{v.timeComplexity} • {v.spaceComplexity}</span>
@@ -1033,6 +1103,9 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
                               onClick={() => {
                                 const restored = restoreAsNewVersion(v, versions);
                                 onSaveNewVersion(restored);
+                                if (restored.language && restored.language !== language) {
+                                  handleLanguageChange(restored.language);
+                                }
                                 handleEditorCodeChange(restored.code);
                                 showToast(`Restored v${v.versionNumber} as v${restored.versionNumber}`, 'success');
                               }}
@@ -1082,9 +1155,24 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
             >
               {/* EDITOR TOOLBAR */}
               <div className="flex items-center justify-between px-4 py-2 border-b border-mono-800 bg-mono-900/90 text-xs font-mono select-none">
-                <div className="flex items-center gap-3">
-                  <span className="font-bold text-mono-200">Java</span>
-                  <span className="text-mono-600">•</span>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center rounded-lg bg-mono-950 p-0.5 border border-mono-800">
+                    {(['python', 'java', 'cpp', 'c', 'go'] as SupportedLanguage[]).map((lang) => (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => handleLanguageChange(lang)}
+                        className={`px-2.5 py-0.5 rounded text-[11px] font-bold transition-all ${
+                          language === lang
+                            ? 'bg-amber-400 text-mono-950 shadow-sm'
+                            : 'text-mono-400 hover:text-mono-200'
+                        }`}
+                      >
+                        {lang === 'python' ? 'Python' : lang === 'java' ? 'Java' : lang === 'cpp' ? 'C++' : lang === 'c' ? 'C' : 'Go'}
+                      </button>
+                    ))}
+                  </div>
+                  <span className="text-mono-700">•</span>
                   <button
                     type="button"
                     onClick={() => setAssistMode(!assistMode)}
@@ -1095,7 +1183,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
                     }`}
                     title="Toggle autocomplete assist mode"
                   >
-                    Assist Mode: {assistMode ? 'ON' : 'OFF'}
+                    Assist: {assistMode ? 'ON' : 'OFF'}
                   </button>
                 </div>
 
@@ -1193,12 +1281,13 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
 
               {/* CODE EDITOR */}
               <div className="flex-1 min-h-0 overflow-hidden bg-mono-950 flex flex-col">
-                <JavaEditor
+                <CodeEditor
                   value={editorCode}
                   onChange={handleEditorCodeChange}
                   fontSize={editorFontSize}
                   highlightLine={highlightLine}
                   assistMode={assistMode}
+                  language={language}
                   minHeight="100%"
                   maxHeight="100%"
                 />
@@ -1420,16 +1509,27 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
             <button
               type="button"
               onClick={() => {
+                const freshStarter = getProblemStarterCode(problem.id, language);
                 try {
-                  localStorage.removeItem(`lockedin_code_${problem.id}`);
+                  localStorage.removeItem(`lockedin_code_${problem.id}_${language}`);
+                  if (language === 'java') {
+                    localStorage.removeItem(`lockedin_code_${problem.id}`);
+                  }
                 } catch {
                   // ignore
                 }
-                setEditorCode(starterCode);
-                editorCodeRef.current = starterCode;
-                onUpdateProgress({ currentCode: starterCode });
+                setEditorCode(freshStarter);
+                editorCodeRef.current = freshStarter;
+                const codeByLanguage = {
+                  ...(progress?.codeByLanguage || {}),
+                  [language]: freshStarter,
+                };
+                onUpdateProgress({
+                  currentCode: language === 'java' ? freshStarter : progress?.currentCode,
+                  codeByLanguage,
+                });
                 setResetConfirmModalOpen(false);
-                showToast('Reset editor to starter code', 'info');
+                showToast(`Reset ${language} editor to starter code`, 'info');
               }}
               className="px-4 py-1.5 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold"
             >

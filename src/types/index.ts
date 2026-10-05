@@ -15,6 +15,8 @@ export interface Problem {
   hints: string[];
 }
 
+export type SupportedLanguage = 'python' | 'java' | 'cpp' | 'c' | 'go';
+
 export interface Progress {
   problemId: number;
   status: ProblemStatus;
@@ -28,6 +30,7 @@ export interface Progress {
   firstAcceptedAt?: string;
   timeToAcceptMs?: number;
   currentCode?: string;
+  codeByLanguage?: Partial<Record<SupportedLanguage, string>>;
 }
 
 export interface CodeVersion {
@@ -35,7 +38,7 @@ export interface CodeVersion {
   problemId: number;
   versionNumber: number;
   label?: string;
-  language: 'java';
+  language: SupportedLanguage;
   code: string;
   timeComplexity: string;
   spaceComplexity: string;
@@ -52,6 +55,7 @@ export interface Settings {
   spoilerSafeMode: boolean; // default true
   autoRevealTopicOnSolve: boolean; // default true
   fontSize?: number; // default 14 or 15
+  preferredLanguage?: SupportedLanguage;
 }
 
 export interface SafeProblemView {
@@ -95,6 +99,7 @@ export interface Submission {
   problemId: number;
   versionId?: string;
   code: string;
+  language?: SupportedLanguage;
   verdict: VerdictType;
   passed: number;
   total: number;

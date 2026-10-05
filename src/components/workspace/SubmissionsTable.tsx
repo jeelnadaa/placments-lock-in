@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Submission } from '../../types';
 import { Clock, XCircle, ChevronRight, Save } from 'lucide-react';
 import { Modal } from '../common/Modal';
-import { JavaEditor } from '../editor/JavaEditor';
+import { CodeEditor } from '../editor/CodeEditor';
 
 interface SubmissionsTableProps {
   submissions: Submission[];
@@ -56,6 +56,9 @@ export const SubmissionsTable: React.FC<SubmissionsTableProps> = ({ submissions,
               <span className={`px-2.5 py-0.5 rounded border font-semibold ${getVerdictStyle(sub.verdict)}`}>
                 {sub.verdict}
               </span>
+              <span className="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold bg-mono-800 text-amber-300 border border-mono-700">
+                {sub.language || 'java'}
+              </span>
               <span className="text-mono-400">
                 {sub.passed}/{sub.total} passed
               </span>
@@ -85,6 +88,9 @@ export const SubmissionsTable: React.FC<SubmissionsTableProps> = ({ submissions,
               <div className="flex items-center gap-3">
                 <span className={`px-2.5 py-0.5 rounded border font-semibold text-sm ${getVerdictStyle(selectedSub.verdict)}`}>
                   {selectedSub.verdict}
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold bg-mono-800 text-amber-300 border border-mono-700">
+                  {selectedSub.language || 'java'}
                 </span>
                 <span className="text-mono-300 font-medium">
                   {selectedSub.passed} / {selectedSub.total} Testcases Passed
@@ -164,8 +170,8 @@ export const SubmissionsTable: React.FC<SubmissionsTableProps> = ({ submissions,
 
             {/* Code snapshot */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-mono-400 font-semibold">Submitted Java Code:</span>
-              <JavaEditor value={selectedSub.code} readOnly minHeight="240px" />
+              <span className="text-mono-400 font-semibold">Submitted Code ({selectedSub.language || 'java'}):</span>
+              <CodeEditor language={selectedSub.language || 'java'} value={selectedSub.code} readOnly minHeight="240px" />
             </div>
           </div>
         )}

@@ -1,4 +1,4 @@
-import { CodeVersion } from '../types';
+import { CodeVersion, SupportedLanguage } from '../types';
 
 export const COMMON_COMPLEXITIES = [
   'O(1)',
@@ -47,6 +47,7 @@ export function createNewCodeVersion(params: {
   spaceComplexity: string;
   remarks?: string;
   label?: string;
+  language?: SupportedLanguage;
   existingVersions?: CodeVersion[];
   isBest?: boolean;
 }): CodeVersion {
@@ -57,6 +58,7 @@ export function createNewCodeVersion(params: {
     spaceComplexity,
     remarks = '',
     label,
+    language = 'python',
     existingVersions = [],
     isBest = false,
   } = params;
@@ -75,7 +77,7 @@ export function createNewCodeVersion(params: {
     problemId,
     versionNumber: nextVer,
     label: label?.trim() || undefined,
-    language: 'java',
+    language,
     code,
     timeComplexity: timeComplexity.trim(),
     spaceComplexity: spaceComplexity.trim(),
@@ -98,7 +100,7 @@ export function restoreAsNewVersion(
     problemId: oldVersion.problemId,
     versionNumber: nextVer,
     label: `Restored from v${oldVersion.versionNumber}`,
-    language: 'java',
+    language: oldVersion.language || 'python',
     code: oldVersion.code,
     timeComplexity: oldVersion.timeComplexity,
     spaceComplexity: oldVersion.spaceComplexity,

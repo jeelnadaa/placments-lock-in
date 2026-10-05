@@ -270,3 +270,451 @@ class Solution {
     expect((res as any).testOutputs).toBeUndefined();
   }, 15000);
 });
+
+describe('Judge Execution & Verdicts (Local Python Runtime)', () => {
+  it('Pilot #1 Two Sum (Python): Correct solution returns Accepted on submit', async () => {
+    const pythonCode = `class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        lookup = {}
+        for i, num in enumerate(nums):
+            comp = target - num
+            if comp in lookup:
+                return [lookup[comp], i]
+            lookup[num] = i
+        return []
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: pythonCode, language: 'python' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+    expect(res.passed).toBeGreaterThan(0);
+  }, 15000);
+
+  it('Pilot #206 Reverse Linked List (Python): Correct solution returns Accepted on submit', async () => {
+    const pythonCode = `class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        prev = None
+        curr = head
+        while curr:
+            nxt = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nxt
+        return prev
+`;
+    const res = await handleSubmitCode({ problemId: 206, code: pythonCode, language: 'python' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+  }, 15000);
+
+  it('Pilot #48 Rotate Image (Python): Correct in-place matrix mutation returns Accepted', async () => {
+    const pythonCode = `class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        matrix.reverse()
+        for i in range(len(matrix)):
+            for j in range(i + 1, len(matrix)):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+`;
+    const res = await handleSubmitCode({ problemId: 48, code: pythonCode, language: 'python' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+  }, 15000);
+
+  it('Python syntax error returns Compile Error with line details', async () => {
+    const brokenCode = `class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]
+        return 42
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: brokenCode, language: 'python' });
+    expect(res.verdict).toBe('Compile Error');
+    expect(res.error).toBeDefined();
+    expect(res.error?.toLowerCase()).toContain('syntaxerror');
+  }, 15000);
+
+  it('Python Wrong Answer reports failing case correctly', async () => {
+    const wrongCode = `class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        return [0, 0]
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: wrongCode, language: 'python' });
+    expect(res.verdict).toBe('Wrong Answer');
+    expect(res.failing).toBeDefined();
+    expect(res.failing?.index).toBe(1);
+  }, 15000);
+
+  it('Python Run custom/sample testcases via handleRunCode', async () => {
+    const pythonCode = `class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        lookup = {}
+        for i, num in enumerate(nums):
+            comp = target - num
+            if comp in lookup:
+                return [lookup[comp], i]
+            lookup[num] = i
+        return []
+`;
+    const res = await handleRunCode({
+      problemId: 1,
+      code: pythonCode,
+      language: 'python',
+      cases: [
+        { inputs: { nums: [2, 7, 11, 15], target: 9 }, expected: [0, 1] },
+        { inputs: { nums: [3, 2, 4], target: 6 }, expected: [1, 2] },
+      ],
+    });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.results.length).toBe(2);
+    expect(res.results[0].passed).toBe(true);
+    expect(res.results[1].passed).toBe(true);
+  }, 15000);
+});
+
+describe('Judge Execution & Verdicts (Local C++ Runtime)', () => {
+  it('Pilot #1 Two Sum (C++): Correct solution returns Accepted on submit', async () => {
+    const cppCode = `class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> seen;
+        for (int i = 0; i < nums.size(); ++i) {
+            int comp = target - nums[i];
+            if (seen.count(comp)) {
+                return {seen[comp], i};
+            }
+            seen[nums[i]] = i;
+        }
+        return {};
+    }
+};
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: cppCode, language: 'cpp' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+    expect(res.passed).toBeGreaterThan(0);
+  }, 15000);
+
+  it('Pilot #206 Reverse Linked List (C++): Correct solution returns Accepted on submit', async () => {
+    const cppCode = `class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        while (curr) {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+};
+`;
+    const res = await handleSubmitCode({ problemId: 206, code: cppCode, language: 'cpp' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+  }, 15000);
+
+  it('Pilot #48 Rotate Image (C++): Correct in-place matrix mutation returns Accepted', async () => {
+    const cppCode = `class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        reverse(matrix.begin(), matrix.end());
+        for (int i = 0; i < matrix.size(); ++i) {
+            for (int j = i + 1; j < matrix.size(); ++j) {
+                swap(matrix[i][j], matrix[j][i]);
+            }
+        }
+    }
+};
+`;
+    const res = await handleSubmitCode({ problemId: 48, code: cppCode, language: 'cpp' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+  }, 15000);
+
+  it('C++ syntax error returns Compile Error with line details', async () => {
+    const brokenCode = `class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        broken syntax here
+    }
+};
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: brokenCode, language: 'cpp' });
+    expect(res.verdict).toBe('Compile Error');
+    expect(res.error).toBeDefined();
+  }, 15000);
+
+  it('C++ Wrong Answer reports failing case correctly', async () => {
+    const wrongCode = `class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        return {0, 0};
+    }
+};
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: wrongCode, language: 'cpp' });
+    expect(res.verdict).toBe('Wrong Answer');
+    expect(res.failing).toBeDefined();
+    expect(res.failing?.index).toBe(1);
+  }, 15000);
+
+  it('C++ Run custom/sample testcases via handleRunCode', async () => {
+    const cppCode = `class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> seen;
+        for (int i = 0; i < nums.size(); ++i) {
+            int comp = target - nums[i];
+            if (seen.count(comp)) {
+                return {seen[comp], i};
+            }
+            seen[nums[i]] = i;
+        }
+        return {};
+    }
+};
+`;
+    const res = await handleRunCode({
+      problemId: 1,
+      code: cppCode,
+      language: 'cpp',
+      cases: [
+        { inputs: { nums: [2, 7, 11, 15], target: 9 }, expected: [0, 1] },
+        { inputs: { nums: [3, 2, 4], target: 6 }, expected: [1, 2] },
+      ],
+    });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.results.length).toBe(2);
+    expect(res.results[0].passed).toBe(true);
+    expect(res.results[1].passed).toBe(true);
+  }, 15000);
+
+  // ==========================================
+  // C Tests
+  // ==========================================
+
+  it('Pilot #1 Two Sum (C): Correct solution returns Accepted on all testcases', async () => {
+    const cCode = `int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    *returnSize = 2;
+    int* res = (int*)malloc(2 * sizeof(int));
+    int cap = 65536;
+    int* keys = (int*)malloc(cap * sizeof(int));
+    int* vals = (int*)malloc(cap * sizeof(int));
+    bool* used = (bool*)calloc(cap, sizeof(bool));
+
+    for (int i = 0; i < numsSize; ++i) {
+        int comp = target - nums[i];
+        int h = (comp % cap + cap) % cap;
+        while (used[h]) {
+            if (keys[h] == comp) {
+                res[0] = vals[h];
+                res[1] = i;
+                free(keys);
+                free(vals);
+                free(used);
+                return res;
+            }
+            h = (h + 1) % cap;
+        }
+
+        int nh = (nums[i] % cap + cap) % cap;
+        while (used[nh] && keys[nh] != nums[i]) {
+            nh = (nh + 1) % cap;
+        }
+        used[nh] = true;
+        keys[nh] = nums[i];
+        vals[nh] = i;
+    }
+    free(keys);
+    free(vals);
+    free(used);
+    return res;
+}
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: cCode, language: 'c' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+    expect(res.runtimeMs).toBeGreaterThanOrEqual(0);
+  }, 15000);
+
+  it('Pilot #206 Reverse Linked List (C): Correct struct ListNode* reversal returns Accepted', async () => {
+    const cCode = `struct ListNode* reverseList(struct ListNode* head) {
+    struct ListNode* prev = NULL;
+    struct ListNode* curr = head;
+    while (curr) {
+        struct ListNode* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+`;
+    const res = await handleSubmitCode({ problemId: 206, code: cCode, language: 'c' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+  }, 15000);
+
+  it('C syntax error returns Compile Error with line details', async () => {
+    const brokenCode = `int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    invalid c syntax here
+}
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: brokenCode, language: 'c' });
+    expect(res.verdict).toBe('Compile Error');
+    expect(res.error).toBeDefined();
+  }, 15000);
+
+  it('C Wrong Answer reports failing case correctly', async () => {
+    const wrongCode = `int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    *returnSize = 2;
+    int* res = (int*)malloc(2 * sizeof(int));
+    res[0] = 0;
+    res[1] = 0;
+    return res;
+}
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: wrongCode, language: 'c' });
+    expect(res.verdict).toBe('Wrong Answer');
+    expect(res.failing).toBeDefined();
+    expect(res.failing?.index).toBe(1);
+  }, 15000);
+
+  it('C Run custom/sample testcases via handleRunCode', async () => {
+    const cCode = `int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    *returnSize = 2;
+    int* res = (int*)malloc(2 * sizeof(int));
+    for (int i = 0; i < numsSize; ++i) {
+        for (int j = i + 1; j < numsSize; ++j) {
+            if (nums[i] + nums[j] == target) {
+                res[0] = i;
+                res[1] = j;
+                return res;
+            }
+        }
+    }
+    return res;
+}
+`;
+    const res = await handleRunCode({
+      problemId: 1,
+      code: cCode,
+      language: 'c',
+      cases: [
+        { inputs: { nums: [2, 7, 11, 15], target: 9 }, expected: [0, 1] },
+        { inputs: { nums: [3, 2, 4], target: 6 }, expected: [1, 2] },
+      ],
+    });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.results.length).toBe(2);
+    expect(res.results[0].passed).toBe(true);
+    expect(res.results[1].passed).toBe(true);
+  }, 15000);
+
+  // ==========================================
+  // Go Tests
+  // ==========================================
+
+  it('Pilot #1 Two Sum (Go): Correct solution returns Accepted on all testcases', async () => {
+    const goCode = `func twoSum(nums []int, target int) []int {
+    seen := make(map[int]int)
+    for i, num := range nums {
+        if idx, ok := seen[target-num]; ok {
+            return []int{idx, i}
+        }
+        seen[num] = i
+    }
+    return nil
+}
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: goCode, language: 'go' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+    expect(res.runtimeMs).toBeGreaterThanOrEqual(0);
+  }, 15000);
+
+  it('Pilot #206 Reverse Linked List (Go): Correct *ListNode reversal returns Accepted', async () => {
+    const goCode = `func reverseList(head *ListNode) *ListNode {
+    var prev *ListNode = nil
+    curr := head
+    for curr != nil {
+        next := curr.Next
+        curr.Next = prev
+        prev = curr
+        curr = next
+    }
+    return prev
+}
+`;
+    const res = await handleSubmitCode({ problemId: 206, code: goCode, language: 'go' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+  }, 15000);
+
+  it('Pilot #48 Rotate Image (Go): Correct in-place matrix mutation returns Accepted', async () => {
+    const goCode = `func rotate(matrix [][]int) {
+    n := len(matrix)
+    for i := 0; i < n/2; i++ {
+        matrix[i], matrix[n-1-i] = matrix[n-1-i], matrix[i]
+    }
+    for i := 0; i < n; i++ {
+        for j := i + 1; j < n; j++ {
+            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+        }
+    }
+}
+`;
+    const res = await handleSubmitCode({ problemId: 48, code: goCode, language: 'go' });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+  }, 15000);
+
+  it('Go syntax error returns Compile Error with line details', async () => {
+    const brokenCode = `func twoSum(nums []int, target int) []int {
+    invalid go syntax here
+}
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: brokenCode, language: 'go' });
+    expect(res.verdict).toBe('Compile Error');
+    expect(res.error).toBeDefined();
+  }, 15000);
+
+  it('Go Wrong Answer reports failing case correctly', async () => {
+    const wrongCode = `func twoSum(nums []int, target int) []int {
+    return []int{0, 0}
+}
+`;
+    const res = await handleSubmitCode({ problemId: 1, code: wrongCode, language: 'go' });
+    expect(res.verdict).toBe('Wrong Answer');
+    expect(res.failing).toBeDefined();
+    expect(res.failing?.index).toBe(1);
+  }, 15000);
+
+  it('Go Run custom/sample testcases via handleRunCode', async () => {
+    const goCode = `func twoSum(nums []int, target int) []int {
+    seen := make(map[int]int)
+    for i, num := range nums {
+        if idx, ok := seen[target-num]; ok {
+            return []int{idx, i}
+        }
+        seen[num] = i
+    }
+    return nil
+}
+`;
+    const res = await handleRunCode({
+      problemId: 1,
+      code: goCode,
+      language: 'go',
+      cases: [
+        { inputs: { nums: [2, 7, 11, 15], target: 9 }, expected: [0, 1] },
+        { inputs: { nums: [3, 2, 4], target: 6 }, expected: [1, 2] },
+      ],
+    });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.results.length).toBe(2);
+    expect(res.results[0].passed).toBe(true);
+    expect(res.results[1].passed).toBe(true);
+  }, 15000);
+});
+
+

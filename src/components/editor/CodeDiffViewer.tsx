@@ -31,6 +31,11 @@ export const CodeDiffViewer: React.FC<CodeDiffViewerProps> = ({ versionA, versio
           </thead>
           <tbody className="divide-y divide-mono-800/60 text-mono-200">
             <tr>
+              <td className="p-3 font-semibold text-mono-400">Language</td>
+              <td className="p-3 font-mono text-amber-300 uppercase font-bold">{versionA.language || 'java'}</td>
+              <td className="p-3 font-mono text-amber-300 uppercase font-bold">{versionB.language || 'java'}</td>
+            </tr>
+            <tr>
               <td className="p-3 font-semibold text-mono-400">Time Complexity</td>
               <td className="p-3 font-mono text-mono-200">{versionA.timeComplexity}</td>
               <td className="p-3 font-mono text-mono-200">{versionB.timeComplexity}</td>
