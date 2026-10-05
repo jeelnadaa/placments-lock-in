@@ -18,7 +18,6 @@ import {
   Lightbulb,
   History,
   CheckCircle2,
-  Type,
   AlignLeft,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -119,7 +118,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
 
   // Editor Toolbar settings
   const [assistMode, setAssistMode] = useState(true);
-  const [editorFontSize, setEditorFontSize] = useState<number>(settings?.fontSize || 15);
+  const editorFontSize = settings?.fontSize || 16;
 
   // Reset to starter code modal
   const [resetConfirmModalOpen, setResetConfirmModalOpen] = useState(false);
@@ -951,11 +950,11 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
         />
 
         {/* RIGHT PANE: EDITOR (TOP) + CONSOLE (BOTTOM) */}
-        <div ref={rightPaneRef} className="flex-1 flex flex-col bg-mono-950 overflow-hidden relative">
+        <div ref={rightPaneRef} className="flex-1 flex flex-col bg-mono-950 min-h-0 overflow-hidden relative">
           {/* EDITOR WRAPPER */}
           {!isMaximizedConsole && (
             <div
-              className="flex flex-col overflow-hidden"
+              className="flex flex-col overflow-hidden min-h-0"
               style={{
                 height: isMaximizedEditor ? '100%' : `${editorHeightPct}%`,
                 minHeight: isMaximizedEditor ? '100%' : '140px',
@@ -998,22 +997,6 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                   </button>
-
-                  {/* Font size control */}
-                  <div className="flex items-center gap-1 text-[11px] text-mono-400 border border-mono-800 px-1.5 py-0.5 rounded bg-mono-950">
-                    <Type className="w-3 h-3 text-mono-500" />
-                    <select
-                      value={editorFontSize}
-                      onChange={(e) => setEditorFontSize(Number(e.target.value))}
-                      className="bg-transparent text-mono-200 focus:outline-none cursor-pointer"
-                    >
-                      <option value={14}>14px</option>
-                      <option value={15.5}>15.5px</option>
-                      <option value={17}>17px</option>
-                      <option value={19}>19px</option>
-                      <option value={21}>21px</option>
-                    </select>
-                  </div>
 
                   {/* Maximize / Restore Editor Button */}
                   <button
@@ -1089,12 +1072,13 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
               )}
 
               {/* CODE EDITOR */}
-              <div className="flex-1 overflow-auto bg-mono-950">
+              <div className="flex-1 min-h-0 overflow-hidden bg-mono-950 flex flex-col">
                 <JavaEditor
                   value={editorCode}
                   onChange={setEditorCode}
                   fontSize={editorFontSize}
                   highlightLine={highlightLine}
+                  assistMode={assistMode}
                   minHeight="100%"
                   maxHeight="100%"
                 />
@@ -1118,7 +1102,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
           {/* BOTTOM CONSOLE / TESTCASE PANEL */}
           {!isMaximizedEditor && (
             <div
-              className="flex flex-col overflow-hidden"
+              className="flex flex-col overflow-hidden min-h-0 flex-1"
               style={{
                 height: isMaximizedConsole ? '100%' : `${100 - editorHeightPct}%`,
                 minHeight: isMaximizedConsole ? '100%' : '140px',

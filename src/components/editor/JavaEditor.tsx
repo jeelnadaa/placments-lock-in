@@ -3,11 +3,13 @@ import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { java } from '@codemirror/lang-java';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { indentUnit } from '@codemirror/language';
-import { EditorState } from '@codemirror/state';
-import { keymap } from '@codemirror/view';
-import { indentWithTab } from '@codemirror/commands';
-import { autocompletion } from '@codemirror/autocomplete';
+import { EditorState, Prec } from '@codemirror/state';
+import { keymap, EditorView } from '@codemirror/view';
+import { indentLess } from '@codemirror/commands';
+import { autocompletion, acceptCompletion } from '@codemirror/autocomplete';
+import { linter, lintGutter } from '@codemirror/lint';
 import { javaCompletionSource } from './javaCompletions';
+import { javaLinter } from './javaLinter';
 
 interface JavaEditorProps {
   value: string;
@@ -18,17 +20,19 @@ interface JavaEditorProps {
   placeholder?: string;
   fontSize?: number;
   highlightLine?: number | null;
+  assistMode?: boolean;
 }
 
 export const JavaEditor: React.FC<JavaEditorProps> = ({
   value,
   onChange,
   readOnly = false,
-  minHeight = '320px',
-  maxHeight = '650px',
+  minHeight = '100%',
+  maxHeight = '100%',
   placeholder = '// Enter your Java solution here...\nclass Solution {\n    public ...\n}',
   fontSize = 16.5,
   highlightLine,
+  assistMode = true,
 }) => {
   const cmRef = useRef<ReactCodeMirrorRef>(null);
 
@@ -50,24 +54,124 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
     }
   }, [highlightLine]);
 
-  // Extensions configured for 4-space indentation and rich Java autocompletion
+  // Extensions configured for 4-space indentation, custom Tab behavior, live linter, and assistMode
   const extensions = useMemo(() => {
-    return [
+    // Custom Tab behavior:
+    // 1. If autocomplete popup is active, accept completion.
+    // 2. Otherwise at any position/empty space, insert exactly 4 spaces.
+    const customTabKeymap = Prec.highest(
+      keymap.of([
+        {
+          key: 'Tab',
+          run: (view) => {
+            if (acceptCompletion(view)) {
+              return true;
+            }
+            view.dispatch(view.state.replaceSelection('    '));
+            return true;
+          },
+        },
+        {
+          key: 'Shift-Tab',
+          run: indentLess,
+        },
+      ])
+    );
+
+    const baseExtensions = [
       java(),
       indentUnit.of('    '),
       EditorState.tabSize.of(4),
-      keymap.of([indentWithTab]),
-      autocompletion({
-        override: [javaCompletionSource],
-        defaultKeymap: true,
-        icons: true,
+      customTabKeymap,
+      linter(javaLinter, { delay: 200 }),
+      lintGutter(),
+      EditorView.theme({
+        '&': {
+          height: '100%',
+          outline: 'none !important',
+        },
+        '.cm-scroller': {
+          overflow: 'auto !important',
+          height: '100% !important',
+          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+        },
+        '.cm-content': {
+          paddingBottom: '50px',
+        },
+        '.cm-lintRange-error': {
+          backgroundImage: 'none',
+          borderBottom: '2px wavy #f43f5e',
+        },
+        '.cm-gutter-lint': {
+          width: '18px',
+        },
+        '.cm-lint-marker-error': {
+          content: '""',
+          display: 'inline-block',
+          width: '10px',
+          height: '10px',
+          borderRadius: '50%',
+          backgroundColor: '#f43f5e',
+          marginLeft: '4px',
+          boxShadow: '0 0 8px rgba(244, 63, 94, 0.7)',
+        },
+        '.cm-tooltip': {
+          zIndex: '9999 !important',
+        },
+        '.cm-tooltip-lint': {
+          backgroundColor: '#131316 !important',
+          color: '#ffe4e6 !important',
+          border: '1.5px solid #9f1239 !important',
+          borderRadius: '8px !important',
+          padding: '10px 14px !important',
+          fontSize: '14.5px !important',
+          lineHeight: '1.5 !important',
+          maxWidth: '550px !important',
+          boxShadow: '0 14px 30px rgba(0, 0, 0, 0.8) !important',
+        },
+        '.cm-diagnostic': {
+          padding: '4px 0 !important',
+          fontSize: '14.5px !important',
+          lineHeight: '1.5 !important',
+        },
+        '.cm-diagnostic-error': {
+          color: '#fca5a5 !important',
+          borderLeft: '3.5px solid #f43f5e !important',
+          paddingLeft: '10px !important',
+          fontWeight: '500 !important',
+        },
+        '.cm-diagnosticText': {
+          fontSize: '14.5px !important',
+          color: '#fff1f2 !important',
+          fontWeight: '500 !important',
+        },
+        '.cm-tooltip-autocomplete': {
+          fontSize: '14px !important',
+          borderRadius: '8px !important',
+          border: '1px solid #3f3f46 !important',
+          backgroundColor: '#18181b !important',
+          boxShadow: '0 14px 30px rgba(0, 0, 0, 0.7) !important',
+        },
       }),
     ];
-  }, []);
+
+    // Assist mode toggles autocompletions suggestions ONLY
+    if (assistMode) {
+      baseExtensions.push(
+        autocompletion({
+          override: [javaCompletionSource],
+          defaultKeymap: true,
+          icons: true,
+        })
+      );
+    }
+
+    return baseExtensions;
+  }, [assistMode]);
 
   return (
     <div
-      className="rounded-lg border border-mono-800 overflow-hidden bg-mono-950 font-mono shadow-inner h-full flex flex-col"
+      className="rounded-lg border border-mono-800 overflow-hidden bg-mono-950 font-mono shadow-inner h-full flex flex-col min-h-0"
       style={{ fontSize: `${fontSize}px` }}
     >
       <CodeMirror
@@ -82,6 +186,7 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
         readOnly={readOnly}
         placeholder={placeholder}
         onChange={onChange}
+        className="h-full flex-1 min-h-0 overflow-hidden"
         basicSetup={{
           lineNumbers: true,
           highlightActiveLineGutter: !readOnly,

@@ -100,7 +100,11 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   };
 
   return (
-    <div className={`flex flex-col border-t border-mono-800 bg-mono-950 font-mono text-xs shadow-xl ${isMaximized ? 'h-full flex-1' : ''}`}>
+    <div
+      className={`flex flex-col border-t border-mono-800 bg-mono-950 font-mono text-xs shadow-xl overflow-hidden ${
+        isCollapsed ? 'shrink-0' : 'h-full flex-1 min-h-0'
+      }`}
+    >
       {/* CONSOLE HEADER BAR */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-mono-800 bg-mono-900/90 select-none">
         <div className="flex items-center gap-2">
@@ -167,7 +171,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
       </div>
 
       {!isCollapsed && (
-        <div className="p-4 flex-1 overflow-y-auto">
+        <div className="p-4 flex-1 min-h-0 overflow-y-auto">
           {/* TAB 1: TESTCASE */}
           {activeConsoleTab === 'testcase' && (
             <div className="flex flex-col gap-3">
