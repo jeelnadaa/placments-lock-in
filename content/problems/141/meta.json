@@ -1,0 +1,56 @@
+{
+  "id": 141,
+  "className": "Solution",
+  "methodName": "hasCycle",
+  "params": [
+    {
+      "name": "head",
+      "type": "ListNode"
+    }
+  ],
+  "returnType": "boolean",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "head": [
+          3,
+          2,
+          0,
+          -4
+        ],
+        "pos": 1
+      },
+      "output": true,
+      "explanation": "There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed)."
+    },
+    {
+      "input": {
+        "head": [
+          1,
+          2
+        ],
+        "pos": 0
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "head": [
+          1
+        ],
+        "pos": -1
+      },
+      "output": false
+    }
+  ],
+  "constraints": [
+    "The number of nodes in the list is in the range [0, 10^4].",
+    "-10^5 <= Node.val <= 10^5",
+    "pos is -1 or a valid index in the linked-list."
+  ],
+  "followUp": "Can you solve it using O(1) (i.e. constant) memory?"
+}

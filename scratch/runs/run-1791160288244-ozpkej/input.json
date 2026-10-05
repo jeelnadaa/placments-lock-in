@@ -1,0 +1,1 @@
+{"className":"Solution","methodName":"twoSum","params":[{"name":"nums","type":"int[]"},{"name":"target","type":"int"}],"returnType":"int[]","kind":"function","timeLimitMs":2000,"tests":[{"index":0,"inputs":{"nums":[2,7,11,15],"target":9}}]}

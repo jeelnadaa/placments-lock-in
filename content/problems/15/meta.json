@@ -1,0 +1,72 @@
+{
+  "id": 15,
+  "className": "Solution",
+  "methodName": "threeSum",
+  "params": [
+    {
+      "name": "nums",
+      "type": "int[]"
+    }
+  ],
+  "returnType": "List<List<Integer>>",
+  "kind": "function",
+  "comparator": "unordered-nested",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "nums": [
+          -1,
+          0,
+          1,
+          2,
+          -1,
+          -4
+        ]
+      },
+      "output": [
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          1,
+          1
+        ]
+      },
+      "output": []
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ]
+      },
+      "output": [
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  ],
+  "constraints": [
+    "3 <= nums.length <= 3000",
+    "-10^5 <= nums[i] <= 10^5"
+  ]
+}

@@ -1,4 +1,4 @@
-import { AppExportData, CodeVersion, Problem, Progress, Settings } from '../types';
+import { AppExportData, CodeVersion, CustomCase, Problem, Progress, Settings, Submission } from '../types';
 
 export interface ImportValidationResult {
   valid: boolean;
@@ -7,7 +7,7 @@ export interface ImportValidationResult {
 }
 
 /**
- * Validate imported JSON object schema
+ * Validate imported JSON object schema (supporting version 1 and version 2)
  */
 export function validateImportData(rawJson: unknown): ImportValidationResult {
   if (!rawJson || typeof rawJson !== 'object') {
@@ -16,8 +16,8 @@ export function validateImportData(rawJson: unknown): ImportValidationResult {
 
   const obj = rawJson as Record<string, unknown>;
 
-  if (obj.version !== 1) {
-    return { valid: false, error: 'Unsupported export version (expected version 1)' };
+  if (obj.version !== 1 && obj.version !== 2) {
+    return { valid: false, error: 'Unsupported export version (expected version 1 or 2)' };
   }
 
   if (!Array.isArray(obj.progress)) {
@@ -65,13 +65,17 @@ export function exportAppToJson(data: {
   progress: Progress[];
   codeVersions: CodeVersion[];
   settings?: Settings;
+  submissions?: Submission[];
+  customCases?: CustomCase[];
 }): string {
   const exportPayload: AppExportData = {
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     settings: data.settings,
     progress: data.progress,
     codeVersions: data.codeVersions,
+    submissions: data.submissions || [],
+    customCases: data.customCases || [],
   };
 
   return JSON.stringify(exportPayload, null, 2);

@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "content:new": "node scripts/content-new.cjs",
+    "content:verify": "node scripts/content-verify.cjs",
+    "content:status": "node scripts/content-status.cjs"
   },
   "dependencies": {
     "@codemirror/lang-java": "^6.0.1",

@@ -1,0 +1,98 @@
+[
+  {
+    "inputs": {
+      "s": "a"
+    },
+    "expected": "a"
+  },
+  {
+    "inputs": {
+      "s": "ac"
+    },
+    "expected": "a"
+  },
+  {
+    "inputs": {
+      "s": "racecar"
+    },
+    "expected": "racecar"
+  },
+  {
+    "inputs": {
+      "s": "noon"
+    },
+    "expected": "noon"
+  },
+  {
+    "inputs": {
+      "s": "aacabdkacaa"
+    },
+    "expected": "aca"
+  },
+  {
+    "inputs": {
+      "s": "forgeeksskeegfor"
+    },
+    "expected": "geeksskeeg"
+  },
+  {
+    "inputs": {
+      "s": "abacdfgdcaba"
+    },
+    "expected": "aba"
+  },
+  {
+    "inputs": {
+      "s": "civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendure"
+    },
+    "expected": "tat"
+  },
+  {
+    "inputs": {
+      "s": "aaaaa"
+    },
+    "expected": "aaaaa"
+  },
+  {
+    "inputs": {
+      "s": "banana"
+    },
+    "expected": "anana"
+  },
+  {
+    "inputs": {
+      "s": "million"
+    },
+    "expected": "illi"
+  },
+  {
+    "inputs": {
+      "s": "character"
+    },
+    "expected": "ara"
+  },
+  {
+    "inputs": {
+      "s": "abacaba"
+    },
+    "expected": "abacaba"
+  },
+  {
+    "inputs": {
+      "s": "123454321"
+    },
+    "expected": "123454321"
+  },
+  {
+    "inputs": {
+      "s": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    "expected": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+    "inputs": {
+      "s": "abcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcde"
+    },
+    "expected": "a"
+  }
+]

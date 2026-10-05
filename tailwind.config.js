@@ -11,6 +11,16 @@ export default {
         sans: ['Satoshi', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
+      fontSize: {
+        '2xs': ['11px', '15px'],
+        'xs': ['13px', '18px'],
+        'sm': ['14.5px', '22px'],
+        'base': ['16px', '24px'],
+        'lg': ['18px', '28px'],
+        'xl': ['21px', '30px'],
+        '2xl': ['25px', '34px'],
+        '3xl': ['32px', '40px'],
+      },
       colors: {
         mono: {
           50: '#fafafa',

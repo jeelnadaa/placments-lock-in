@@ -77,7 +77,7 @@ describe('Import and Export Logic', () => {
     });
 
     const parsed = JSON.parse(jsonStr);
-    expect(parsed.version).toBe(1);
+    expect(parsed.version).toBe(2);
     expect(parsed.progress.length).toBe(2);
     expect(parsed.codeVersions.length).toBe(1);
 
@@ -89,7 +89,7 @@ describe('Import and Export Logic', () => {
   it('should reject invalid import data schema', () => {
     expect(validateImportData(null).valid).toBe(false);
     expect(validateImportData('string').valid).toBe(false);
-    expect(validateImportData({ version: 2 }).valid).toBe(false);
+    expect(validateImportData({ version: 99 }).valid).toBe(false);
     expect(validateImportData({ version: 1, progress: 'not-array' }).valid).toBe(false);
     expect(
       validateImportData({

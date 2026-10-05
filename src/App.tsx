@@ -7,7 +7,7 @@ import {
   rehideAllSpoilers,
   DEFAULT_SETTINGS,
 } from './db/db';
-import { Problem, Progress, CodeVersion, Settings } from './types';
+import { Problem, Progress, CodeVersion, Settings, Submission, CustomCase } from './types';
 import { Navbar, NavigationTab } from './components/layout/Navbar';
 import { DashboardView } from './components/dashboard/DashboardView';
 import { PlanView } from './components/plan/PlanView';
@@ -32,6 +32,8 @@ function AppContent() {
   const problems = useLiveQuery(() => db.problems.toArray(), [], [] as Problem[]);
   const progressList = useLiveQuery(() => db.progress.toArray(), [], [] as Progress[]);
   const codeVersions = useLiveQuery(() => db.codeVersions.toArray(), [], [] as CodeVersion[]);
+  const submissionsList = useLiveQuery(() => db.submissions.toArray(), [], [] as Submission[]);
+  const customCasesList = useLiveQuery(() => db.customCases.toArray(), [], [] as CustomCase[]);
   const dbSettings = useLiveQuery(() => db.settings.get('current'), []);
 
   const settings: Settings = dbSettings || DEFAULT_SETTINGS;
@@ -86,6 +88,18 @@ function AppContent() {
     if (!activeProblemId) return [];
     return codeVersions.filter((v) => v.problemId === activeProblemId);
   }, [codeVersions, activeProblemId]);
+
+  const activeProblemSubmissions = useMemo(() => {
+    if (!activeProblemId) return [];
+    return submissionsList
+      .filter((s) => s.problemId === activeProblemId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [submissionsList, activeProblemId]);
+
+  const activeProblemCustomCases = useMemo(() => {
+    if (!activeProblemId) return [];
+    return customCasesList.filter((c) => c.problemId === activeProblemId);
+  }, [customCasesList, activeProblemId]);
 
   // Handlers
   const handleUpdateProgress = async (problemId: number, updates: Partial<Progress>) => {
@@ -149,6 +163,18 @@ function AppContent() {
     });
   };
 
+  const handleAddSubmission = async (sub: Submission) => {
+    await db.submissions.add(sub);
+  };
+
+  const handleAddCustomCase = async (cc: CustomCase) => {
+    await db.customCases.add(cc);
+  };
+
+  const handleDeleteCustomCase = async (id: string) => {
+    await db.customCases.delete(id);
+  };
+
   const handleUpdateSettings = async (newSettings: Partial<Settings>) => {
     const current = await db.settings.get('current');
     const updated = { ...(current || DEFAULT_SETTINGS), ...newSettings };
@@ -168,26 +194,42 @@ function AppContent() {
     importedProgress: Progress[],
     importedVersions: CodeVersion[],
     importedSettings?: Settings,
-    mode: 'replace' | 'merge' = 'replace'
+    mode: 'replace' | 'merge' = 'replace',
+    importedSubmissions?: Submission[],
+    importedCustomCases?: CustomCase[]
   ) => {
-    await db.transaction('rw', db.progress, db.codeVersions, db.settings, async () => {
-      if (mode === 'replace') {
-        await db.progress.clear();
-        await db.codeVersions.clear();
-        await db.progress.bulkAdd(importedProgress);
-        await db.codeVersions.bulkAdd(importedVersions);
-      } else {
-        await db.progress.bulkPut(importedProgress);
-        await db.codeVersions.bulkPut(importedVersions);
+    await db.transaction(
+      'rw',
+      db.progress,
+      db.codeVersions,
+      db.settings,
+      db.submissions,
+      db.customCases,
+      async () => {
+        if (mode === 'replace') {
+          await db.progress.clear();
+          await db.codeVersions.clear();
+          await db.submissions.clear();
+          await db.customCases.clear();
+          await db.progress.bulkAdd(importedProgress);
+          await db.codeVersions.bulkAdd(importedVersions);
+          if (importedSubmissions?.length) await db.submissions.bulkAdd(importedSubmissions);
+          if (importedCustomCases?.length) await db.customCases.bulkAdd(importedCustomCases);
+        } else {
+          await db.progress.bulkPut(importedProgress);
+          await db.codeVersions.bulkPut(importedVersions);
+          if (importedSubmissions?.length) await db.submissions.bulkPut(importedSubmissions);
+          if (importedCustomCases?.length) await db.customCases.bulkPut(importedCustomCases);
+        }
+        if (importedSettings) {
+          await db.settings.put({
+            ...DEFAULT_SETTINGS,
+            ...importedSettings,
+            id: 'current',
+          });
+        }
       }
-      if (importedSettings) {
-        await db.settings.put({
-          ...DEFAULT_SETTINGS,
-          ...importedSettings,
-          id: 'current',
-        });
-      }
-    });
+    );
   };
 
   const handleOpenProblem = (problemId: number) => {
@@ -200,37 +242,52 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-mono-950 text-mono-100 flex flex-col font-sans">
-      {/* NAVBAR */}
-      <Navbar
-        currentTab={currentTab}
-        onSelectTab={(tab) => {
-          setActiveProblemId(null);
-          setCurrentTab(tab);
-        }}
-        solvedCount={solvedCount}
-        currentStreak={currentStreak}
-        settings={settings}
-        onClearTrackClick={() => {
-          setClearConfirmText('');
-          setClearTrackModalOpen(true);
-        }}
-      />
+      {/* NAVBAR: hidden in workspace view for maximum screen area */}
+      {!activeProblem && (
+        <Navbar
+          currentTab={currentTab}
+          onSelectTab={(tab) => {
+            setActiveProblemId(null);
+            setCurrentTab(tab);
+          }}
+          solvedCount={solvedCount}
+          currentStreak={currentStreak}
+          settings={settings}
+          onClearTrackClick={() => {
+            setClearConfirmText('');
+            setClearTrackModalOpen(true);
+          }}
+        />
+      )}
 
       {/* MAIN VIEW CONTAINER */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      <main
+        className={
+          activeProblem
+            ? 'flex-1 w-full h-screen overflow-hidden'
+            : 'flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8'
+        }
+      >
         {/* If a problem is currently opened, display ProblemDetailView */}
         {activeProblem ? (
           <ProblemDetailView
             problem={activeProblem}
+            allProblems={problems}
             progress={progressMap.get(activeProblem.id)}
             versions={activeProblemVersions}
+            submissions={activeProblemSubmissions}
+            customCases={activeProblemCustomCases}
             settings={settings}
             onBack={handleBackFromProblem}
+            onNavigateProblem={handleOpenProblem}
             onUpdateProgress={(updates) => handleUpdateProgress(activeProblem.id, updates)}
             onSaveNewVersion={handleSaveNewVersion}
             onUpdateVersion={handleUpdateVersion}
             onDeleteVersion={handleDeleteVersion}
             onMarkBestVersion={handleMarkBestVersion}
+            onAddSubmission={handleAddSubmission}
+            onAddCustomCase={handleAddCustomCase}
+            onDeleteCustomCase={handleDeleteCustomCase}
           />
         ) : (
           <>
@@ -281,6 +338,8 @@ function AppContent() {
                 problems={problems}
                 progressList={progressList}
                 codeVersions={codeVersions}
+                submissionsList={submissionsList}
+                customCasesList={customCasesList}
                 onUpdateSettings={handleUpdateSettings}
                 onRehideAllSpoilers={handleRehideAllSpoilers}
                 onClearTrack={handleClearTrack}

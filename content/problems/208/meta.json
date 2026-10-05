@@ -1,0 +1,61 @@
+{
+  "id": 208,
+  "className": "Trie",
+  "methodName": "",
+  "params": [],
+  "returnType": "void",
+  "kind": "class",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "operations": [
+          "Trie",
+          "insert",
+          "search",
+          "search",
+          "startsWith",
+          "insert",
+          "search"
+        ],
+        "args": [
+          [],
+          [
+            "apple"
+          ],
+          [
+            "apple"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ]
+        ]
+      },
+      "output": [
+        null,
+        null,
+        true,
+        false,
+        true,
+        null,
+        true
+      ]
+    }
+  ],
+  "constraints": [
+    "1 <= word.length, prefix.length <= 2000",
+    "word and prefix consist only of lowercase English letters.",
+    "At most 3 * 10^4 calls in total will be made to insert, search, and startsWith."
+  ]
+}

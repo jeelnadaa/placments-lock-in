@@ -9,7 +9,7 @@ import {
   EyeOff,
   Trash2,
 } from 'lucide-react';
-import { Settings, Problem, Progress, CodeVersion } from '../../types';
+import { Settings, Problem, Progress, CodeVersion, Submission, CustomCase } from '../../types';
 import { Modal } from '../common/Modal';
 import { useToast } from '../common/Toast';
 import {
@@ -23,6 +23,8 @@ interface SettingsViewProps {
   problems: Problem[];
   progressList: Progress[];
   codeVersions: CodeVersion[];
+  submissionsList?: Submission[];
+  customCasesList?: CustomCase[];
   onUpdateSettings: (newSettings: Partial<Settings>) => Promise<void>;
   onRehideAllSpoilers: () => Promise<void>;
   onClearTrack: () => Promise<void>;
@@ -30,7 +32,9 @@ interface SettingsViewProps {
     importedProgress: Progress[],
     importedVersions: CodeVersion[],
     importedSettings?: Settings,
-    mode?: 'replace' | 'merge'
+    mode?: 'replace' | 'merge',
+    importedSubmissions?: Submission[],
+    importedCustomCases?: CustomCase[]
   ) => Promise<void>;
 }
 
@@ -39,6 +43,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   problems,
   progressList,
   codeVersions,
+  submissionsList,
+  customCasesList,
   onUpdateSettings,
   onRehideAllSpoilers,
   onClearTrack,
@@ -59,6 +65,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     progress: Progress[];
     codeVersions: CodeVersion[];
     settings?: Settings;
+    submissions?: Submission[];
+    customCases?: CustomCase[];
   } | null>(null);
 
   // File download helper
@@ -78,6 +86,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       progress: progressList,
       codeVersions,
       settings,
+      submissions: submissionsList,
+      customCases: customCasesList,
     });
     const filename = `blind75-backup-${new Date().toISOString().slice(0, 10)}.json`;
     downloadFile(filename, jsonStr, 'application/json');
@@ -117,6 +127,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           progress: validation.data.progress,
           codeVersions: validation.data.codeVersions,
           settings: validation.data.settings,
+          submissions: validation.data.submissions,
+          customCases: validation.data.customCases,
         });
         setImportModalOpen(true);
       } catch (err: unknown) {
@@ -136,7 +148,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         pendingImportData.progress,
         pendingImportData.codeVersions,
         pendingImportData.settings,
-        importStrategy
+        importStrategy,
+        pendingImportData.submissions,
+        pendingImportData.customCases
       );
       setImportModalOpen(false);
       setPendingImportData(null);

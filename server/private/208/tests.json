@@ -1,0 +1,570 @@
+[
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "search",
+        "startsWith"
+      ],
+      "args": [
+        [],
+        [
+          "hello"
+        ],
+        [
+          "hello"
+        ],
+        [
+          "hell"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "search",
+        "startsWith"
+      ],
+      "args": [
+        [],
+        [
+          "nonexistent"
+        ],
+        [
+          "non"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      false,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "search",
+        "startsWith",
+        "startsWith"
+      ],
+      "args": [
+        [],
+        [
+          "cat"
+        ],
+        [
+          "car"
+        ],
+        [
+          "cat"
+        ],
+        [
+          "cars"
+        ],
+        [
+          "ca"
+        ],
+        [
+          "z"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "a"
+        ],
+        [
+          "a"
+        ],
+        [
+          "a"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "insert",
+        "search",
+        "search",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "banana"
+        ],
+        [
+          "bandana"
+        ],
+        [
+          "band"
+        ],
+        [
+          "ban"
+        ],
+        [
+          "band"
+        ],
+        [
+          "bandana"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      null,
+      false,
+      true,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "supercalifragilisticexpialidocious"
+        ],
+        [
+          "supercalifragilisticexpialidocious"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "apple"
+        ],
+        [
+          "banana"
+        ],
+        [
+          "apple"
+        ],
+        [
+          "app"
+        ],
+        [
+          "applex"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "application"
+        ],
+        [
+          "band"
+        ],
+        [
+          "application"
+        ],
+        [
+          "app"
+        ],
+        [
+          "applicationx"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "apply"
+        ],
+        [
+          "bandana"
+        ],
+        [
+          "apply"
+        ],
+        [
+          "app"
+        ],
+        [
+          "applyx"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "banana"
+        ],
+        [
+          "cat"
+        ],
+        [
+          "banana"
+        ],
+        [
+          "ban"
+        ],
+        [
+          "bananax"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "band"
+        ],
+        [
+          "caterpillar"
+        ],
+        [
+          "band"
+        ],
+        [
+          "ban"
+        ],
+        [
+          "bandx"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "bandana"
+        ],
+        [
+          "dog"
+        ],
+        [
+          "bandana"
+        ],
+        [
+          "ban"
+        ],
+        [
+          "bandanax"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "cat"
+        ],
+        [
+          "dodge"
+        ],
+        [
+          "cat"
+        ],
+        [
+          "cat"
+        ],
+        [
+          "catx"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "caterpillar"
+        ],
+        [
+          "apple"
+        ],
+        [
+          "caterpillar"
+        ],
+        [
+          "cat"
+        ],
+        [
+          "caterpillarx"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "dog"
+        ],
+        [
+          "application"
+        ],
+        [
+          "dog"
+        ],
+        [
+          "dog"
+        ],
+        [
+          "dogx"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "Trie",
+        "insert",
+        "insert",
+        "search",
+        "startsWith",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "dodge"
+        ],
+        [
+          "apply"
+        ],
+        [
+          "dodge"
+        ],
+        [
+          "dod"
+        ],
+        [
+          "dodgex"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true,
+      false
+    ]
+  }
+]
