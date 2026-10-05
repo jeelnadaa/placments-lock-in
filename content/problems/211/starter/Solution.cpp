@@ -1,0 +1,7 @@
+class WordDictionary {
+public:
+    WordDictionary() {
+        
+    }
+
+};

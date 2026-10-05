@@ -1,4 +1,4 @@
-import { ProblemMeta, SupportedLanguage } from '../types';
+import type { ProblemMeta, SupportedLanguage } from '../types/index.ts';
 
 /**
  * Maps Java/Meta type names to Python type annotations
@@ -74,8 +74,8 @@ export function generatePythonStarterCode(meta: ProblemMeta): string {
   const lines: string[] = [];
 
   const typesUsed = new Set<string>();
-  typesUsed.add(meta.returnType);
-  meta.params.forEach((p) => typesUsed.add(p.type));
+  if (meta.returnType) typesUsed.add(meta.returnType);
+  (meta.params || []).forEach((p) => typesUsed.add(p.type));
 
   const usesListNode = Array.from(typesUsed).some((t) => t.includes('ListNode'));
   const usesTreeNode = Array.from(typesUsed).some((t) => t.includes('TreeNode'));
@@ -108,12 +108,12 @@ export function generatePythonStarterCode(meta: ProblemMeta): string {
 
   // Determine needed typing imports
   const typingImports = new Set<string>();
-  const pythonReturn = javaTypeToPython(meta.returnType);
+  const pythonReturn = javaTypeToPython(meta.returnType || 'void');
   if (pythonReturn.includes('List')) typingImports.add('List');
   if (pythonReturn.includes('Optional')) typingImports.add('Optional');
   if (pythonReturn.includes('Dict')) typingImports.add('Dict');
 
-  for (const p of meta.params) {
+  for (const p of (meta.params || [])) {
     const pt = javaTypeToPython(p.type);
     if (pt.includes('List')) typingImports.add('List');
     if (pt.includes('Optional')) typingImports.add('Optional');
@@ -250,8 +250,8 @@ export function generateCppStarterCode(meta: ProblemMeta): string {
   const lines: string[] = [];
 
   const typesUsed = new Set<string>();
-  typesUsed.add(meta.returnType);
-  meta.params.forEach((p) => typesUsed.add(p.type));
+  if (meta.returnType) typesUsed.add(meta.returnType);
+  (meta.params || []).forEach((p) => typesUsed.add(p.type));
 
   const usesListNode = Array.from(typesUsed).some((t) => t.includes('ListNode'));
   const usesTreeNode = Array.from(typesUsed).some((t) => t.includes('TreeNode'));
@@ -334,7 +334,7 @@ export function generateCppStarterCode(meta: ProblemMeta): string {
   // Handle standard function or in-place function
   lines.push('class Solution {');
   lines.push('public:');
-  const paramStrings = meta.params.map((p) => `${javaTypeToCpp(p.type, true)} ${p.name}`);
+  const paramStrings = (meta.params || []).map((p) => `${javaTypeToCpp(p.type, true)} ${p.name}`);
   const allParams = paramStrings.join(', ');
 
   const isInplace = typeof meta.kind === 'string' && meta.kind.startsWith('inplace:');
@@ -421,8 +421,8 @@ export function generateCStarterCode(meta: ProblemMeta): string {
   const lines: string[] = [];
 
   const typesUsed = new Set<string>();
-  typesUsed.add(meta.returnType);
-  meta.params.forEach((p) => typesUsed.add(p.type));
+  if (meta.returnType) typesUsed.add(meta.returnType);
+  (meta.params || []).forEach((p) => typesUsed.add(p.type));
 
   const usesListNode = Array.from(typesUsed).some((t) => t.includes('ListNode'));
   const usesTreeNode = Array.from(typesUsed).some((t) => t.includes('TreeNode'));
@@ -536,7 +536,7 @@ export function generateCStarterCode(meta: ProblemMeta): string {
 
   // Build params
   const paramStrings: string[] = [];
-  for (const p of meta.params) {
+  for (const p of (meta.params || [])) {
     const t = p.type.trim();
     if (t === 'int[]') {
       paramStrings.push(`int* ${p.name}`, `int ${p.name}Size`);
@@ -655,8 +655,8 @@ export function generateGoStarterCode(meta: ProblemMeta): string {
   const lines: string[] = [];
 
   const typesUsed = new Set<string>();
-  typesUsed.add(meta.returnType);
-  meta.params.forEach((p) => typesUsed.add(p.type));
+  if (meta.returnType) typesUsed.add(meta.returnType);
+  (meta.params || []).forEach((p) => typesUsed.add(p.type));
 
   const usesListNode = Array.from(typesUsed).some((t) => t.includes('ListNode'));
   const usesTreeNode = Array.from(typesUsed).some((t) => t.includes('TreeNode'));
@@ -748,7 +748,7 @@ export function generateGoStarterCode(meta: ProblemMeta): string {
   const retType = isInplace ? '' : javaTypeToGo(meta.returnType);
   const retPart = retType ? ` ${retType}` : '';
 
-  const paramStrings = meta.params.map((p) => `${p.name} ${javaTypeToGo(p.type)}`);
+  const paramStrings = (meta.params || []).map((p) => `${p.name} ${javaTypeToGo(p.type)}`);
   const allParams = paramStrings.join(', ');
 
   lines.push(`func ${meta.methodName}(${allParams})${retPart} {`);

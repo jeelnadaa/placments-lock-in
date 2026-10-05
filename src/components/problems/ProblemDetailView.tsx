@@ -121,10 +121,24 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
 
   // Helper to load persisted draft code across browser sessions per (problemId, language)
   const getPersistedCode = (probId: number, lang: SupportedLanguage): string => {
+    const isJavaContamination = (code: string, targetLang: SupportedLanguage): boolean => {
+      if (targetLang === 'java') return false;
+      return (
+        /public\s+class\s+Solution/.test(code) ||
+        /class\s+Solution\s*\{\s*public/.test(code) ||
+        /public\s+(?:int|void|boolean|String|List|TreeNode|ListNode)\b/.test(code)
+      );
+    };
+
     try {
       const savedLocal = localStorage.getItem(`lockedin_code_${probId}_${lang}`);
       if (savedLocal !== null && savedLocal !== undefined && savedLocal.length > 0) {
-        return savedLocal;
+        if (!isJavaContamination(savedLocal, lang)) {
+          return savedLocal;
+        }
+        try {
+          localStorage.removeItem(`lockedin_code_${probId}_${lang}`);
+        } catch {}
       }
       if (lang === 'java') {
         const legacyJava = localStorage.getItem(`lockedin_code_${probId}`);
@@ -136,7 +150,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
       // ignore localStorage errors
     }
     if (progress?.problemId === probId) {
-      if (progress.codeByLanguage?.[lang]) {
+      if (progress.codeByLanguage?.[lang] && !isJavaContamination(progress.codeByLanguage[lang]!, lang)) {
         return progress.codeByLanguage[lang]!;
       }
       if (lang === 'java' && progress.currentCode) {
@@ -146,7 +160,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
     const latest = [...versions]
       .filter((v) => v.problemId === probId && v.language === lang)
       .sort((a, b) => b.versionNumber - a.versionNumber)[0];
-    if (latest?.code && latest.code.length > 0) {
+    if (latest?.code && latest.code.length > 0 && !isJavaContamination(latest.code, lang)) {
       return latest.code;
     }
     return getProblemStarterCode(probId, lang);
@@ -1154,18 +1168,18 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
               }}
             >
               {/* EDITOR TOOLBAR */}
-              <div className="flex items-center justify-between px-4 py-2 border-b border-mono-800 bg-mono-900/90 text-xs font-mono select-none">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center rounded-lg bg-mono-950 p-0.5 border border-mono-800">
+              <div className="flex items-center justify-between px-4 py-2.5 border-b border-mono-800 bg-mono-900/95 text-xs font-mono select-none">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center rounded-xl bg-mono-950 p-1 border border-mono-750 shadow-inner gap-1">
                     {(['python', 'java', 'cpp', 'c', 'go'] as SupportedLanguage[]).map((lang) => (
                       <button
                         key={lang}
                         type="button"
                         onClick={() => handleLanguageChange(lang)}
-                        className={`px-2.5 py-0.5 rounded text-[11px] font-bold transition-all ${
+                        className={`px-3.5 py-1.5 rounded-lg text-xs md:text-[13px] font-bold tracking-wide transition-all ${
                           language === lang
-                            ? 'bg-amber-400 text-mono-950 shadow-sm'
-                            : 'text-mono-400 hover:text-mono-200'
+                            ? 'bg-amber-400 text-mono-950 shadow-md ring-1 ring-amber-300/40'
+                            : 'text-mono-400 hover:text-mono-100 hover:bg-mono-850/80'
                         }`}
                       >
                         {lang === 'python' ? 'Python' : lang === 'java' ? 'Java' : lang === 'cpp' ? 'C++' : lang === 'c' ? 'C' : 'Go'}
@@ -1176,7 +1190,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setAssistMode(!assistMode)}
-                    className={`px-2 py-0.5 rounded text-[11px] border transition-colors ${
+                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                       assistMode
                         ? 'bg-mono-800 border-mono-700 text-mono-200'
                         : 'bg-mono-900 border-mono-800 text-mono-500'

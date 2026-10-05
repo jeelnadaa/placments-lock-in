@@ -1,0 +1,7 @@
+class MedianFinder {
+public:
+    MedianFinder() {
+        
+    }
+
+};
