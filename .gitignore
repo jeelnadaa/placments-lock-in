@@ -1,5 +1,58 @@
-node_modules
-dist
-dist-ssr
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production and Build Outputs
+dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+
+# Local Java Judge Execution & Scratch Directories
+scratch/
+temp/
+*.class
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# Environment variables and local configs
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.local
+
+# IDE and Editor directories
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# Testing and Coverage
+coverage/
+.nyc_output/
