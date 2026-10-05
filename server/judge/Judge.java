@@ -632,7 +632,8 @@ public class Judge {
                 } catch (Throwable t) {
                     errorHolder[0] = t instanceof InvocationTargetException ? ((InvocationTargetException) t).getTargetException() : t;
                 } finally {
-                    runtimeHolder[0] = (System.nanoTime() - start) / 1_000_000;
+                    long elapsedNanos = System.nanoTime() - start;
+                    runtimeHolder[0] = Math.max(1, (elapsedNanos + 999_999) / 1_000_000);
                     System.setOut(originalOut);
                 }
             };

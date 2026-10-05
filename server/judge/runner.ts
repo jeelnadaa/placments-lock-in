@@ -177,7 +177,7 @@ export async function executeJavaSolution(params: {
     return {
       verdict: worstVerdict,
       testOutputs: parsedOutputs,
-      totalRuntimeMs: totalRuntime,
+      totalRuntimeMs: Math.max(1, Math.round(totalRuntime)),
     };
   } finally {
     // Clean up temporary run directory

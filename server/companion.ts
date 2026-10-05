@@ -257,7 +257,7 @@ export async function handleRunCode(payload: {
   return {
     verdict: allPassed ? 'Accepted' : overallVerdict,
     results,
-    runtimeMs: execResult.totalRuntimeMs,
+    runtimeMs: Math.max(1, Math.round(execResult.totalRuntimeMs || results.reduce((acc, r) => acc + (r.runtimeMs || 0), 0) || 1)),
   };
 }
 
@@ -381,6 +381,12 @@ export async function handleSubmitCode(payload: {
   let passed = 0;
   let totalRuntime = 0;
 
+  const getEffectiveRuntime = (accumulatedMs: number): number => {
+    if (accumulatedMs > 0) return Math.max(1, Math.round(accumulatedMs));
+    if (execResult.totalRuntimeMs > 0) return Math.max(1, Math.round(execResult.totalRuntimeMs));
+    return 1;
+  };
+
   for (let i = 0; i < total; i++) {
     const t = allTests[i];
     const out = outputMap.get(i);
@@ -398,7 +404,7 @@ export async function handleSubmitCode(payload: {
         verdict: out.verdict,
         passed,
         total,
-        runtimeMs: totalRuntime,
+        runtimeMs: getEffectiveRuntime(totalRuntime),
         failing: {
           index: i + 1,
           input: t.inputs,
@@ -425,7 +431,7 @@ export async function handleSubmitCode(payload: {
         verdict: 'Wrong Answer',
         passed,
         total,
-        runtimeMs: totalRuntime,
+        runtimeMs: getEffectiveRuntime(totalRuntime),
         failing: {
           index: i + 1,
           input: t.inputs,
@@ -446,7 +452,7 @@ export async function handleSubmitCode(payload: {
       verdict: execResult.verdict || 'Runtime Error',
       passed,
       total,
-      runtimeMs: totalRuntime,
+      runtimeMs: getEffectiveRuntime(totalRuntime),
       error: execResult.error,
       failing: {
         index: failingIdx + 1,
@@ -461,7 +467,7 @@ export async function handleSubmitCode(payload: {
     verdict: 'Accepted',
     passed,
     total,
-    runtimeMs: totalRuntime,
+    runtimeMs: getEffectiveRuntime(totalRuntime),
   };
 }
 

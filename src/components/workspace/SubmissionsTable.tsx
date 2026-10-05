@@ -62,7 +62,7 @@ export const SubmissionsTable: React.FC<SubmissionsTableProps> = ({ submissions,
               <span className="text-mono-400">
                 {sub.passed}/{sub.total} passed
               </span>
-              {sub.runtimeMs > 0 && (
+              {typeof sub.runtimeMs === 'number' && (
                 <span className="text-mono-500">• {sub.runtimeMs} ms</span>
               )}
             </div>

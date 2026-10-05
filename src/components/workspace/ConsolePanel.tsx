@@ -357,7 +357,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                       <span className="text-mono-300 font-semibold">
                         {submitResult.passed} / {submitResult.total} testcases passed
                       </span>
-                      {submitResult.runtimeMs > 0 && (
+                      {typeof submitResult.runtimeMs === 'number' && (
                         <span className="text-mono-400 font-mono">• Runtime: {submitResult.runtimeMs} ms</span>
                       )}
                     </div>
