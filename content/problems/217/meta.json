@@ -1,0 +1,61 @@
+{
+  "id": 217,
+  "className": "Solution",
+  "methodName": "containsDuplicate",
+  "params": [
+    {
+      "name": "nums",
+      "type": "int[]"
+    }
+  ],
+  "returnType": "boolean",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "output": false
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          3,
+          3,
+          4,
+          3,
+          2,
+          4,
+          2
+        ]
+      },
+      "output": true
+    }
+  ],
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^9 <= nums[i] <= 10^9"
+  ]
+}

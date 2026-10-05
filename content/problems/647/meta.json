@@ -1,0 +1,39 @@
+{
+  "id": 647,
+  "title": "Palindromic Substrings",
+  "slug": "palindromic-substrings",
+  "difficulty": "Medium",
+  "day": 12,
+  "category": "String",
+  "order": 2,
+  "timeEstimateMinutes": 20,
+  "className": "Solution",
+  "methodName": "countSubstrings",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "s",
+      "type": "String"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "s": "abc"
+      },
+      "output": 3
+    },
+    {
+      "input": {
+        "s": "aaa"
+      },
+      "output": 6
+    }
+  ],
+  "constraints": [
+    "1 <= s.length <= 1000",
+    "s consists of lowercase English letters."
+  ]
+}

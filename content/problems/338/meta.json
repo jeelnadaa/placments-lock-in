@@ -1,0 +1,44 @@
+{
+  "id": 338,
+  "className": "Solution",
+  "methodName": "countBits",
+  "params": [
+    {
+      "name": "n",
+      "type": "int"
+    }
+  ],
+  "returnType": "int[]",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "n": 2
+      },
+      "output": [
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "input": {
+        "n": 5
+      },
+      "output": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        2
+      ]
+    }
+  ],
+  "constraints": [
+    "0 <= n <= 10^5"
+  ]
+}

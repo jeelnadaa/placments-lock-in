@@ -1,0 +1,55 @@
+{
+  "id": 297,
+  "title": "Serialize and Deserialize Binary Tree",
+  "slug": "serialize-and-deserialize-binary-tree",
+  "difficulty": "Hard",
+  "day": 14,
+  "category": "Trees",
+  "order": 4,
+  "timeEstimateMinutes": 35,
+  "className": "Solution",
+  "methodName": "serializeDeserialize",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "root",
+      "type": "TreeNode"
+    }
+  ],
+  "returnType": "TreeNode",
+  "examples": [
+    {
+      "input": {
+        "root": [
+          1,
+          2,
+          3,
+          null,
+          null,
+          4,
+          5
+        ]
+      },
+      "output": [
+        1,
+        2,
+        3,
+        null,
+        null,
+        4,
+        5
+      ]
+    },
+    {
+      "input": {
+        "root": []
+      },
+      "output": []
+    }
+  ],
+  "constraints": [
+    "The number of nodes in the tree is in the range [0, 10^4].",
+    "-1000 <= Node.val <= 1000"
+  ]
+}

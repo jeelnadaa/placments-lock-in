@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Calendar, List, Settings as SettingsIcon, Flame, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Calendar, List, Settings as SettingsIcon, Flame, ShieldCheck, FlaskConical } from 'lucide-react';
 import { Settings } from '../../types';
 
 export type NavigationTab = 'dashboard' | 'plan' | 'problems' | 'settings';
@@ -11,6 +11,7 @@ interface NavbarProps {
   currentStreak: number;
   settings?: Settings;
   onClearTrackClick: () => void;
+  onOpenSandbox?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -20,6 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentStreak,
   settings,
   onClearTrackClick,
+  onOpenSandbox,
 }) => {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-mono-800 bg-mono-950/85 backdrop-blur-md">
@@ -93,6 +95,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             <SettingsIcon className="w-3.5 h-3.5" />
             <span>Settings</span>
           </button>
+
+          {onOpenSandbox && (
+            <button
+              type="button"
+              onClick={onOpenSandbox}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-950/40 border border-emerald-800/60 font-semibold transition-all"
+              title="Open Judge Diagnostics Sandbox (#0) to test Java execution, stdout, and error handling"
+            >
+              <FlaskConical className="w-3.5 h-3.5" />
+              <span>🧪 Judge Sandbox</span>
+            </button>
+          )}
         </nav>
 
         {/* STATS & QUICK ACTIONS */}

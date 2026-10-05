@@ -1,0 +1,56 @@
+{
+  "id": 347,
+  "className": "Solution",
+  "methodName": "topKFrequent",
+  "params": [
+    {
+      "name": "nums",
+      "type": "int[]"
+    },
+    {
+      "name": "k",
+      "type": "int"
+    }
+  ],
+  "returnType": "int[]",
+  "kind": "function",
+  "comparator": "unordered",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "output": [
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ],
+        "k": 1
+      },
+      "output": [
+        1
+      ]
+    }
+  ],
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^4 <= nums[i] <= 10^4",
+    "k is in the range [1, the number of unique elements in the array].",
+    "It is guaranteed that the answer is unique."
+  ]
+}

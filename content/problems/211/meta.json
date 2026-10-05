@@ -1,0 +1,69 @@
+{
+  "id": 211,
+  "title": "Design Add and Search Words Data Structure",
+  "slug": "design-add-and-search-words-data-structure",
+  "difficulty": "Medium",
+  "day": 12,
+  "category": "Trie",
+  "order": 4,
+  "timeEstimateMinutes": 30,
+  "className": "WordDictionary",
+  "kind": "class",
+  "comparator": "exact",
+  "examples": [
+    {
+      "input": {
+        "operations": [
+          "WordDictionary",
+          "addWord",
+          "addWord",
+          "addWord",
+          "search",
+          "search",
+          "search",
+          "search"
+        ],
+        "args": [
+          [],
+          [
+            "bad"
+          ],
+          [
+            "dad"
+          ],
+          [
+            "mad"
+          ],
+          [
+            "pad"
+          ],
+          [
+            "bad"
+          ],
+          [
+            ".ad"
+          ],
+          [
+            "b.."
+          ]
+        ]
+      },
+      "output": [
+        null,
+        null,
+        null,
+        null,
+        false,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  "constraints": [
+    "1 <= word.length <= 25",
+    "word in addWord consists of lowercase English letters.",
+    "word in search consist of '.' or lowercase English letters.",
+    "At most 10^4 calls will be made to addWord and search."
+  ]
+}

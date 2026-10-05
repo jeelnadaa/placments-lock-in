@@ -18,6 +18,23 @@ import { Modal } from './components/common/Modal';
 import { ToastProvider, useToast } from './components/common/Toast';
 import { calculateStreaks } from './utils/streaks';
 
+const TEST_PROBLEM_0: Problem = {
+  id: 0,
+  title: "Judge Diagnostics & Sandbox",
+  day: 0,
+  order: 0,
+  topic: "Testing",
+  difficulty: "Easy",
+  leetcodeUrl: "",
+  neetcodeUrl: null,
+  leetcodePremium: false,
+  hints: [
+    "Run mode executes your code against sample test cases and returns actual outputs.",
+    "Mode 1 tests normal addition, Mode 2 triggers runtime exception, Mode 3 times out, Mode 4 captures stdout.",
+    "Check the problem description for exact parameters and reference answers."
+  ]
+};
+
 function AppContent() {
   const { showToast } = useToast();
 
@@ -80,24 +97,25 @@ function AppContent() {
 
   // Active problem object
   const activeProblem = useMemo(() => {
-    if (!activeProblemId) return null;
+    if (activeProblemId === null || activeProblemId === undefined) return null;
+    if (activeProblemId === 0) return TEST_PROBLEM_0;
     return problems.find((p) => p.id === activeProblemId) || null;
   }, [problems, activeProblemId]);
 
   const activeProblemVersions = useMemo(() => {
-    if (!activeProblemId) return [];
+    if (activeProblemId === null || activeProblemId === undefined) return [];
     return codeVersions.filter((v) => v.problemId === activeProblemId);
   }, [codeVersions, activeProblemId]);
 
   const activeProblemSubmissions = useMemo(() => {
-    if (!activeProblemId) return [];
+    if (activeProblemId === null || activeProblemId === undefined) return [];
     return submissionsList
       .filter((s) => s.problemId === activeProblemId)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [submissionsList, activeProblemId]);
 
   const activeProblemCustomCases = useMemo(() => {
-    if (!activeProblemId) return [];
+    if (activeProblemId === null || activeProblemId === undefined) return [];
     return customCasesList.filter((c) => c.problemId === activeProblemId);
   }, [customCasesList, activeProblemId]);
 
@@ -257,6 +275,7 @@ function AppContent() {
             setClearConfirmText('');
             setClearTrackModalOpen(true);
           }}
+          onOpenSandbox={() => handleOpenProblem(0)}
         />
       )}
 

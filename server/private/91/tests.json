@@ -1,0 +1,98 @@
+[
+  {
+    "inputs": {
+      "s": "12"
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "226"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "06"
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "s": "0"
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "s": "10"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "27"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "2101"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "1111"
+    },
+    "expected": 5
+  },
+  {
+    "inputs": {
+      "s": "1201234"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "2611055971756562"
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "s": "100"
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "s": "301"
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "s": "20"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "11106"
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "7"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "26"
+    },
+    "expected": 2
+  }
+]

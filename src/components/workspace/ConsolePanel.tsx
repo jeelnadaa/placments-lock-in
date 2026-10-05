@@ -9,6 +9,8 @@ import {
   ChevronUp,
   BookmarkPlus,
   Save,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
 import { CustomCase, ProblemMeta, RunResponse, SubmitResponse } from '../../types';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -28,6 +30,8 @@ interface ConsolePanelProps {
   onSaveAsVersionClick: () => void;
   onAddFailingToCustomCases: (failingInput: Record<string, unknown> | string) => void;
   onJumpToLine?: (line: number) => void;
+  isMaximized?: boolean;
+  onToggleMaximize?: () => void;
 }
 
 export const ConsolePanel: React.FC<ConsolePanelProps> = ({
@@ -45,6 +49,8 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   onSaveAsVersionClick,
   onAddFailingToCustomCases,
   onJumpToLine,
+  isMaximized = false,
+  onToggleMaximize,
 }) => {
   const [selectedCaseIdx, setSelectedCaseIdx] = useState(0);
   const [selectedResultCaseIdx, setSelectedResultCaseIdx] = useState(0);
@@ -94,7 +100,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   };
 
   return (
-    <div className="flex flex-col border-t border-mono-800 bg-mono-950 font-mono text-xs shadow-xl">
+    <div className={`flex flex-col border-t border-mono-800 bg-mono-950 font-mono text-xs shadow-xl ${isMaximized ? 'h-full flex-1' : ''}`}>
       {/* CONSOLE HEADER BAR */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-mono-800 bg-mono-900/90 select-none">
         <div className="flex items-center gap-2">
@@ -137,18 +143,31 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
           </button>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1 rounded hover:bg-mono-800 text-mono-400 hover:text-mono-200 transition-colors"
-          title={isCollapsed ? 'Expand console' : 'Collapse console'}
-        >
-          {isCollapsed ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </button>
+        <div className="flex items-center gap-1">
+          {onToggleMaximize && !isCollapsed && (
+            <button
+              type="button"
+              onClick={onToggleMaximize}
+              className="p-1 rounded hover:bg-mono-800 text-mono-400 hover:text-mono-200 transition-colors"
+              title={isMaximized ? 'Restore height' : 'Expand testcase panel to full height'}
+            >
+              {isMaximized ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="p-1 rounded hover:bg-mono-800 text-mono-400 hover:text-mono-200 transition-colors"
+            title={isCollapsed ? 'Expand console' : 'Collapse console'}
+          >
+            {isCollapsed ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+        </div>
       </div>
 
       {!isCollapsed && (
-        <div className="p-4 max-h-[340px] overflow-y-auto">
+        <div className="p-4 flex-1 overflow-y-auto">
           {/* TAB 1: TESTCASE */}
           {activeConsoleTab === 'testcase' && (
             <div className="flex flex-col gap-3">

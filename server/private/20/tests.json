@@ -1,0 +1,98 @@
+[
+  {
+    "inputs": {
+      "s": ""
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "["
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "]"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "((("
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": ")))"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "{[]}"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "([)]"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "({[]})"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "()()()()()"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "(((())))"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "(((((((((("
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "[[[[[[[]]]]]]]"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "}{"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "()[]{}([{}])"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "[({})]()"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "[({})](]"
+    },
+    "expected": false
+  }
+]

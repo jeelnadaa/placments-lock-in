@@ -1,0 +1,112 @@
+{
+  "id": 79,
+  "title": "Word Search",
+  "slug": "word-search",
+  "difficulty": "Medium",
+  "day": 12,
+  "category": "Backtracking",
+  "order": 3,
+  "timeEstimateMinutes": 30,
+  "className": "Solution",
+  "methodName": "exist",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "board",
+      "type": "char[][]"
+    },
+    {
+      "name": "word",
+      "type": "String"
+    }
+  ],
+  "returnType": "boolean",
+  "examples": [
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "ABCCED"
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "SEE"
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "ABCB"
+      },
+      "output": false
+    }
+  ],
+  "constraints": [
+    "m == board.length",
+    "n = board[i].length",
+    "1 <= m, n <= 6",
+    "1 <= word.length <= 15",
+    "board and word consists of only lowercase and uppercase English letters."
+  ]
+}

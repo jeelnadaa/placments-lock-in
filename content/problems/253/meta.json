@@ -1,0 +1,61 @@
+{
+  "id": 253,
+  "title": "Meeting Rooms II",
+  "slug": "meeting-rooms-ii",
+  "difficulty": "Medium",
+  "day": 13,
+  "category": "Intervals",
+  "order": 5,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "minMeetingRooms",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "intervals",
+      "type": "int[][]"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            30
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            15,
+            20
+          ]
+        ]
+      },
+      "output": 2
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            7,
+            10
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      },
+      "output": 1
+    }
+  ],
+  "constraints": [
+    "1 <= intervals.length <= 10^4",
+    "0 <= start_i < end_i <= 10^6"
+  ]
+}

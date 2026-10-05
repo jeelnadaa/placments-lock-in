@@ -1,0 +1,41 @@
+{
+  "id": 3,
+  "className": "Solution",
+  "methodName": "lengthOfLongestSubstring",
+  "params": [
+    {
+      "name": "s",
+      "type": "String"
+    }
+  ],
+  "returnType": "int",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "s": "abcabcbb"
+      },
+      "output": 3,
+      "explanation": "The answer is \"abc\", with the length of 3."
+    },
+    {
+      "input": {
+        "s": "bbbbb"
+      },
+      "output": 1
+    },
+    {
+      "input": {
+        "s": "pwwkew"
+      },
+      "output": 3
+    }
+  ],
+  "constraints": [
+    "0 <= s.length <= 5 * 10^4",
+    "s consists of English letters, digits, symbols and spaces."
+  ]
+}

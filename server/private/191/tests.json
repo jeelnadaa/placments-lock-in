@@ -1,0 +1,98 @@
+[
+  {
+    "inputs": {
+      "n": 1
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "n": 2
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "n": 3
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "n": 4
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "n": 7
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "n": 8
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "n": 15
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "n": 16
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "n": 255
+    },
+    "expected": 8
+  },
+  {
+    "inputs": {
+      "n": 1023
+    },
+    "expected": 10
+  },
+  {
+    "inputs": {
+      "n": 1024
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "n": 65535
+    },
+    "expected": 16
+  },
+  {
+    "inputs": {
+      "n": 1000000
+    },
+    "expected": 7
+  },
+  {
+    "inputs": {
+      "n": 2147483647
+    },
+    "expected": 31
+  },
+  {
+    "inputs": {
+      "n": 1431655765
+    },
+    "expected": 16
+  },
+  {
+    "inputs": {
+      "n": 858993459
+    },
+    "expected": 16
+  }
+]

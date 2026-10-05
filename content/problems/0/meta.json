@@ -1,0 +1,39 @@
+{
+  "id": 0,
+  "className": "Solution",
+  "methodName": "runDiagnostic",
+  "params": [
+    { "name": "nums", "type": "int[]" },
+    { "name": "mode", "type": "String" },
+    { "name": "target", "type": "int" }
+  ],
+  "returnType": "int[]",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": { "nums": [1, 2, 3, 4], "mode": "SUM", "target": 10 },
+      "output": [20],
+      "explanation": "Mode SUM computes sum of all elements in nums (1+2+3+4 = 10) plus target (10), returning [20]."
+    },
+    {
+      "input": { "nums": [5, 1, 9, 2, 8], "mode": "FILTER", "target": 4 },
+      "output": [5, 9, 8],
+      "explanation": "Mode FILTER filters all elements in nums strictly greater than target (4)."
+    },
+    {
+      "input": { "nums": [10, 20, 30], "mode": "REVERSE", "target": 0 },
+      "output": [30, 20, 10],
+      "explanation": "Mode REVERSE returns the elements of nums reversed."
+    }
+  ],
+  "constraints": [
+    "0 <= nums.length <= 10^4",
+    "-10^5 <= nums[i] <= 10^5",
+    "mode is one of \"SUM\", \"FILTER\", \"REVERSE\", or \"DEFAULT\"",
+    "-10^5 <= target <= 10^5"
+  ],
+  "followUp": "Try testing a failing case, compile error, runtime exception, or loop timeout."
+}

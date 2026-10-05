@@ -1,0 +1,267 @@
+[
+  {
+    "inputs": {
+      "root": [
+        3,
+        4,
+        5,
+        1,
+        2
+      ],
+      "subRoot": [
+        4,
+        1,
+        2
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        3,
+        4,
+        5,
+        1,
+        2,
+        null,
+        null,
+        null,
+        null,
+        0
+      ],
+      "subRoot": [
+        4,
+        1,
+        2
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "root": [
+        1
+      ],
+      "subRoot": [
+        1
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        1
+      ],
+      "subRoot": [
+        2
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "root": [
+        1,
+        2,
+        3
+      ],
+      "subRoot": [
+        2
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        1,
+        2,
+        3
+      ],
+      "subRoot": [
+        3
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        1,
+        2,
+        3
+      ],
+      "subRoot": [
+        1,
+        2
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "root": [
+        1,
+        1
+      ],
+      "subRoot": [
+        1
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        3,
+        4,
+        5,
+        1,
+        null,
+        2
+      ],
+      "subRoot": [
+        3,
+        4,
+        5,
+        1,
+        null,
+        2
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        1,
+        null,
+        1,
+        null,
+        1,
+        null,
+        1,
+        null,
+        1,
+        null,
+        1,
+        2
+      ],
+      "subRoot": [
+        1,
+        null,
+        1,
+        2
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        4,
+        2,
+        6,
+        1,
+        3,
+        5,
+        7
+      ],
+      "subRoot": [
+        2,
+        1,
+        3
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        4,
+        2,
+        6,
+        1,
+        3,
+        5,
+        7
+      ],
+      "subRoot": [
+        6,
+        5,
+        7
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        4,
+        2,
+        6,
+        1,
+        3,
+        5,
+        7
+      ],
+      "subRoot": [
+        6,
+        5,
+        null
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "root": [
+        10,
+        5,
+        15,
+        3,
+        7
+      ],
+      "subRoot": [
+        5,
+        3,
+        7
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "root": [
+        10,
+        5,
+        15,
+        3,
+        7
+      ],
+      "subRoot": [
+        5,
+        3,
+        null
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "root": [
+        1,
+        2,
+        null,
+        3
+      ],
+      "subRoot": [
+        2,
+        3
+      ]
+    },
+    "expected": true
+  }
+]

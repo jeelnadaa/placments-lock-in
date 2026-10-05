@@ -1,0 +1,114 @@
+[
+  {
+    "inputs": {
+      "s": "ADOBECODEBANC",
+      "t": "ABC"
+    },
+    "expected": "BANC"
+  },
+  {
+    "inputs": {
+      "s": "a",
+      "t": "a"
+    },
+    "expected": "a"
+  },
+  {
+    "inputs": {
+      "s": "a",
+      "t": "aa"
+    },
+    "expected": ""
+  },
+  {
+    "inputs": {
+      "s": "aa",
+      "t": "aa"
+    },
+    "expected": "aa"
+  },
+  {
+    "inputs": {
+      "s": "ab",
+      "t": "b"
+    },
+    "expected": "b"
+  },
+  {
+    "inputs": {
+      "s": "ab",
+      "t": "a"
+    },
+    "expected": "a"
+  },
+  {
+    "inputs": {
+      "s": "bdab",
+      "t": "ab"
+    },
+    "expected": "ab"
+  },
+  {
+    "inputs": {
+      "s": "bba",
+      "t": "ab"
+    },
+    "expected": "ba"
+  },
+  {
+    "inputs": {
+      "s": "cabwefgewcwaefgcf",
+      "t": "cae"
+    },
+    "expected": "cwae"
+  },
+  {
+    "inputs": {
+      "s": "a",
+      "t": "b"
+    },
+    "expected": ""
+  },
+  {
+    "inputs": {
+      "s": "aaaaaaaaaaaabbbbbcdd",
+      "t": "abcdd"
+    },
+    "expected": "abbbbbcdd"
+  },
+  {
+    "inputs": {
+      "s": "ADOBECODEBANC",
+      "t": "A"
+    },
+    "expected": "A"
+  },
+  {
+    "inputs": {
+      "s": "ADOBECODEBANC",
+      "t": "Z"
+    },
+    "expected": ""
+  },
+  {
+    "inputs": {
+      "s": "XYZABC",
+      "t": "ABC"
+    },
+    "expected": "ABC"
+  },
+  {
+    "inputs": {
+      "s": "DONOTPANIC",
+      "t": "NOT"
+    },
+    "expected": "NOT"
+  },
+  {
+    "inputs": {
+      "s": "timetopractice",
+      "t": "toc"
+    },
+    "expected": "toprac"
+  }
+]

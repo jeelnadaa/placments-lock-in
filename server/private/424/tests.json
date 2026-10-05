@@ -1,0 +1,114 @@
+[
+  {
+    "inputs": {
+      "s": "ABAB",
+      "k": 2
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "s": "AABABBA",
+      "k": 1
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "s": "AAAA",
+      "k": 2
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "s": "ABCD",
+      "k": 0
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "ABCD",
+      "k": 1
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "ABCD",
+      "k": 2
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "ABCD",
+      "k": 3
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "s": "A",
+      "k": 0
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "ABAA",
+      "k": 0
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "BAAA",
+      "k": 0
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "KRSCDCSONAJNHLBMDQGIFCPEKABNABIKZWILGABFDNYIHAMMYAQURAIRKICJAISIOYZZACMGOHABAXBGNATSNVGMOBVAUVARASIB",
+      "k": 4
+    },
+    "expected": 7
+  },
+  {
+    "inputs": {
+      "s": "EOEMQLLQTRQDDCOACUBECIWIPPFORQGNYCIBIBCGARENKBBENASADJHSNOATCVDRIYAHYHAMMYAQURAIRKICJAISIOYZZACMGOHAB",
+      "k": 7
+    },
+    "expected": 11
+  },
+  {
+    "inputs": {
+      "s": "BAAAB",
+      "k": 2
+    },
+    "expected": 5
+  },
+  {
+    "inputs": {
+      "s": "ABBB",
+      "k": 2
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "s": "AABA",
+      "k": 0
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "ABBBBA",
+      "k": 1
+    },
+    "expected": 5
+  }
+]

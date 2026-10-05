@@ -1,0 +1,440 @@
+[
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "addWord",
+        "addWord",
+        "search",
+        "search",
+        "search",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "bad"
+        ],
+        [
+          "dad"
+        ],
+        [
+          "mad"
+        ],
+        [
+          "pad"
+        ],
+        [
+          "bad"
+        ],
+        [
+          ".ad"
+        ],
+        [
+          "b.."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      null,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "a"
+        ],
+        [
+          "."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "a"
+        ],
+        [
+          "a."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "addWord",
+        "search",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "apple"
+        ],
+        [
+          "app"
+        ],
+        [
+          "app."
+        ],
+        [
+          "app.."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      false,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "hello"
+        ],
+        [
+          "hello"
+        ],
+        [
+          "world"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search",
+        "search",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "abc"
+        ],
+        [
+          "..."
+        ],
+        [
+          "..d"
+        ],
+        [
+          ".b."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "a"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "at"
+        ],
+        [
+          "and"
+        ],
+        [
+          "an."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "cat"
+        ],
+        [
+          "bat"
+        ],
+        [
+          "rat"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "cat"
+        ],
+        [
+          "bat"
+        ],
+        [
+          ".at"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "longerwordhere"
+        ],
+        [
+          "............wordhere"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      false
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "longerwordhere"
+        ],
+        [
+          ".............."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "addWord",
+        "search",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "tea"
+        ],
+        [
+          "toast"
+        ],
+        [
+          "t.."
+        ],
+        [
+          "t...."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      null,
+      true,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "z"
+        ],
+        [
+          "z"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "z"
+        ],
+        [
+          "."
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true
+    ]
+  },
+  {
+    "inputs": {
+      "operations": [
+        "WordDictionary",
+        "addWord",
+        "search"
+      ],
+      "args": [
+        [],
+        [
+          "xyz"
+        ],
+        [
+          "x.z"
+        ]
+      ]
+    },
+    "expected": [
+      null,
+      null,
+      true
+    ]
+  }
+]

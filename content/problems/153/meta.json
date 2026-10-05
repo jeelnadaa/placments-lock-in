@@ -1,0 +1,62 @@
+{
+  "id": 153,
+  "className": "Solution",
+  "methodName": "findMin",
+  "params": [
+    {
+      "name": "nums",
+      "type": "int[]"
+    }
+  ],
+  "returnType": "int",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "nums": [
+          3,
+          4,
+          5,
+          1,
+          2
+        ]
+      },
+      "output": 1
+    },
+    {
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ]
+      },
+      "output": 0
+    },
+    {
+      "input": {
+        "nums": [
+          11,
+          13,
+          15,
+          17
+        ]
+      },
+      "output": 11
+    }
+  ],
+  "constraints": [
+    "n == nums.length",
+    "1 <= n <= 5000",
+    "-5000 <= nums[i] <= 5000",
+    "All the integers of nums are unique.",
+    "nums is sorted and rotated between 1 and n times."
+  ]
+}

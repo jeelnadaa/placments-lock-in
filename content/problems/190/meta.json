@@ -1,0 +1,38 @@
+{
+  "id": 190,
+  "title": "Reverse Bits",
+  "slug": "reverse-bits",
+  "difficulty": "Easy",
+  "day": 8,
+  "category": "Bit Manipulation",
+  "order": 5,
+  "timeEstimateMinutes": 15,
+  "className": "Solution",
+  "methodName": "reverseBits",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "n",
+      "type": "int"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "n": 43261596
+      },
+      "output": 964176192
+    },
+    {
+      "input": {
+        "n": -3
+      },
+      "output": -1073741825
+    }
+  ],
+  "constraints": [
+    "The input must be a binary string of length 32."
+  ]
+}

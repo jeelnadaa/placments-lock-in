@@ -1,0 +1,67 @@
+{
+  "id": 139,
+  "title": "Word Break",
+  "slug": "word-break",
+  "difficulty": "Medium",
+  "day": 14,
+  "category": "Dynamic Programming",
+  "order": 1,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "wordBreak",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "s",
+      "type": "String"
+    },
+    {
+      "name": "wordDict",
+      "type": "List<String>"
+    }
+  ],
+  "returnType": "boolean",
+  "examples": [
+    {
+      "input": {
+        "s": "leetcode",
+        "wordDict": [
+          "leet",
+          "code"
+        ]
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "s": "applepenapple",
+        "wordDict": [
+          "apple",
+          "pen"
+        ]
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "s": "catsandog",
+        "wordDict": [
+          "cats",
+          "dog",
+          "sand",
+          "and",
+          "cat"
+        ]
+      },
+      "output": false
+    }
+  ],
+  "constraints": [
+    "1 <= s.length <= 300",
+    "1 <= wordDict.length <= 1000",
+    "1 <= wordDict[i].length <= 20",
+    "s and wordDict[i] consist of only lowercase English letters.",
+    "All the strings of wordDict are unique."
+  ]
+}

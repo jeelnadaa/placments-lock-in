@@ -1,7 +1,13 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { java } from '@codemirror/lang-java';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { indentUnit } from '@codemirror/language';
+import { EditorState } from '@codemirror/state';
+import { keymap } from '@codemirror/view';
+import { indentWithTab } from '@codemirror/commands';
+import { autocompletion } from '@codemirror/autocomplete';
+import { javaCompletionSource } from './javaCompletions';
 
 interface JavaEditorProps {
   value: string;
@@ -21,7 +27,7 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
   minHeight = '320px',
   maxHeight = '650px',
   placeholder = '// Enter your Java solution here...\nclass Solution {\n    public ...\n}',
-  fontSize = 15,
+  fontSize = 16.5,
   highlightLine,
 }) => {
   const cmRef = useRef<ReactCodeMirrorRef>(null);
@@ -44,9 +50,24 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
     }
   }, [highlightLine]);
 
+  // Extensions configured for 4-space indentation and rich Java autocompletion
+  const extensions = useMemo(() => {
+    return [
+      java(),
+      indentUnit.of('    '),
+      EditorState.tabSize.of(4),
+      keymap.of([indentWithTab]),
+      autocompletion({
+        override: [javaCompletionSource],
+        defaultKeymap: true,
+        icons: true,
+      }),
+    ];
+  }, []);
+
   return (
     <div
-      className="rounded-lg border border-mono-800 overflow-hidden bg-mono-950 font-mono shadow-inner"
+      className="rounded-lg border border-mono-800 overflow-hidden bg-mono-950 font-mono shadow-inner h-full flex flex-col"
       style={{ fontSize: `${fontSize}px` }}
     >
       <CodeMirror
@@ -56,7 +77,7 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
         minHeight={minHeight}
         maxHeight={maxHeight}
         theme={oneDark}
-        extensions={[java()]}
+        extensions={extensions}
         editable={!readOnly}
         readOnly={readOnly}
         placeholder={placeholder}
@@ -68,7 +89,7 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
           foldGutter: true,
           bracketMatching: true,
           closeBrackets: !readOnly,
-          autocompletion: !readOnly,
+          autocompletion: false, // overridden by our custom autocompletion extension above
           indentOnInput: !readOnly,
         }}
       />

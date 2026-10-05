@@ -1,0 +1,99 @@
+{
+  "id": 200,
+  "title": "Number of Islands",
+  "slug": "number-of-islands",
+  "difficulty": "Medium",
+  "day": 9,
+  "category": "Graphs",
+  "order": 3,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "numIslands",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "grid",
+      "type": "char[][]"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "grid": [
+          [
+            "1",
+            "1",
+            "1",
+            "1",
+            "0"
+          ],
+          [
+            "1",
+            "1",
+            "0",
+            "1",
+            "0"
+          ],
+          [
+            "1",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        ]
+      },
+      "output": 1
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            "1",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          [
+            "1",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0",
+            "1",
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0",
+            "0",
+            "1",
+            "1"
+          ]
+        ]
+      },
+      "output": 3
+    }
+  ],
+  "constraints": [
+    "m == grid.length",
+    "n == grid[i].length",
+    "1 <= m, n <= 300",
+    "grid[i][j] is '0' or '1'."
+  ]
+}

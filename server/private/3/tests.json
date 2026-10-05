@@ -1,0 +1,98 @@
+[
+  {
+    "inputs": {
+      "s": ""
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "s": " "
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "au"
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "dvdf"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "abba"
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "tmmzuxt"
+    },
+    "expected": 5
+  },
+  {
+    "inputs": {
+      "s": "abcdefg"
+    },
+    "expected": 7
+  },
+  {
+    "inputs": {
+      "s": "aab"
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "cdd"
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "s": "anviaj"
+    },
+    "expected": 5
+  },
+  {
+    "inputs": {
+      "s": "asjrgapa"
+    },
+    "expected": 6
+  },
+  {
+    "inputs": {
+      "s": "1234567890"
+    },
+    "expected": 10
+  },
+  {
+    "inputs": {
+      "s": "a1b2c3d4"
+    },
+    "expected": 8
+  },
+  {
+    "inputs": {
+      "s": "xyzxyzxyz"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "abcdeafghij"
+    },
+    "expected": 10
+  },
+  {
+    "inputs": {
+      "s": "bpfbhmipx"
+    },
+    "expected": 7
+  }
+]

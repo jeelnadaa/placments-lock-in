@@ -1,0 +1,312 @@
+[
+  {
+    "inputs": {
+      "board": [
+        [
+          "A",
+          "B",
+          "C",
+          "E"
+        ],
+        [
+          "S",
+          "F",
+          "C",
+          "S"
+        ],
+        [
+          "A",
+          "D",
+          "E",
+          "E"
+        ]
+      ],
+      "word": "ABCCED"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "A",
+          "B",
+          "C",
+          "E"
+        ],
+        [
+          "S",
+          "F",
+          "C",
+          "S"
+        ],
+        [
+          "A",
+          "D",
+          "E",
+          "E"
+        ]
+      ],
+      "word": "SEE"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "A",
+          "B",
+          "C",
+          "E"
+        ],
+        [
+          "S",
+          "F",
+          "C",
+          "S"
+        ],
+        [
+          "A",
+          "D",
+          "E",
+          "E"
+        ]
+      ],
+      "word": "ABCB"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a"
+        ]
+      ],
+      "word": "a"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a"
+        ]
+      ],
+      "word": "b"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "d"
+        ]
+      ],
+      "word": "abcd"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "d"
+        ]
+      ],
+      "word": "abdc"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "C",
+          "D"
+        ]
+      ],
+      "word": "ACDB"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "C",
+          "A",
+          "A"
+        ],
+        [
+          "A",
+          "A",
+          "A"
+        ],
+        [
+          "B",
+          "C",
+          "D"
+        ]
+      ],
+      "word": "AAB"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "A",
+          "B",
+          "C",
+          "E"
+        ],
+        [
+          "S",
+          "F",
+          "E",
+          "S"
+        ],
+        [
+          "A",
+          "D",
+          "E",
+          "E"
+        ]
+      ],
+      "word": "ABCESEEEFS"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "word": "aaa"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "a",
+          "a",
+          "a"
+        ]
+      ],
+      "word": "aaaa"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b",
+          "c"
+        ],
+        [
+          "d",
+          "e",
+          "f"
+        ],
+        [
+          "g",
+          "h",
+          "i"
+        ]
+      ],
+      "word": "cfi"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b",
+          "c"
+        ],
+        [
+          "d",
+          "e",
+          "f"
+        ],
+        [
+          "g",
+          "h",
+          "i"
+        ]
+      ],
+      "word": "beh"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b",
+          "c"
+        ],
+        [
+          "d",
+          "e",
+          "f"
+        ],
+        [
+          "g",
+          "h",
+          "i"
+        ]
+      ],
+      "word": "ihgfedcba"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "A",
+          "B",
+          "C"
+        ],
+        [
+          "D",
+          "E",
+          "F"
+        ]
+      ],
+      "word": "FEDCBA"
+    },
+    "expected": true
+  }
+]

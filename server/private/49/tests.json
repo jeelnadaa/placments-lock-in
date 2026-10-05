@@ -1,0 +1,304 @@
+[
+  {
+    "inputs": {
+      "strs": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "expected": [
+      [
+        "a"
+      ],
+      [
+        "b"
+      ],
+      [
+        "c"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "ab",
+        "ba",
+        "abc",
+        "cba",
+        "bca"
+      ]
+    },
+    "expected": [
+      [
+        "ab",
+        "ba"
+      ],
+      [
+        "abc",
+        "cba",
+        "bca"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "expected": [
+      [
+        "",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "listen",
+        "silent",
+        "enlist"
+      ]
+    },
+    "expected": [
+      [
+        "listen",
+        "silent",
+        "enlist"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "rat",
+        "tar",
+        "art",
+        "car"
+      ]
+    },
+    "expected": [
+      [
+        "rat",
+        "tar",
+        "art"
+      ],
+      [
+        "car"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "hello",
+        "world"
+      ]
+    },
+    "expected": [
+      [
+        "hello"
+      ],
+      [
+        "world"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "opt",
+        "top",
+        "pot",
+        "stop",
+        "spot",
+        "pots"
+      ]
+    },
+    "expected": [
+      [
+        "opt",
+        "top",
+        "pot"
+      ],
+      [
+        "stop",
+        "spot",
+        "pots"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "z"
+      ]
+    },
+    "expected": [
+      [
+        "z"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "ab",
+        "bc",
+        "cd"
+      ]
+    },
+    "expected": [
+      [
+        "ab"
+      ],
+      [
+        "bc"
+      ],
+      [
+        "cd"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "abc",
+        "def",
+        "ghi"
+      ]
+    },
+    "expected": [
+      [
+        "abc"
+      ],
+      [
+        "def"
+      ],
+      [
+        "ghi"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "aaa",
+        "aaa",
+        "aaa"
+      ]
+    },
+    "expected": [
+      [
+        "aaa",
+        "aaa",
+        "aaa"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "a",
+        "aa",
+        "aaa",
+        "aaaa"
+      ]
+    },
+    "expected": [
+      [
+        "a"
+      ],
+      [
+        "aa"
+      ],
+      [
+        "aaa"
+      ],
+      [
+        "aaaa"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "cat",
+        "dog",
+        "act",
+        "god"
+      ]
+    },
+    "expected": [
+      [
+        "cat",
+        "act"
+      ],
+      [
+        "dog",
+        "god"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "tab",
+        "bat",
+        "map"
+      ]
+    },
+    "expected": [
+      [
+        "tab",
+        "bat"
+      ],
+      [
+        "map"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "silent",
+        "listen",
+        "hello"
+      ]
+    },
+    "expected": [
+      [
+        "silent",
+        "listen"
+      ],
+      [
+        "hello"
+      ]
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "x",
+        "y",
+        "x",
+        "y"
+      ]
+    },
+    "expected": [
+      [
+        "x",
+        "x"
+      ],
+      [
+        "y",
+        "y"
+      ]
+    ]
+  }
+]

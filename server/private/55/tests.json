@@ -1,0 +1,173 @@
+[
+  {
+    "inputs": {
+      "nums": [
+        2,
+        3,
+        1,
+        1,
+        4
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        3,
+        2,
+        1,
+        0,
+        4
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "nums": [
+        0
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        1
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        2,
+        0,
+        0
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        0,
+        1
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "nums": [
+        2,
+        5,
+        0,
+        0
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        2,
+        3
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        0,
+        2,
+        3
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        5,
+        4,
+        3,
+        2,
+        1,
+        0,
+        0
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        1,
+        0,
+        1
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        2,
+        0,
+        1
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        3,
+        0,
+        8,
+        2,
+        0,
+        0,
+        1
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        0
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "nums": [
+        0,
+        1
+      ]
+    },
+    "expected": false
+  }
+]

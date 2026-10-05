@@ -1,0 +1,169 @@
+[
+  {
+    "inputs": {
+      "nums": [
+        -1
+      ]
+    },
+    "expected": -1
+  },
+  {
+    "inputs": {
+      "nums": [
+        -2,
+        -1
+      ]
+    },
+    "expected": -1
+  },
+  {
+    "inputs": {
+      "nums": [
+        -1,
+        -2
+      ]
+    },
+    "expected": -1
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        2
+      ]
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "nums": [
+        0,
+        0,
+        0
+      ]
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "nums": [
+        -1,
+        0,
+        -2
+      ]
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "nums": [
+        8,
+        -19,
+        5,
+        -4,
+        20
+      ]
+    },
+    "expected": 21
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        -1,
+        1
+      ]
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "nums": [
+        2,
+        -1,
+        2
+      ]
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "nums": [
+        100,
+        -200,
+        300
+      ]
+    },
+    "expected": 300
+  },
+  {
+    "inputs": {
+      "nums": [
+        -5,
+        -4,
+        -3,
+        -2,
+        -1
+      ]
+    },
+    "expected": -1
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "expected": 15
+  },
+  {
+    "inputs": {
+      "nums": [
+        3,
+        -1,
+        2,
+        -1,
+        -4
+      ]
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "nums": [
+        -2,
+        1
+      ]
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "nums": [
+        2,
+        -3,
+        7,
+        -2,
+        6,
+        -1
+      ]
+    },
+    "expected": 11
+  },
+  {
+    "inputs": {
+      "nums": [
+        10,
+        -5,
+        10,
+        -5,
+        10
+      ]
+    },
+    "expected": 20
+  }
+]

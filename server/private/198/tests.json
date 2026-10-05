@@ -1,0 +1,185 @@
+[
+  {
+    "inputs": {
+      "nums": [
+        0
+      ]
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "nums": [
+        5
+      ]
+    },
+    "expected": 5
+  },
+  {
+    "inputs": {
+      "nums": [
+        2,
+        1
+      ]
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        2
+      ]
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        3,
+        1
+      ]
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "nums": [
+        2,
+        1,
+        1,
+        2
+      ]
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "nums": [
+        10,
+        1,
+        1,
+        10
+      ]
+    },
+    "expected": 20
+  },
+  {
+    "inputs": {
+      "nums": [
+        100,
+        200,
+        100
+      ]
+    },
+    "expected": 200
+  },
+  {
+    "inputs": {
+      "nums": [
+        4,
+        1,
+        2,
+        7,
+        5,
+        3,
+        1
+      ]
+    },
+    "expected": 14
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "expected": 25
+  },
+  {
+    "inputs": {
+      "nums": [
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    },
+    "expected": 25
+  },
+  {
+    "inputs": {
+      "nums": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "nums": [
+        50,
+        1,
+        1,
+        50,
+        1,
+        50
+      ]
+    },
+    "expected": 150
+  },
+  {
+    "inputs": {
+      "nums": [
+        2,
+        4,
+        8,
+        9,
+        9,
+        3
+      ]
+    },
+    "expected": 19
+  },
+  {
+    "inputs": {
+      "nums": [
+        20,
+        10,
+        30,
+        40,
+        50
+      ]
+    },
+    "expected": 100
+  },
+  {
+    "inputs": {
+      "nums": [
+        1,
+        100,
+        1,
+        100,
+        1
+      ]
+    },
+    "expected": 200
+  }
+]

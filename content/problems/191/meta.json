@@ -1,0 +1,40 @@
+{
+  "id": 191,
+  "className": "Solution",
+  "methodName": "hammingWeight",
+  "params": [
+    {
+      "name": "n",
+      "type": "int"
+    }
+  ],
+  "returnType": "int",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "n": 11
+      },
+      "output": 3,
+      "explanation": "The input binary is 1011, having a total of three set bits."
+    },
+    {
+      "input": {
+        "n": 128
+      },
+      "output": 1
+    },
+    {
+      "input": {
+        "n": 2147483645
+      },
+      "output": 30
+    }
+  ],
+  "constraints": [
+    "1 <= n <= 2^31 - 1"
+  ]
+}

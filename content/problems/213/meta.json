@@ -1,0 +1,58 @@
+{
+  "id": 213,
+  "title": "House Robber II",
+  "slug": "house-robber-ii",
+  "difficulty": "Medium",
+  "day": 8,
+  "category": "Dynamic Programming",
+  "order": 3,
+  "timeEstimateMinutes": 30,
+  "className": "Solution",
+  "methodName": "rob",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "nums",
+      "type": "int[]"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          2
+        ]
+      },
+      "output": 3
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "output": 4
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
+      "output": 3
+    }
+  ],
+  "constraints": [
+    "1 <= nums.length <= 100",
+    "0 <= nums[i] <= 1000"
+  ]
+}

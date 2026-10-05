@@ -1,0 +1,391 @@
+[
+  {
+    "inputs": {
+      "board": [
+        [
+          "o",
+          "a",
+          "a",
+          "n"
+        ],
+        [
+          "e",
+          "t",
+          "a",
+          "e"
+        ],
+        [
+          "i",
+          "h",
+          "k",
+          "r"
+        ],
+        [
+          "i",
+          "f",
+          "l",
+          "v"
+        ]
+      ],
+      "words": [
+        "oath",
+        "pea",
+        "eat",
+        "rain"
+      ]
+    },
+    "expected": [
+      "eat",
+      "oath"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "d"
+        ]
+      ],
+      "words": [
+        "abcb"
+      ]
+    },
+    "expected": []
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a"
+        ]
+      ],
+      "words": [
+        "a"
+      ]
+    },
+    "expected": [
+      "a"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a"
+        ]
+      ],
+      "words": [
+        "b"
+      ]
+    },
+    "expected": []
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "d"
+        ]
+      ],
+      "words": [
+        "ab",
+        "ac",
+        "bd",
+        "cd",
+        "dcba"
+      ]
+    },
+    "expected": [
+      "ab",
+      "ac",
+      "bd",
+      "cd"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b",
+          "c"
+        ],
+        [
+          "a",
+          "e",
+          "d"
+        ],
+        [
+          "a",
+          "f",
+          "g"
+        ]
+      ],
+      "words": [
+        "abcdefg",
+        "gfedcbaaa",
+        "eaabcdgfa",
+        "befa",
+        "d"
+      ]
+    },
+    "expected": [
+      "abcdefg",
+      "befa",
+      "d",
+      "gfedcbaaa"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "words": [
+        "aaa"
+      ]
+    },
+    "expected": []
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "h",
+          "e",
+          "l",
+          "l",
+          "o"
+        ],
+        [
+          "w",
+          "o",
+          "r",
+          "l",
+          "d"
+        ]
+      ],
+      "words": [
+        "hello",
+        "world",
+        "low",
+        "hold"
+      ]
+    },
+    "expected": [
+      "hello",
+      "world",
+      "hold",
+      "low"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "b",
+          "c",
+          "e"
+        ],
+        [
+          "s",
+          "f",
+          "c",
+          "s"
+        ],
+        [
+          "a",
+          "d",
+          "e",
+          "e"
+        ]
+      ],
+      "words": [
+        "abcced",
+        "see",
+        "abcb"
+      ]
+    },
+    "expected": [
+      "abcced",
+      "see"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "z"
+        ]
+      ],
+      "words": [
+        "z",
+        "zz"
+      ]
+    },
+    "expected": [
+      "z"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "s",
+          "e",
+          "e",
+          "n"
+        ],
+        [
+          "t",
+          "m",
+          "e",
+          "t"
+        ]
+      ],
+      "words": [
+        "seen",
+        "meet",
+        "set"
+      ]
+    },
+    "expected": [
+      "meet",
+      "seen",
+      "set"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "a",
+          "p",
+          "p",
+          "l",
+          "e"
+        ]
+      ],
+      "words": [
+        "apple",
+        "app",
+        "ple"
+      ]
+    },
+    "expected": [
+      "app",
+      "apple",
+      "ple"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "c",
+          "a",
+          "t"
+        ],
+        [
+          "d",
+          "o",
+          "g"
+        ]
+      ],
+      "words": [
+        "cat",
+        "dog",
+        "cog",
+        "tag"
+      ]
+    },
+    "expected": [
+      "cat",
+      "dog",
+      "tag"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "x",
+          "y"
+        ],
+        [
+          "z",
+          "w"
+        ]
+      ],
+      "words": [
+        "xywz",
+        "xw",
+        "yw"
+      ]
+    },
+    "expected": [
+      "xywz",
+      "yw"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "m",
+          "a"
+        ],
+        [
+          "p",
+          "s"
+        ]
+      ],
+      "words": [
+        "map",
+        "maps",
+        "sap",
+        "spam"
+      ]
+    },
+    "expected": [
+      "map",
+      "maps",
+      "sap",
+      "spam"
+    ]
+  },
+  {
+    "inputs": {
+      "board": [
+        [
+          "f",
+          "i",
+          "n",
+          "d"
+        ]
+      ],
+      "words": [
+        "find",
+        "in"
+      ]
+    },
+    "expected": [
+      "find",
+      "in"
+    ]
+  }
+]

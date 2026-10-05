@@ -1,0 +1,62 @@
+{
+  "id": 207,
+  "title": "Course Schedule",
+  "slug": "course-schedule",
+  "difficulty": "Medium",
+  "day": 11,
+  "category": "Graphs",
+  "order": 2,
+  "timeEstimateMinutes": 30,
+  "className": "Solution",
+  "methodName": "canFinish",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "numCourses",
+      "type": "int"
+    },
+    {
+      "name": "prerequisites",
+      "type": "int[][]"
+    }
+  ],
+  "returnType": "boolean",
+  "examples": [
+    {
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "output": false
+    }
+  ],
+  "constraints": [
+    "1 <= numCourses <= 2000",
+    "0 <= prerequisites.length <= 5000",
+    "prerequisites[i].length == 2",
+    "0 <= a_i, b_i < numCourses",
+    "All pairs [a_i, b_i] are distinct."
+  ]
+}

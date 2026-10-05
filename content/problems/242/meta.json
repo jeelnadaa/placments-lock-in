@@ -1,0 +1,40 @@
+{
+  "id": 242,
+  "className": "Solution",
+  "methodName": "isAnagram",
+  "params": [
+    {
+      "name": "s",
+      "type": "String"
+    },
+    {
+      "name": "t",
+      "type": "String"
+    }
+  ],
+  "returnType": "boolean",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "s": "anagram",
+        "t": "nagaram"
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "s": "rat",
+        "t": "car"
+      },
+      "output": false
+    }
+  ],
+  "constraints": [
+    "1 <= s.length, t.length <= 5 * 10^4",
+    "s and t consist of lowercase English letters."
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": 238,
+  "title": "Product of Array Except Self",
+  "slug": "product-of-array-except-self",
+  "difficulty": "Medium",
+  "day": 6,
+  "category": "Array",
+  "order": 1,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "productExceptSelf",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "nums",
+      "type": "int[]"
+    }
+  ],
+  "returnType": "int[]",
+  "examples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "output": [
+        24,
+        12,
+        8,
+        6
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          1,
+          0,
+          -3,
+          3
+        ]
+      },
+      "output": [
+        0,
+        0,
+        9,
+        0,
+        0
+      ]
+    }
+  ],
+  "constraints": [
+    "2 <= nums.length <= 10^5",
+    "-30 <= nums[i] <= 30",
+    "The product of any prefix or suffix of nums fits in a 32-bit integer."
+  ]
+}

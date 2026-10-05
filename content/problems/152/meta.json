@@ -1,0 +1,49 @@
+{
+  "id": 152,
+  "title": "Maximum Product Subarray",
+  "slug": "maximum-product-subarray",
+  "difficulty": "Medium",
+  "day": 10,
+  "category": "Dynamic Programming",
+  "order": 3,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "maxProduct",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "nums",
+      "type": "int[]"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          -2,
+          4
+        ]
+      },
+      "output": 6
+    },
+    {
+      "input": {
+        "nums": [
+          -2,
+          0,
+          -1
+        ]
+      },
+      "output": 0
+    }
+  ],
+  "constraints": [
+    "1 <= nums.length <= 2 * 10^4",
+    "-10 <= nums[i] <= 10",
+    "The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer."
+  ]
+}

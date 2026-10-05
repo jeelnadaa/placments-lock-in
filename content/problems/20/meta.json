@@ -1,0 +1,46 @@
+{
+  "id": 20,
+  "className": "Solution",
+  "methodName": "isValid",
+  "params": [
+    {
+      "name": "s",
+      "type": "String"
+    }
+  ],
+  "returnType": "boolean",
+  "kind": "function",
+  "comparator": "exact",
+  "timeLimitMs": 2000,
+  "memoryLimitMb": 256,
+  "examples": [
+    {
+      "input": {
+        "s": "()"
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "s": "()[]{}"
+      },
+      "output": true
+    },
+    {
+      "input": {
+        "s": "(]"
+      },
+      "output": false
+    },
+    {
+      "input": {
+        "s": "([])"
+      },
+      "output": true
+    }
+  ],
+  "constraints": [
+    "1 <= s.length <= 10^4",
+    "s consists of parentheses only '()[]{}'."
+  ]
+}

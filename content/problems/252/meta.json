@@ -1,0 +1,62 @@
+{
+  "id": 252,
+  "title": "Meeting Rooms",
+  "slug": "meeting-rooms",
+  "difficulty": "Easy",
+  "day": 12,
+  "category": "Intervals",
+  "order": 5,
+  "timeEstimateMinutes": 15,
+  "className": "Solution",
+  "methodName": "canAttendMeetings",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "intervals",
+      "type": "int[][]"
+    }
+  ],
+  "returnType": "boolean",
+  "examples": [
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            30
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            15,
+            20
+          ]
+        ]
+      },
+      "output": false
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            7,
+            10
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      },
+      "output": true
+    }
+  ],
+  "constraints": [
+    "0 <= intervals.length <= 10^4",
+    "intervals[i].length == 2",
+    "0 <= start_i < end_i <= 10^6"
+  ]
+}

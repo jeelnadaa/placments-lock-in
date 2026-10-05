@@ -120,7 +120,6 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
   // Editor Toolbar settings
   const [assistMode, setAssistMode] = useState(true);
   const [editorFontSize, setEditorFontSize] = useState<number>(settings?.fontSize || 15);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Reset to starter code modal
   const [resetConfirmModalOpen, setResetConfirmModalOpen] = useState(false);
@@ -256,19 +255,36 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
     }, 600);
   };
 
-  // Resizer drag handler
+  // Vertical split layout for right pane (Editor vs Console)
+  const [editorHeightPct, setEditorHeightPct] = useState<number>(55);
+  const [isMaximizedEditor, setIsMaximizedEditor] = useState<boolean>(false);
+  const [isMaximizedConsole, setIsMaximizedConsole] = useState<boolean>(false);
+  const isDraggingVerticalRef = useRef(false);
+  const rightPaneRef = useRef<HTMLDivElement>(null);
+
+  // Resizer drag handler (both horizontal pane resize and vertical editor/console resize)
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDraggingRef.current) return;
-      const totalWidth = window.innerWidth;
-      const newPct = (e.clientX / totalWidth) * 100;
-      if (newPct >= 25 && newPct <= 75) {
-        setLeftWidthPct(Math.round(newPct));
+      if (isDraggingRef.current) {
+        const totalWidth = window.innerWidth;
+        const newPct = (e.clientX / totalWidth) * 100;
+        if (newPct >= 20 && newPct <= 80) {
+          setLeftWidthPct(Math.round(newPct));
+        }
+      } else if (isDraggingVerticalRef.current && rightPaneRef.current) {
+        const rect = rightPaneRef.current.getBoundingClientRect();
+        const newPct = ((e.clientY - rect.top) / rect.height) * 100;
+        if (newPct >= 15 && newPct <= 85) {
+          setEditorHeightPct(Math.round(newPct));
+          setIsMaximizedEditor(false);
+          setIsMaximizedConsole(false);
+        }
       }
     };
 
     const handleMouseUp = () => {
       isDraggingRef.current = false;
+      isDraggingVerticalRef.current = false;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -492,7 +508,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
   };
 
   return (
-    <div className={`flex flex-col h-screen max-h-screen bg-mono-950 text-mono-100 overflow-hidden ${isFullscreen ? 'fixed inset-0 z-50 p-2' : ''}`}>
+    <div className="flex flex-col h-screen max-h-screen bg-mono-950 text-mono-100 overflow-hidden">
       {/* 1. TOP BAR */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-mono-800 bg-mono-900/90 backdrop-blur-md gap-4 flex-wrap select-none text-xs">
         {/* Left: Navigation & Problem Title */}
@@ -935,173 +951,219 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
         />
 
         {/* RIGHT PANE: EDITOR (TOP) + CONSOLE (BOTTOM) */}
-        <div className="flex-1 flex flex-col bg-mono-950 overflow-hidden">
-          {/* EDITOR TOOLBAR */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-mono-800 bg-mono-900/90 text-xs font-mono select-none">
-            <div className="flex items-center gap-3">
-              <span className="font-bold text-mono-200">Java</span>
-              <span className="text-mono-600">•</span>
-              <button
-                type="button"
-                onClick={() => setAssistMode(!assistMode)}
-                className={`px-2 py-0.5 rounded text-[11px] border transition-colors ${
-                  assistMode
-                    ? 'bg-mono-800 border-mono-700 text-mono-200'
-                    : 'bg-mono-900 border-mono-800 text-mono-500'
-                }`}
-                title="Toggle autocomplete assist mode"
-              >
-                Assist Mode: {assistMode ? 'ON' : 'OFF'}
-              </button>
-            </div>
+        <div ref={rightPaneRef} className="flex-1 flex flex-col bg-mono-950 overflow-hidden relative">
+          {/* EDITOR WRAPPER */}
+          {!isMaximizedConsole && (
+            <div
+              className="flex flex-col overflow-hidden"
+              style={{
+                height: isMaximizedEditor ? '100%' : `${editorHeightPct}%`,
+                minHeight: isMaximizedEditor ? '100%' : '140px',
+              }}
+            >
+              {/* EDITOR TOOLBAR */}
+              <div className="flex items-center justify-between px-4 py-2 border-b border-mono-800 bg-mono-900/90 text-xs font-mono select-none">
+                <div className="flex items-center gap-3">
+                  <span className="font-bold text-mono-200">Java</span>
+                  <span className="text-mono-600">•</span>
+                  <button
+                    type="button"
+                    onClick={() => setAssistMode(!assistMode)}
+                    className={`px-2 py-0.5 rounded text-[11px] border transition-colors ${
+                      assistMode
+                        ? 'bg-mono-800 border-mono-700 text-mono-200'
+                        : 'bg-mono-900 border-mono-800 text-mono-500'
+                    }`}
+                    title="Toggle autocomplete assist mode"
+                  >
+                    Assist Mode: {assistMode ? 'ON' : 'OFF'}
+                  </button>
+                </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleFormatCode}
-                className="px-2 py-1 rounded hover:bg-mono-800 text-mono-400 hover:text-mono-200 transition-colors"
-                title="Format Code"
-              >
-                <AlignLeft className="w-3.5 h-3.5" />
-              </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleFormatCode}
+                    className="px-2 py-1 rounded hover:bg-mono-800 text-mono-400 hover:text-mono-200 transition-colors"
+                    title="Format Code"
+                  >
+                    <AlignLeft className="w-3.5 h-3.5" />
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setResetConfirmModalOpen(true)}
-                className="px-2 py-1 rounded hover:bg-mono-800 text-mono-400 hover:text-mono-200 transition-colors"
-                title="Reset to starter code"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setResetConfirmModalOpen(true)}
+                    className="px-2 py-1 rounded hover:bg-mono-800 text-mono-400 hover:text-mono-200 transition-colors"
+                    title="Reset to starter code"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                  </button>
 
-              {/* Font size control */}
-              <div className="flex items-center gap-1 text-[11px] text-mono-400 border border-mono-800 px-1.5 py-0.5 rounded bg-mono-950">
-                <Type className="w-3 h-3 text-mono-500" />
-                <select
-                  value={editorFontSize}
-                  onChange={(e) => setEditorFontSize(Number(e.target.value))}
-                  className="bg-transparent text-mono-200 focus:outline-none cursor-pointer"
-                >
-                  <option value={13}>13px</option>
-                  <option value={14.5}>14.5px</option>
-                  <option value={16}>16px</option>
-                  <option value={18}>18px</option>
-                </select>
-              </div>
+                  {/* Font size control */}
+                  <div className="flex items-center gap-1 text-[11px] text-mono-400 border border-mono-800 px-1.5 py-0.5 rounded bg-mono-950">
+                    <Type className="w-3 h-3 text-mono-500" />
+                    <select
+                      value={editorFontSize}
+                      onChange={(e) => setEditorFontSize(Number(e.target.value))}
+                      className="bg-transparent text-mono-200 focus:outline-none cursor-pointer"
+                    >
+                      <option value={14}>14px</option>
+                      <option value={15.5}>15.5px</option>
+                      <option value={17}>17px</option>
+                      <option value={19}>19px</option>
+                      <option value={21}>21px</option>
+                    </select>
+                  </div>
 
-              <button
-                type="button"
-                onClick={() => setIsFullscreen(!isFullscreen)}
-                className="p-1 rounded hover:bg-mono-800 text-mono-400 hover:text-mono-200 transition-colors"
-                title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-              >
-                {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-              </button>
-            </div>
-          </div>
-
-          {/* ACTIVE ERROR CALLOUT BANNER */}
-          {activeError && !dismissedError && (
-            <div className="flex items-center justify-between px-4 py-2 bg-rose-950/90 border-b border-rose-800 text-rose-200 text-xs font-mono select-none">
-              <div className="flex items-center gap-2.5 overflow-hidden text-ellipsis">
-                <span className="px-2 py-0.5 rounded bg-rose-900 border border-rose-700 text-rose-300 font-bold shrink-0">
-                  {activeError.type}
-                </span>
-                {activeError.line !== undefined && (
+                  {/* Maximize / Restore Editor Button */}
                   <button
                     type="button"
                     onClick={() => {
-                      setHighlightLine(activeError.line!);
-                      showToast(`Navigated to line ${activeError.line}`, 'info');
+                      setIsMaximizedEditor(!isMaximizedEditor);
+                      setIsMaximizedConsole(false);
                     }}
-                    className="px-2 py-0.5 rounded bg-rose-900/60 hover:bg-rose-850 border border-rose-700 text-rose-200 font-bold shrink-0 underline hover:no-underline cursor-pointer transition-colors"
-                    title={`Click to jump to line ${activeError.line} in code editor`}
+                    className={`p-1 rounded hover:bg-mono-800 transition-colors ${
+                      isMaximizedEditor ? 'text-amber-400 bg-mono-800' : 'text-mono-400 hover:text-mono-200'
+                    }`}
+                    title={isMaximizedEditor ? 'Restore editor height' : 'Expand editor to full height'}
                   >
-                    Line {activeError.line}
+                    {isMaximizedEditor ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
                   </button>
-                )}
-                <span className="truncate text-rose-100 font-medium" title={activeError.summary}>
-                  {activeError.summary}
-                </span>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0 ml-3">
-                {activeError.line !== undefined && (
-                  <button
-                    type="button"
-                    onClick={() => setHighlightLine(activeError.line!)}
-                    className="px-2 py-1 rounded bg-rose-900/80 hover:bg-rose-800 border border-rose-700 text-rose-100 text-[11px] font-semibold transition-colors"
-                  >
-                    Jump to Line
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveConsoleTab('result');
-                  }}
-                  className="px-2 py-1 rounded bg-rose-900/80 hover:bg-rose-800 border border-rose-700 text-rose-100 text-[11px] font-semibold transition-colors"
-                >
-                  View in Console ↓
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDismissedError(true)}
-                  className="p-1 rounded hover:bg-rose-900 text-rose-400 hover:text-rose-100 transition-colors"
-                  title="Dismiss banner"
-                >
-                  ✕
-                </button>
+              {/* ACTIVE ERROR CALLOUT BANNER */}
+              {activeError && !dismissedError && (
+                <div className="flex items-center justify-between px-4 py-2 bg-rose-950/90 border-b border-rose-800 text-rose-200 text-xs font-mono select-none">
+                  <div className="flex items-center gap-2.5 overflow-hidden text-ellipsis">
+                    <span className="px-2 py-0.5 rounded bg-rose-900 border border-rose-700 text-rose-300 font-bold shrink-0">
+                      {activeError.type}
+                    </span>
+                    {activeError.line !== undefined && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setHighlightLine(activeError.line!);
+                          showToast(`Navigated to line ${activeError.line}`, 'info');
+                        }}
+                        className="px-2 py-0.5 rounded bg-rose-900/60 hover:bg-rose-850 border border-rose-700 text-rose-200 font-bold shrink-0 underline hover:no-underline cursor-pointer transition-colors"
+                        title={`Click to jump to line ${activeError.line} in code editor`}
+                      >
+                        Line {activeError.line}
+                      </button>
+                    )}
+                    <span className="truncate text-rose-100 font-medium" title={activeError.summary}>
+                      {activeError.summary}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0 ml-3">
+                    {activeError.line !== undefined && (
+                      <button
+                        type="button"
+                        onClick={() => setHighlightLine(activeError.line!)}
+                        className="px-2 py-1 rounded bg-rose-900/80 hover:bg-rose-800 border border-rose-700 text-rose-100 text-[11px] font-semibold transition-colors"
+                      >
+                        Jump to Line
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveConsoleTab('result');
+                      }}
+                      className="px-2 py-1 rounded bg-rose-900/80 hover:bg-rose-800 border border-rose-700 text-rose-100 text-[11px] font-semibold transition-colors"
+                    >
+                      View in Console ↓
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDismissedError(true)}
+                      className="p-1 rounded hover:bg-rose-900 text-rose-400 hover:text-rose-100 transition-colors"
+                      title="Dismiss banner"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* CODE EDITOR */}
+              <div className="flex-1 overflow-auto bg-mono-950">
+                <JavaEditor
+                  value={editorCode}
+                  onChange={setEditorCode}
+                  fontSize={editorFontSize}
+                  highlightLine={highlightLine}
+                  minHeight="100%"
+                  maxHeight="100%"
+                />
               </div>
             </div>
           )}
 
-          {/* CODE EDITOR */}
-          <div className="flex-1 overflow-auto bg-mono-950">
-            <JavaEditor
-              value={editorCode}
-              onChange={setEditorCode}
-              fontSize={editorFontSize}
-              highlightLine={highlightLine}
-              minHeight="280px"
-              maxHeight="100%"
-            />
-          </div>
+          {/* DRAGGABLE VERTICAL DIVIDER BETWEEN EDITOR AND CONSOLE */}
+          {!isMaximizedEditor && !isMaximizedConsole && (
+            <div
+              onMouseDown={() => {
+                isDraggingVerticalRef.current = true;
+              }}
+              className="h-2 w-full bg-mono-900 hover:bg-mono-750 active:bg-white cursor-row-resize flex items-center justify-center transition-colors select-none z-10 shrink-0 border-y border-mono-800 group"
+              title="Drag up/down to resize Editor and Testcase panel"
+            >
+              <div className="w-12 h-1 rounded-full bg-mono-700 group-hover:bg-mono-400 transition-colors" />
+            </div>
+          )}
 
-          {/* BOTTOM CONSOLE PANEL */}
-          <ConsolePanel
-            meta={meta}
-            activeConsoleTab={activeConsoleTab}
-            setActiveConsoleTab={setActiveConsoleTab}
-            sampleCases={sampleCasesState}
-            customCases={customCases}
-            onAddCustomCase={(inputs) => {
-              const newCase: CustomCase = {
-                id: Math.random().toString(36).substring(2, 9),
-                problemId: problem.id,
-                inputs,
-                source: 'user',
-                createdAt: new Date().toISOString(),
-              };
-              onAddCustomCase(newCase);
-            }}
-            onDeleteCustomCase={onDeleteCustomCase}
-            onUpdateSampleCase={(idx, paramName, val) => {
-              const updated = [...sampleCasesState];
-              try {
-                updated[idx].inputs[paramName] = JSON.parse(val);
-              } catch {
-                updated[idx].inputs[paramName] = val;
-              }
-              setSampleCasesState(updated);
-            }}
-            runResult={runResult}
-            submitResult={submitResult}
-            isRunning={isRunning}
-            onSaveAsVersionClick={() => setSaveModalOpen(true)}
-            onAddFailingToCustomCases={handleAddFailingToCustom}
-            onJumpToLine={(line) => setHighlightLine(line)}
-          />
+          {/* BOTTOM CONSOLE / TESTCASE PANEL */}
+          {!isMaximizedEditor && (
+            <div
+              className="flex flex-col overflow-hidden"
+              style={{
+                height: isMaximizedConsole ? '100%' : `${100 - editorHeightPct}%`,
+                minHeight: isMaximizedConsole ? '100%' : '140px',
+              }}
+            >
+              <ConsolePanel
+                meta={meta}
+                activeConsoleTab={activeConsoleTab}
+                setActiveConsoleTab={setActiveConsoleTab}
+                sampleCases={sampleCasesState}
+                customCases={customCases}
+                onAddCustomCase={(inputs) => {
+                  const newCase: CustomCase = {
+                    id: Math.random().toString(36).substring(2, 9),
+                    problemId: problem.id,
+                    inputs,
+                    source: 'user',
+                    createdAt: new Date().toISOString(),
+                  };
+                  onAddCustomCase(newCase);
+                }}
+                onDeleteCustomCase={onDeleteCustomCase}
+                onUpdateSampleCase={(idx, paramName, val) => {
+                  const updated = [...sampleCasesState];
+                  try {
+                    updated[idx].inputs[paramName] = JSON.parse(val);
+                  } catch {
+                    updated[idx].inputs[paramName] = val;
+                  }
+                  setSampleCasesState(updated);
+                }}
+                runResult={runResult}
+                submitResult={submitResult}
+                isRunning={isRunning}
+                onSaveAsVersionClick={() => setSaveModalOpen(true)}
+                onAddFailingToCustomCases={handleAddFailingToCustom}
+                onJumpToLine={(line) => setHighlightLine(line)}
+                isMaximized={isMaximizedConsole}
+                onToggleMaximize={() => {
+                  setIsMaximizedConsole(!isMaximizedConsole);
+                  setIsMaximizedEditor(false);
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
 

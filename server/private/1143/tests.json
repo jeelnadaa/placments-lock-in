@@ -1,0 +1,114 @@
+[
+  {
+    "inputs": {
+      "text1": "abcde",
+      "text2": "ace"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "text1": "abc",
+      "text2": "abc"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "text1": "abc",
+      "text2": "def"
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "text1": "a",
+      "text2": "a"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "text1": "a",
+      "text2": "b"
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "text1": "oxcp",
+      "text2": "pomv"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "text1": "bsbininm",
+      "text2": "jmjkbkjkv"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "text1": "ezupkr",
+      "text2": "ubmrapg"
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "text1": "pmjghexybyrgzrcrmbtx",
+      "text2": "fvueqqublobcbtgunqlq"
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "text1": "bl",
+      "text2": "yby"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "text1": "hofubmnylkra",
+      "text2": "pqshwvdvdsqq"
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "text1": "mhunuzqrkzsnidwbun",
+      "text2": "szulspmhwpazoxijwbq"
+    },
+    "expected": 6
+  },
+  {
+    "inputs": {
+      "text1": "greatest",
+      "text2": "east"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "text1": "algorithm",
+      "text2": "altruistic"
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "text1": "abcdef",
+      "text2": "azbzed"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "text1": "sea",
+      "text2": "eat"
+    },
+    "expected": 2
+  }
+]

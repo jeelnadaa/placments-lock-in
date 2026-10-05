@@ -1,0 +1,114 @@
+[
+  {
+    "inputs": {
+      "s": "a",
+      "t": "a"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "a",
+      "t": "b"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "ab",
+      "t": "ba"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "ab",
+      "t": "a"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "listen",
+      "t": "silent"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "hello",
+      "t": "billion"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "aabbcc",
+      "t": "bbaacc"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "aabbcc",
+      "t": "abacc"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "z",
+      "t": "z"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "az",
+      "t": "za"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "abcdefghijklmnopqrstuvwxyz",
+      "t": "zyxwvutsrqponmlkjihgfedcba"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "abcdefghijklmnopqrstuvwxyz",
+      "t": "zyxwvutsrqponmlkjihgfedcbz"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "aaaaabbbbb",
+      "t": "bbbbbaaaaa"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "restaurant",
+      "t": "restauran"
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "conversation",
+      "t": "voicesranton"
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "ac",
+      "t": "bb"
+    },
+    "expected": false
+  }
+]

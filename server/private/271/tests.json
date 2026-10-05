@@ -1,0 +1,216 @@
+[
+  {
+    "inputs": {
+      "strs": [
+        "lint",
+        "code",
+        "love",
+        "you"
+      ]
+    },
+    "expected": [
+      "lint",
+      "code",
+      "love",
+      "you"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "we",
+        "say",
+        ":",
+        "yes"
+      ]
+    },
+    "expected": [
+      "we",
+      "say",
+      ":",
+      "yes"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": []
+    },
+    "expected": []
+  },
+  {
+    "inputs": {
+      "strs": [
+        ""
+      ]
+    },
+    "expected": [
+      ""
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "",
+        ""
+      ]
+    },
+    "expected": [
+      "",
+      ""
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "abc",
+        "12#34",
+        "###",
+        "hello"
+      ]
+    },
+    "expected": [
+      "abc",
+      "12#34",
+      "###",
+      "hello"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "special",
+        "!@#$%^&*()_+",
+        "newline\n",
+        "\ttab"
+      ]
+    },
+    "expected": [
+      "special",
+      "!@#$%^&*()_+",
+      "newline\n",
+      "\ttab"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "one"
+      ]
+    },
+    "expected": [
+      "one"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    "expected": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "123",
+        "456",
+        "789"
+      ]
+    },
+    "expected": [
+      "123",
+      "456",
+      "789"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "4#lint",
+        "4#code"
+      ]
+    },
+    "expected": [
+      "4#lint",
+      "4#code"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "spaces inside words",
+        "   leading",
+        "trailing   "
+      ]
+    },
+    "expected": [
+      "spaces inside words",
+      "   leading",
+      "trailing   "
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "mixed",
+        "10#characters",
+        "0#",
+        "#"
+      ]
+    },
+    "expected": [
+      "mixed",
+      "10#characters",
+      "0#",
+      "#"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "unicode",
+        "alpha",
+        "beta"
+      ]
+    },
+    "expected": [
+      "unicode",
+      "alpha",
+      "beta"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "single letter",
+        "a"
+      ]
+    },
+    "expected": [
+      "single letter",
+      "a"
+    ]
+  },
+  {
+    "inputs": {
+      "strs": [
+        "final",
+        "test",
+        "case"
+      ]
+    },
+    "expected": [
+      "final",
+      "test",
+      "case"
+    ]
+  }
+]

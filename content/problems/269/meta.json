@@ -1,0 +1,59 @@
+{
+  "id": 269,
+  "title": "Alien Dictionary",
+  "slug": "alien-dictionary",
+  "difficulty": "Hard",
+  "day": 15,
+  "category": "Graphs",
+  "order": 5,
+  "timeEstimateMinutes": 35,
+  "className": "Solution",
+  "methodName": "alienOrder",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "words",
+      "type": "String[]"
+    }
+  ],
+  "returnType": "String",
+  "examples": [
+    {
+      "input": {
+        "words": [
+          "wrt",
+          "wrf",
+          "er",
+          "ett",
+          "rftt"
+        ]
+      },
+      "output": "wertf"
+    },
+    {
+      "input": {
+        "words": [
+          "z",
+          "x"
+        ]
+      },
+      "output": "zx"
+    },
+    {
+      "input": {
+        "words": [
+          "z",
+          "x",
+          "z"
+        ]
+      },
+      "output": ""
+    }
+  ],
+  "constraints": [
+    "1 <= words.length <= 100",
+    "1 <= words[i].length <= 100",
+    "words[i] consists of only lowercase English letters."
+  ]
+}

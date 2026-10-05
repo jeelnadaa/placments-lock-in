@@ -1,0 +1,98 @@
+[
+  {
+    "inputs": {
+      "s": "abc"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "aaa"
+    },
+    "expected": 6
+  },
+  {
+    "inputs": {
+      "s": "a"
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "s": "aa"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "aba"
+    },
+    "expected": 4
+  },
+  {
+    "inputs": {
+      "s": "abba"
+    },
+    "expected": 6
+  },
+  {
+    "inputs": {
+      "s": "racecar"
+    },
+    "expected": 10
+  },
+  {
+    "inputs": {
+      "s": "noon"
+    },
+    "expected": 6
+  },
+  {
+    "inputs": {
+      "s": "madam"
+    },
+    "expected": 7
+  },
+  {
+    "inputs": {
+      "s": "hello"
+    },
+    "expected": 6
+  },
+  {
+    "inputs": {
+      "s": "leetcode"
+    },
+    "expected": 9
+  },
+  {
+    "inputs": {
+      "s": "aaaa"
+    },
+    "expected": 10
+  },
+  {
+    "inputs": {
+      "s": "abacaba"
+    },
+    "expected": 12
+  },
+  {
+    "inputs": {
+      "s": "xyz"
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "s": "baac"
+    },
+    "expected": 5
+  },
+  {
+    "inputs": {
+      "s": "abccba"
+    },
+    "expected": 9
+  }
+]

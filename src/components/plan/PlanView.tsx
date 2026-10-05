@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { ExternalLink, CheckCircle2, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+import { ExternalLink, CheckCircle2, ChevronRight } from 'lucide-react';
 import { Problem, Progress, Settings, ProblemStatus } from '../../types';
 import { DifficultyBadge, StatusBadge } from '../common/Badge';
 import { SpoilerControl } from '../spoilers/SpoilerControl';
-import { calculateCurrentPlanDay, getDateForPlanDay } from '../../utils/schedule';
+import { calculateCurrentPlanDay } from '../../utils/schedule';
 
 interface PlanViewProps {
   problems: Problem[];
@@ -47,8 +47,6 @@ export const PlanView: React.FC<PlanViewProps> = ({
     };
   });
 
-  const activeDayDateStr = getDateForPlanDay(startDate, activeDay);
-
   return (
     <div className="flex flex-col gap-6 pb-16">
       {/* HEADER */}
@@ -62,12 +60,11 @@ export const PlanView: React.FC<PlanViewProps> = ({
           </p>
         </div>
 
-        {startDate && (
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-mono-900 border border-mono-800 text-xs font-mono text-mono-300">
-            <CalendarIcon className="w-3.5 h-3.5 text-mono-400" />
-            <span>Target Date for Day {activeDay}: {activeDayDateStr}</span>
-          </div>
-        )}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-mono-900 border border-mono-800 text-xs font-mono text-mono-300">
+          <span className="font-bold text-mono-100">Day {activeDay}</span>
+          <span className="text-mono-500">•</span>
+          <span>5 Problems</span>
+        </div>
       </div>
 
       {/* DAY SELECTOR TABS (DAY 1 TO 15) */}

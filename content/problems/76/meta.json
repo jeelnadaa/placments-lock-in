@@ -1,0 +1,54 @@
+{
+  "id": 76,
+  "title": "Minimum Window Substring",
+  "slug": "minimum-window-substring",
+  "difficulty": "Hard",
+  "day": 15,
+  "category": "Sliding Window",
+  "order": 1,
+  "timeEstimateMinutes": 35,
+  "className": "Solution",
+  "methodName": "minWindow",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "s",
+      "type": "String"
+    },
+    {
+      "name": "t",
+      "type": "String"
+    }
+  ],
+  "returnType": "String",
+  "examples": [
+    {
+      "input": {
+        "s": "ADOBECODEBANC",
+        "t": "ABC"
+      },
+      "output": "BANC"
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "a"
+      },
+      "output": "a"
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "aa"
+      },
+      "output": ""
+    }
+  ],
+  "constraints": [
+    "m == s.length",
+    "n == t.length",
+    "1 <= m, n <= 10^5",
+    "s and t consist of uppercase and lowercase English letters."
+  ]
+}

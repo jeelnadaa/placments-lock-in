@@ -1,0 +1,54 @@
+{
+  "id": 295,
+  "title": "Find Median from Data Stream",
+  "slug": "find-median-from-data-stream",
+  "difficulty": "Hard",
+  "day": 15,
+  "category": "Heap",
+  "order": 4,
+  "timeEstimateMinutes": 35,
+  "className": "MedianFinder",
+  "kind": "class",
+  "comparator": "exact",
+  "examples": [
+    {
+      "input": {
+        "operations": [
+          "MedianFinder",
+          "addNum",
+          "addNum",
+          "findMedian",
+          "addNum",
+          "findMedian"
+        ],
+        "args": [
+          [],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [],
+          [
+            3
+          ],
+          []
+        ]
+      },
+      "output": [
+        null,
+        null,
+        null,
+        1.5,
+        null,
+        2
+      ]
+    }
+  ],
+  "constraints": [
+    "-10^5 <= num <= 10^5",
+    "There will be at least one element in the data structure before calling findMedian.",
+    "At most 5 * 10^4 calls will be made to addNum and findMedian."
+  ]
+}

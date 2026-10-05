@@ -1,0 +1,90 @@
+{
+  "id": 39,
+  "title": "Combination Sum",
+  "slug": "combination-sum",
+  "difficulty": "Medium",
+  "day": 11,
+  "category": "Backtracking",
+  "order": 3,
+  "timeEstimateMinutes": 30,
+  "className": "Solution",
+  "methodName": "combinationSum",
+  "kind": "function",
+  "comparator": "unordered-nested",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "int[]"
+    },
+    {
+      "name": "target",
+      "type": "int"
+    }
+  ],
+  "returnType": "List<List<Integer>>",
+  "examples": [
+    {
+      "input": {
+        "candidates": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "target": 7
+      },
+      "output": [
+        [
+          2,
+          2,
+          3
+        ],
+        [
+          7
+        ]
+      ]
+    },
+    {
+      "input": {
+        "candidates": [
+          2,
+          3,
+          5
+        ],
+        "target": 8
+      },
+      "output": [
+        [
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          2,
+          3,
+          3
+        ],
+        [
+          3,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "candidates": [
+          2
+        ],
+        "target": 1
+      },
+      "output": []
+    }
+  ],
+  "constraints": [
+    "1 <= candidates.length <= 30",
+    "2 <= candidates[i] <= 40",
+    "All elements of candidates are distinct.",
+    "1 <= target <= 40"
+  ]
+}

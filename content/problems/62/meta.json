@@ -1,0 +1,44 @@
+{
+  "id": 62,
+  "title": "Unique Paths",
+  "slug": "unique-paths",
+  "difficulty": "Medium",
+  "day": 13,
+  "category": "Dynamic Programming",
+  "order": 3,
+  "timeEstimateMinutes": 20,
+  "className": "Solution",
+  "methodName": "uniquePaths",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "m",
+      "type": "int"
+    },
+    {
+      "name": "n",
+      "type": "int"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "m": 3,
+        "n": 7
+      },
+      "output": 28
+    },
+    {
+      "input": {
+        "m": 3,
+        "n": 2
+      },
+      "output": 3
+    }
+  ],
+  "constraints": [
+    "1 <= m, n <= 100"
+  ]
+}

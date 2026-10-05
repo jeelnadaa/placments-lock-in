@@ -1,0 +1,46 @@
+{
+  "id": 424,
+  "title": "Longest Repeating Character Replacement",
+  "slug": "longest-repeating-character-replacement",
+  "difficulty": "Medium",
+  "day": 7,
+  "category": "Sliding Window",
+  "order": 2,
+  "timeEstimateMinutes": 30,
+  "className": "Solution",
+  "methodName": "characterReplacement",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "s",
+      "type": "String"
+    },
+    {
+      "name": "k",
+      "type": "int"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "s": "ABAB",
+        "k": 2
+      },
+      "output": 4
+    },
+    {
+      "input": {
+        "s": "AABABBA",
+        "k": 1
+      },
+      "output": 4
+    }
+  ],
+  "constraints": [
+    "1 <= s.length <= 10^5",
+    "s consists of only uppercase English letters.",
+    "0 <= k <= s.length"
+  ]
+}

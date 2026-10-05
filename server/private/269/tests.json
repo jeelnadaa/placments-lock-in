@@ -1,0 +1,170 @@
+[
+  {
+    "inputs": {
+      "words": [
+        "wrt",
+        "wrf",
+        "er",
+        "ett",
+        "rftt"
+      ]
+    },
+    "expected": "wertf"
+  },
+  {
+    "inputs": {
+      "words": [
+        "z",
+        "x"
+      ]
+    },
+    "expected": "zx"
+  },
+  {
+    "inputs": {
+      "words": [
+        "z",
+        "x",
+        "z"
+      ]
+    },
+    "expected": ""
+  },
+  {
+    "inputs": {
+      "words": [
+        "abc",
+        "ab"
+      ]
+    },
+    "expected": ""
+  },
+  {
+    "inputs": {
+      "words": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "expected": "abc"
+  },
+  {
+    "inputs": {
+      "words": [
+        "z"
+      ]
+    },
+    "expected": "z"
+  },
+  {
+    "inputs": {
+      "words": [
+        "zy",
+        "zx"
+      ]
+    },
+    "expected": "yxz"
+  },
+  {
+    "inputs": {
+      "words": [
+        "ab",
+        "adc"
+      ]
+    },
+    "expected": "abcd"
+  },
+  {
+    "inputs": {
+      "words": [
+        "apple",
+        "app"
+      ]
+    },
+    "expected": ""
+  },
+  {
+    "inputs": {
+      "words": [
+        "w",
+        "wo",
+        "wor",
+        "word"
+      ]
+    },
+    "expected": "drow"
+  },
+  {
+    "inputs": {
+      "words": [
+        "x",
+        "y",
+        "x"
+      ]
+    },
+    "expected": ""
+  },
+  {
+    "inputs": {
+      "words": [
+        "ri",
+        "xz",
+        "qsq",
+        "qrt",
+        "dhe",
+        "dhm",
+        "dgb",
+        "dgt",
+        "ith",
+        "ith",
+        "its",
+        "its"
+      ]
+    },
+    "expected": "riqxdhgtemsb"
+  },
+  {
+    "inputs": {
+      "words": [
+        "a",
+        "ba",
+        "bc",
+        "c"
+      ]
+    },
+    "expected": "abc"
+  },
+  {
+    "inputs": {
+      "words": [
+        "qb",
+        "qba",
+        "qbax"
+      ]
+    },
+    "expected": "abqx"
+  },
+  {
+    "inputs": {
+      "words": [
+        "za",
+        "zb",
+        "ca",
+        "cb"
+      ]
+    },
+    "expected": "abzc"
+  },
+  {
+    "inputs": {
+      "words": [
+        "ac",
+        "ab",
+        "zc",
+        "zb"
+      ]
+    },
+    "expected": "cbaz"
+  }
+]

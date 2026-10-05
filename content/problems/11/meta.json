@@ -1,0 +1,53 @@
+{
+  "id": 11,
+  "title": "Container With Most Water",
+  "slug": "container-with-most-water",
+  "difficulty": "Medium",
+  "day": 6,
+  "category": "Two Pointers",
+  "order": 2,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "maxArea",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "height",
+      "type": "int[]"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "height": [
+          1,
+          8,
+          6,
+          2,
+          5,
+          4,
+          8,
+          3,
+          7
+        ]
+      },
+      "output": 49
+    },
+    {
+      "input": {
+        "height": [
+          1,
+          1
+        ]
+      },
+      "output": 1
+    }
+  ],
+  "constraints": [
+    "n == height.length",
+    "2 <= n <= 10^5",
+    "0 <= height[i] <= 10^4"
+  ]
+}

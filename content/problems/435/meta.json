@@ -1,0 +1,85 @@
+{
+  "id": 435,
+  "title": "Non-overlapping Intervals",
+  "slug": "non-overlapping-intervals",
+  "difficulty": "Medium",
+  "day": 9,
+  "category": "Intervals",
+  "order": 5,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "eraseOverlapIntervals",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "intervals",
+      "type": "int[][]"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      "output": 1
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "output": 2
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "output": 0
+    }
+  ],
+  "constraints": [
+    "1 <= intervals.length <= 10^5",
+    "intervals[i].length == 2",
+    "-5 * 10^4 <= start_i < end_i <= 5 * 10^4"
+  ]
+}

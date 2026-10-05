@@ -1,0 +1,114 @@
+[
+  {
+    "inputs": {
+      "a": 1,
+      "b": 2
+    },
+    "expected": 3
+  },
+  {
+    "inputs": {
+      "a": 2,
+      "b": 3
+    },
+    "expected": 5
+  },
+  {
+    "inputs": {
+      "a": 0,
+      "b": 0
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "a": -1,
+      "b": 1
+    },
+    "expected": 0
+  },
+  {
+    "inputs": {
+      "a": -2,
+      "b": 3
+    },
+    "expected": 1
+  },
+  {
+    "inputs": {
+      "a": -14,
+      "b": 16
+    },
+    "expected": 2
+  },
+  {
+    "inputs": {
+      "a": -10,
+      "b": -20
+    },
+    "expected": -30
+  },
+  {
+    "inputs": {
+      "a": 100,
+      "b": 200
+    },
+    "expected": 300
+  },
+  {
+    "inputs": {
+      "a": 15,
+      "b": 0
+    },
+    "expected": 15
+  },
+  {
+    "inputs": {
+      "a": 0,
+      "b": -9
+    },
+    "expected": -9
+  },
+  {
+    "inputs": {
+      "a": 999,
+      "b": 1
+    },
+    "expected": 1000
+  },
+  {
+    "inputs": {
+      "a": -500,
+      "b": -500
+    },
+    "expected": -1000
+  },
+  {
+    "inputs": {
+      "a": 45,
+      "b": -30
+    },
+    "expected": 15
+  },
+  {
+    "inputs": {
+      "a": -30,
+      "b": 45
+    },
+    "expected": 15
+  },
+  {
+    "inputs": {
+      "a": 12,
+      "b": 12
+    },
+    "expected": 24
+  },
+  {
+    "inputs": {
+      "a": -7,
+      "b": -8
+    },
+    "expected": -15
+  }
+]

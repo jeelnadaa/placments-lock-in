@@ -5,6 +5,7 @@ import {
   ExternalLink,
   ChevronRight,
   Filter,
+  FlaskConical,
 } from 'lucide-react';
 import { Problem, Progress, Settings, ProblemDifficulty, ProblemStatus } from '../../types';
 import { DifficultyBadge, StatusBadge } from '../common/Badge';
@@ -186,6 +187,34 @@ export const AllProblemsView: React.FC<AllProblemsViewProps> = ({
         <div className="text-xs font-mono text-mono-400">
           Showing <span className="font-semibold text-mono-100">{sortedProblems.length}</span> of {problems.length}
         </div>
+      </div>
+
+      {/* JUDGE DIAGNOSTIC & TESTING SANDBOX BANNER */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-gradient-to-r from-emerald-950/40 via-mono-900 to-mono-900 border border-emerald-800/60 shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0">
+            <FlaskConical className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-emerald-300 text-sm">🧪 #0 Judge Diagnostics & Sandbox</span>
+              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+                Diagnostic Question
+              </span>
+            </div>
+            <p className="text-xs text-mono-400 mt-0.5">
+              Verify your local Java environment: test standard math execution, intentional exceptions, timeouts, stdout capturing, and actual vs expected results.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => onOpenProblem(0)}
+          className="whitespace-nowrap px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-mono-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow self-end sm:self-center"
+        >
+          <span>Open Test Sandbox</span>
+          <ChevronRight className="w-4 h-4" />
+        </button>
       </div>
 
       {/* FILTER & SEARCH BAR */}

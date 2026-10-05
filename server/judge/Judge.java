@@ -200,6 +200,9 @@ public class Judge {
         if (obj instanceof TreeNode) {
             return serializeTreeNode((TreeNode) obj);
         }
+        if (obj instanceof Node) {
+            return serializeGraphNode((Node) obj);
+        }
         return "\"" + obj.toString() + "\"";
     }
 
@@ -249,6 +252,50 @@ public class Judge {
         }
         sb.append("]");
         return sb.toString();
+    }
+
+    public static String serializeGraphNode(Node node) {
+        if (node == null) return "[]";
+        Map<Integer, Node> map = new TreeMap<>();
+        Queue<Node> q = new LinkedList<>();
+        q.offer(node);
+        map.put(node.val, node);
+        while (!q.isEmpty()) {
+            Node curr = q.poll();
+            if (curr.neighbors != null) {
+                for (Node nbr : curr.neighbors) {
+                    if (nbr != null && !map.containsKey(nbr.val)) {
+                        map.put(nbr.val, nbr);
+                        q.offer(nbr);
+                    }
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder("[");
+        boolean first = true;
+        for (Map.Entry<Integer, Node> entry : map.entrySet()) {
+            if (!first) sb.append(",");
+            first = false;
+            sb.append("[");
+            Node n = entry.getValue();
+            if (n.neighbors != null) {
+                for (int i = 0; i < n.neighbors.size(); i++) {
+                    if (i > 0) sb.append(",");
+                    sb.append(n.neighbors.get(i).val);
+                }
+            }
+            sb.append("]");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    public static TreeNode findTreeNode(TreeNode root, int val) {
+        if (root == null) return null;
+        if (root.val == val) return root;
+        TreeNode left = findTreeNode(root.left, val);
+        if (left != null) return left;
+        return findTreeNode(root.right, val);
     }
 
     // Convert JsonVal to specified Java type
@@ -376,7 +423,25 @@ public class Judge {
             }
             return dummy.next;
         }
+        if ("ListNode[]".equals(type)) {
+            List<JsonVal> outer = jv.asList();
+            ListNode[] res = new ListNode[outer.size()];
+            for (int i = 0; i < outer.size(); i++) {
+                res[i] = (ListNode) convertType(outer.get(i), "ListNode", null);
+            }
+            return res;
+        }
         if ("TreeNode".equals(type)) {
+            if (jv.val instanceof Number) {
+                int target = jv.asInt();
+                if (allInputs != null && allInputs.containsKey("root")) {
+                    JsonVal rootJv = allInputs.get("root");
+                    TreeNode fullTree = (TreeNode) convertType(rootJv, "TreeNode", null);
+                    TreeNode found = findTreeNode(fullTree, target);
+                    if (found != null) return found;
+                }
+                return new TreeNode(target);
+            }
             List<JsonVal> vals = jv.asList();
             if (vals.isEmpty() || vals.get(0).isNull()) return null;
             TreeNode root = new TreeNode(vals.get(0).asInt());
@@ -401,6 +466,22 @@ public class Judge {
                 }
             }
             return root;
+        }
+        if ("Node".equals(type)) {
+            List<JsonVal> adjList = jv.asList();
+            if (adjList == null || adjList.isEmpty()) return null;
+            int n = adjList.size();
+            Node[] nodes = new Node[n + 1];
+            for (int i = 1; i <= n; i++) {
+                nodes[i] = new Node(i);
+            }
+            for (int i = 1; i <= n; i++) {
+                List<JsonVal> nbrs = adjList.get(i - 1).asList();
+                for (JsonVal nb : nbrs) {
+                    nodes[i].neighbors.add(nodes[nb.asInt()]);
+                }
+            }
+            return nodes[1];
         }
 
         return jv.val;
@@ -538,7 +619,9 @@ public class Judge {
 
                         Object ret = fTargetMethod.invoke(instance, callArgs);
 
-                        if (kind.startsWith("inplace:")) {
+                        if ("treenode-val".equals(kind)) {
+                            resultHolder[0] = (ret instanceof TreeNode) ? ((TreeNode) ret).val : ret;
+                        } else if (kind.startsWith("inplace:")) {
                             int inplaceIdx = Integer.parseInt(kind.substring("inplace:".length()));
                             resultHolder[0] = callArgs[inplaceIdx];
                         } else {

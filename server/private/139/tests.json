@@ -1,0 +1,175 @@
+[
+  {
+    "inputs": {
+      "s": "leetcode",
+      "wordDict": [
+        "leet",
+        "code"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "applepenapple",
+      "wordDict": [
+        "apple",
+        "pen"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "catsandog",
+      "wordDict": [
+        "cats",
+        "dog",
+        "sand",
+        "and",
+        "cat"
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "a",
+      "wordDict": [
+        "a"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "a",
+      "wordDict": [
+        "b"
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "bb",
+      "wordDict": [
+        "a",
+        "b",
+        "bbb",
+        "bbbb"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "cars",
+      "wordDict": [
+        "car",
+        "ca",
+        "rs"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "cbca",
+      "wordDict": [
+        "bc",
+        "ca"
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "goalspecial",
+      "wordDict": [
+        "go",
+        "goal",
+        "goals",
+        "special"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "abcd",
+      "wordDict": [
+        "a",
+        "abc",
+        "b",
+        "cd"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "program",
+      "wordDict": [
+        "pro",
+        "gram"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "aaaaaaa",
+      "wordDict": [
+        "aaaa",
+        "aaa"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "aaaaaaa",
+      "wordDict": [
+        "aaaa",
+        "aa"
+      ]
+    },
+    "expected": false
+  },
+  {
+    "inputs": {
+      "s": "sanddog",
+      "wordDict": [
+        "sand",
+        "dog"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "ilikesamsung",
+      "wordDict": [
+        "i",
+        "like",
+        "sam",
+        "sung",
+        "samsung"
+      ]
+    },
+    "expected": true
+  },
+  {
+    "inputs": {
+      "s": "mississippi",
+      "wordDict": [
+        "miss",
+        "is",
+        "sip",
+        "pi"
+      ]
+    },
+    "expected": true
+  }
+]

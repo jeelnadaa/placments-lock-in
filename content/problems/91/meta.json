@@ -1,0 +1,45 @@
+{
+  "id": 91,
+  "title": "Decode Ways",
+  "slug": "decode-ways",
+  "difficulty": "Medium",
+  "day": 9,
+  "category": "Dynamic Programming",
+  "order": 4,
+  "timeEstimateMinutes": 30,
+  "className": "Solution",
+  "methodName": "numDecodings",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "s",
+      "type": "String"
+    }
+  ],
+  "returnType": "int",
+  "examples": [
+    {
+      "input": {
+        "s": "12"
+      },
+      "output": 2
+    },
+    {
+      "input": {
+        "s": "226"
+      },
+      "output": 3
+    },
+    {
+      "input": {
+        "s": "06"
+      },
+      "output": 0
+    }
+  ],
+  "constraints": [
+    "1 <= s.length <= 100",
+    "s contains only digits and may contain leading zero(s)."
+  ]
+}

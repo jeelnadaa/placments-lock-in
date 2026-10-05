@@ -1,0 +1,72 @@
+{
+  "id": 19,
+  "title": "Remove Nth Node From End of List",
+  "slug": "remove-nth-node-from-end-of-list",
+  "difficulty": "Medium",
+  "day": 6,
+  "category": "Linked List",
+  "order": 3,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "removeNthFromEnd",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "head",
+      "type": "ListNode"
+    },
+    {
+      "name": "n",
+      "type": "int"
+    }
+  ],
+  "returnType": "ListNode",
+  "examples": [
+    {
+      "input": {
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "n": 2
+      },
+      "output": [
+        1,
+        2,
+        3,
+        5
+      ]
+    },
+    {
+      "input": {
+        "head": [
+          1
+        ],
+        "n": 1
+      },
+      "output": []
+    },
+    {
+      "input": {
+        "head": [
+          1,
+          2
+        ],
+        "n": 1
+      },
+      "output": [
+        1
+      ]
+    }
+  ],
+  "constraints": [
+    "The number of nodes in the list is sz.",
+    "1 <= sz <= 30",
+    "0 <= Node.val <= 100",
+    "1 <= n <= sz"
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": 271,
+  "title": "Encode and Decode Strings",
+  "slug": "encode-and-decode-strings",
+  "difficulty": "Medium",
+  "day": 7,
+  "category": "String",
+  "order": 1,
+  "timeEstimateMinutes": 25,
+  "className": "Solution",
+  "methodName": "encodeDecode",
+  "kind": "function",
+  "comparator": "exact",
+  "params": [
+    {
+      "name": "strs",
+      "type": "List<String>"
+    }
+  ],
+  "returnType": "List<String>",
+  "examples": [
+    {
+      "input": {
+        "strs": [
+          "lint",
+          "code",
+          "love",
+          "you"
+        ]
+      },
+      "output": [
+        "lint",
+        "code",
+        "love",
+        "you"
+      ]
+    },
+    {
+      "input": {
+        "strs": [
+          "we",
+          "say",
+          ":",
+          "yes"
+        ]
+      },
+      "output": [
+        "we",
+        "say",
+        ":",
+        "yes"
+      ]
+    }
+  ],
+  "constraints": [
+    "0 <= strs.length <= 200",
+    "0 <= strs[i].length <= 200",
+    "strs[i] contains any possible characters out of 256 valid ASCII characters."
+  ]
+}

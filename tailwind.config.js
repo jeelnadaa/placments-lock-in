@@ -12,14 +12,14 @@ export default {
         mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
       fontSize: {
-        '2xs': ['12px', '16px'],
-        'xs': ['14px', '20px'],
-        'sm': ['15.5px', '23px'],
-        'base': ['17px', '26px'],
-        'lg': ['19px', '29px'],
-        'xl': ['22px', '32px'],
-        '2xl': ['27px', '36px'],
-        '3xl': ['34px', '42px'],
+        '2xs': ['13.5px', '18px'],
+        'xs': ['15.5px', '22px'],
+        'sm': ['17px', '25px'],
+        'base': ['18.5px', '28px'],
+        'lg': ['21px', '31px'],
+        'xl': ['25px', '35px'],
+        '2xl': ['30px', '40px'],
+        '3xl': ['38px', '46px'],
       },
       colors: {
         mono: {
