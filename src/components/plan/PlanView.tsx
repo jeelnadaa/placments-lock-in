@@ -68,7 +68,7 @@ export const PlanView: React.FC<PlanViewProps> = ({
       </div>
 
       {/* DAY SELECTOR TABS (DAY 1 TO 15) */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
+      <div className="flex items-center gap-2 overflow-x-auto py-2 scrollbar-thin">
         {dayStats.map((stat) => {
           const isActive = stat.day === activeDay;
           return (
@@ -76,29 +76,35 @@ export const PlanView: React.FC<PlanViewProps> = ({
               key={stat.day}
               type="button"
               onClick={() => setActiveDay(stat.day)}
-              className={`relative flex flex-col items-center min-w-[70px] px-3 py-2.5 rounded-xl border transition-all shrink-0 ${
+              className={`flex flex-col items-center justify-between min-w-[76px] px-3 py-2 rounded-xl border transition-all shrink-0 ${
                 isActive
-                  ? 'bg-mono-100 text-mono-950 border-mono-100 font-bold shadow-lg'
+                  ? 'bg-mono-100 text-mono-950 border-mono-100 font-bold shadow-lg ring-2 ring-mono-100/30'
                   : 'bg-mono-900 text-mono-400 border-mono-800 hover:border-mono-700 hover:text-mono-200'
               }`}
             >
-              {stat.isToday && (
-                <span
-                  className={`absolute -top-1.5 px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold ${
-                    isActive ? 'bg-black text-white' : 'bg-mono-200 text-mono-900'
-                  }`}
-                >
-                  TODAY
-                </span>
-              )}
-              <span className="text-xs font-mono">Day {stat.day}</span>
+              <div className="h-4 flex items-center justify-center">
+                {stat.isToday ? (
+                  <span
+                    className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider uppercase ${
+                      isActive
+                        ? 'bg-mono-950 text-white'
+                        : 'bg-mono-800 text-mono-200 border border-mono-700'
+                    }`}
+                  >
+                    TODAY
+                  </span>
+                ) : (
+                  <span className="text-[9px] opacity-0 select-none">PAD</span>
+                )}
+              </div>
+              <span className="text-xs font-mono font-semibold mt-0.5">Day {stat.day}</span>
               <div className="flex items-center gap-1 mt-1 text-[11px] font-mono">
                 {stat.isCompleted ? (
                   <CheckCircle2
-                    className={`w-3 h-3 ${isActive ? 'text-black' : 'text-emerald-400'}`}
+                    className={`w-3.5 h-3.5 ${isActive ? 'text-black' : 'text-emerald-400'}`}
                   />
                 ) : (
-                  <span className={isActive ? 'text-mono-800' : 'text-mono-500'}>
+                  <span className={isActive ? 'text-mono-800 font-medium' : 'text-mono-500'}>
                     {stat.solved}/{stat.total}
                   </span>
                 )}

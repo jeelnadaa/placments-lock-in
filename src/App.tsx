@@ -16,7 +16,7 @@ import { ProblemDetailView } from './components/problems/ProblemDetailView';
 import { SettingsView } from './components/settings/SettingsView';
 import { Modal } from './components/common/Modal';
 import { ToastProvider, useToast } from './components/common/Toast';
-import { calculateStreaks } from './utils/streaks';
+import { calculateStreaks, toLocalDateString } from './utils/streaks';
 
 const TEST_PROBLEM_0: Problem = {
   id: 0,
@@ -195,6 +195,12 @@ function AppContent() {
 
   const handleUpdateSettings = async (newSettings: Partial<Settings>) => {
     const current = await db.settings.get('current');
+    if (newSettings.startDate) {
+      const todayStr = toLocalDateString(new Date());
+      if (newSettings.startDate > todayStr) {
+        newSettings.startDate = todayStr;
+      }
+    }
     const updated = { ...(current || DEFAULT_SETTINGS), ...newSettings };
     await db.settings.put(updated);
   };

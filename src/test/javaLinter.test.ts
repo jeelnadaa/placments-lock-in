@@ -115,4 +115,83 @@ describe('Live Java Linter & Scope Diagnostics', () => {
     const semi = diags.find((d) => d.message.includes(';'));
     expect(semi).toBeDefined();
   });
+
+  it('detects unreachable code after return statement', () => {
+    const code = `class Solution {
+    public int test() {
+        return 1;
+        int x = 2;
+    }
+}`;
+    const view = createMockView(code);
+    const diags = javaLinter(view);
+
+    const unreachable = diags.find((d) => d.message.includes('Unreachable statement'));
+    expect(unreachable).toBeDefined();
+    expect(unreachable?.severity).toBe('error');
+  });
+
+  it('warns on suspicious assignment in if condition', () => {
+    const code = `class Solution {
+    public void test(int x) {
+        if (x = 5) {
+        }
+    }
+}`;
+    const view = createMockView(code);
+    const diags = javaLinter(view);
+
+    const assignInCond = diags.find((d) => d.message.includes("Did you mean '=='"));
+    expect(assignInCond).toBeDefined();
+    expect(assignInCond?.severity).toBe('warning');
+  });
+
+  it('warns when comparing string literal with ==', () => {
+    const code = `class Solution {
+    public boolean test(String s) {
+        return s == "target";
+    }
+}`;
+    const view = createMockView(code);
+    const diags = javaLinter(view);
+
+    const strEq = diags.find((d) => d.message.includes('.equals(...)'));
+    expect(strEq).toBeDefined();
+    expect(strEq?.severity).toBe('warning');
+  });
+
+  it('detects Python/JS syntax leaks (def, let, elif, len, True)', () => {
+    const code = `class Solution {
+    def myMethod() {
+        let x = 10;
+        if (x > 0) {
+            return True;
+        } elif (x == 0) {
+            return False;
+        }
+    }
+}`;
+    const view = createMockView(code);
+    const diags = javaLinter(view);
+
+    expect(diags.some((d) => d.message.includes("'def'"))).toBe(true);
+    expect(diags.some((d) => d.message.includes("'let'"))).toBe(true);
+    expect(diags.some((d) => d.message.includes("'else if'"))).toBe(true);
+    expect(diags.some((d) => d.message.includes("'true'"))).toBe(true);
+  });
+
+  it('detects unmatched closing parenthesis and bracket', () => {
+    const code = `class Solution {
+    public int test() {
+        int x = (1 + 2));
+        int[] arr = [1, 2]];
+        return x;
+    }
+}`;
+    const view = createMockView(code);
+    const diags = javaLinter(view);
+
+    expect(diags.some((d) => d.message.includes("Unmatched closing parenthesis ')'"))).toBe(true);
+    expect(diags.some((d) => d.message.includes("Unmatched closing bracket ']'"))).toBe(true);
+  });
 });

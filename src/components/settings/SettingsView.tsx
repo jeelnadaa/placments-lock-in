@@ -17,6 +17,7 @@ import {
   generateMarkdownReport,
   validateImportData,
 } from '../../utils/importExport';
+import { toLocalDateString } from '../../utils/streaks';
 
 interface SettingsViewProps {
   settings: Settings;
@@ -51,6 +52,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onImportData,
 }) => {
   const { showToast } = useToast();
+  const todayStr = toLocalDateString(new Date());
 
   // Modals state
   const [spoilerOffModalOpen, setSpoilerOffModalOpen] = useState(false);
@@ -193,8 +195,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <input
               id="startDateInput"
               type="date"
+              max={todayStr}
               value={settings.startDate || ''}
-              onChange={(e) => onUpdateSettings({ startDate: e.target.value })}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (!val) return;
+                if (val > todayStr) {
+                  showToast('Start date cannot be later than today', 'error');
+                  onUpdateSettings({ startDate: todayStr });
+                } else {
+                  onUpdateSettings({ startDate: val });
+                }
+              }}
               className="bg-mono-950 border border-mono-800 rounded-lg px-3 py-1.5 text-xs font-mono text-mono-100 focus:outline-none focus:border-mono-600 self-start sm:self-auto"
             />
           </div>
