@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CheckCircle2,
   XCircle,
@@ -11,6 +11,7 @@ import {
   Save,
 } from 'lucide-react';
 import { CustomCase, ProblemMeta, RunResponse, SubmitResponse } from '../../types';
+import { ErrorDisplay } from './ErrorDisplay';
 
 interface ConsolePanelProps {
   meta?: ProblemMeta;
@@ -26,6 +27,7 @@ interface ConsolePanelProps {
   isRunning: boolean;
   onSaveAsVersionClick: () => void;
   onAddFailingToCustomCases: (failingInput: Record<string, unknown> | string) => void;
+  onJumpToLine?: (line: number) => void;
 }
 
 export const ConsolePanel: React.FC<ConsolePanelProps> = ({
@@ -42,10 +44,18 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   isRunning,
   onSaveAsVersionClick,
   onAddFailingToCustomCases,
+  onJumpToLine,
 }) => {
   const [selectedCaseIdx, setSelectedCaseIdx] = useState(0);
   const [selectedResultCaseIdx, setSelectedResultCaseIdx] = useState(0);
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Auto-expand console when execution starts or results arrive so errors are never hidden
+  useEffect(() => {
+    if (runResult || submitResult || isRunning) {
+      setIsCollapsed(false);
+    }
+  }, [runResult, submitResult, isRunning]);
 
   // Total cases count (samples + custom)
   const totalCasesCount = sampleCases.length + customCases.length;
@@ -293,88 +303,133 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                     )}
                   </div>
 
-                  {/* Single Failing Testcase Display (Strict Criterion 4) */}
-                  {submitResult.failing && (
-                    <div className="p-4 rounded-xl bg-mono-900 border border-rose-900/60 flex flex-col gap-2.5">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-rose-300 flex items-center gap-1.5">
-                          <XCircle className="w-4 h-4 text-rose-400" />
-                          <span>Failing Testcase #{submitResult.failing.index}</span>
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => onAddFailingToCustomCases(submitResult.failing!.input)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-mono-850 hover:bg-mono-800 border border-mono-700 text-mono-200 text-[11px]"
-                          title="Copy this failing test into your custom testcases"
-                        >
-                          <BookmarkPlus className="w-3.5 h-3.5 text-amber-400" />
-                          <span>Add to my testcases</span>
-                        </button>
-                      </div>
-
-                      <div className="flex flex-col gap-1">
-                        <span className="text-mono-500 font-medium">Input:</span>
-                        <pre className="p-2.5 rounded bg-mono-950 border border-mono-800 overflow-x-auto text-mono-200">
-                          {typeof submitResult.failing.input === 'string'
-                            ? submitResult.failing.input
-                            : JSON.stringify(submitResult.failing.input, null, 2)}
-                        </pre>
-                      </div>
-
-                      {submitResult.failing.actual !== undefined && (
-                        <div className="flex flex-col gap-1">
-                          <span className="text-rose-400 font-medium">Output:</span>
-                          <pre className="p-2.5 rounded bg-mono-950 border border-mono-800 overflow-x-auto text-rose-200">
-                            {submitResult.failing.actual}
-                          </pre>
-                        </div>
-                      )}
-
-                      {submitResult.failing.expected !== undefined && (
-                        <div className="flex flex-col gap-1">
-                          <span className="text-emerald-400 font-medium">Expected:</span>
-                          <pre className="p-2.5 rounded bg-mono-950 border border-mono-800 overflow-x-auto text-emerald-200">
-                            {submitResult.failing.expected}
-                          </pre>
-                        </div>
-                      )}
-
-                      {submitResult.failing.stdout && (
-                        <div className="flex flex-col gap-1">
-                          <span className="text-mono-400 font-medium">Stdout:</span>
-                          <pre className="p-2.5 rounded bg-mono-950 border border-mono-800 overflow-x-auto text-mono-300">
-                            {submitResult.failing.stdout}
-                          </pre>
-                        </div>
-                      )}
-
-                      {submitResult.failing.error && (
-                        <div className="flex flex-col gap-1">
-                          <span className="text-rose-400 font-medium">Error:</span>
-                          <pre className="p-2.5 rounded bg-mono-950 border border-rose-900/60 overflow-x-auto text-rose-300">
-                            {submitResult.failing.error}
-                          </pre>
-                        </div>
-                      )}
-                    </div>
+                  {/* COMPILE ERROR (SUBMIT) */}
+                  {(submitResult.verdict === 'Compile Error' || submitResult.compileError) && (
+                    <ErrorDisplay
+                      verdict="Compile Error"
+                      compileError={submitResult.compileError || submitResult.error}
+                      onJumpToLine={onJumpToLine}
+                    />
                   )}
 
-                  {submitResult.error && !submitResult.failing && (
-                    <div className="p-3.5 rounded-xl bg-mono-900 border border-rose-900/60 text-rose-300 whitespace-pre-wrap">
-                      {submitResult.error}
-                    </div>
+                  {/* RUNTIME ERROR (SUBMIT) */}
+                  {submitResult.verdict === 'Runtime Error' && (
+                    <ErrorDisplay
+                      verdict="Runtime Error"
+                      error={submitResult.failing?.error || submitResult.error}
+                      stackTrace={submitResult.failing?.stackTrace}
+                      failingInput={submitResult.failing?.input}
+                      onJumpToLine={onJumpToLine}
+                    />
                   )}
+
+                  {/* FAILING TESTCASE (WRONG ANSWER / TLE) */}
+                  {submitResult.failing &&
+                    submitResult.verdict !== 'Compile Error' &&
+                    submitResult.verdict !== 'Runtime Error' && (
+                      <div className="p-4 rounded-xl bg-mono-900 border border-rose-900/60 flex flex-col gap-2.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-rose-300 flex items-center gap-1.5 text-sm">
+                            <XCircle className="w-4 h-4 text-rose-400" />
+                            <span>Failing Testcase #{submitResult.failing.index}</span>
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={() => onAddFailingToCustomCases(submitResult.failing!.input)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-mono-850 hover:bg-mono-800 border border-mono-700 text-mono-200 text-xs font-semibold"
+                            title="Copy this failing test into your custom testcases"
+                          >
+                            <BookmarkPlus className="w-3.5 h-3.5 text-amber-400" />
+                            <span>Add to my testcases</span>
+                          </button>
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                          <span className="text-mono-400 font-medium text-xs">Input:</span>
+                          <pre className="p-3 rounded-lg bg-mono-950 border border-mono-800 overflow-x-auto text-mono-200 text-sm">
+                            {typeof submitResult.failing.input === 'string'
+                              ? submitResult.failing.input
+                              : JSON.stringify(submitResult.failing.input, null, 2)}
+                          </pre>
+                        </div>
+
+                        {submitResult.failing.actual !== undefined && (
+                          <div className="flex flex-col gap-1">
+                            <span className="text-rose-400 font-medium text-xs">Output:</span>
+                            <pre className="p-3 rounded-lg bg-mono-950 border border-mono-800 overflow-x-auto text-rose-200 text-sm">
+                              {submitResult.failing.actual}
+                            </pre>
+                          </div>
+                        )}
+
+                        {submitResult.failing.expected !== undefined && (
+                          <div className="flex flex-col gap-1">
+                            <span className="text-emerald-400 font-medium text-xs">Expected:</span>
+                            <pre className="p-3 rounded-lg bg-mono-950 border border-mono-800 overflow-x-auto text-emerald-200 text-sm">
+                              {submitResult.failing.expected}
+                            </pre>
+                          </div>
+                        )}
+
+                        {submitResult.failing.stdout && (
+                          <div className="flex flex-col gap-1">
+                            <span className="text-mono-400 font-medium text-xs">Stdout:</span>
+                            <pre className="p-3 rounded-lg bg-mono-950 border border-mono-800 overflow-x-auto text-mono-300 text-sm">
+                              {submitResult.failing.stdout}
+                            </pre>
+                          </div>
+                        )}
+
+                        {submitResult.failing.error && (
+                          <div className="flex flex-col gap-1">
+                            <span className="text-rose-400 font-medium text-xs">Error:</span>
+                            <pre className="p-3 rounded-lg bg-mono-950 border border-rose-900/60 overflow-x-auto text-rose-300 text-sm">
+                              {submitResult.failing.error}
+                            </pre>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                  {submitResult.error &&
+                    !submitResult.failing &&
+                    submitResult.verdict !== 'Compile Error' &&
+                    submitResult.verdict !== 'Runtime Error' && (
+                      <div className="p-4 rounded-xl bg-mono-900 border border-rose-900/60 text-rose-300 whitespace-pre-wrap text-sm font-mono">
+                        {submitResult.error}
+                      </div>
+                    )}
                 </div>
               ) : runResult ? (
                 // RUN RESULT DISPLAY
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3 p-3 rounded-xl border bg-mono-900/60">
-                    <span className={`px-2.5 py-0.5 rounded border font-bold ${getVerdictStyle(runResult.verdict)}`}>
+                  <div className="flex items-center gap-3 p-3.5 rounded-xl border bg-mono-900/60">
+                    <span className={`px-2.5 py-0.5 rounded border font-bold text-sm ${getVerdictStyle(runResult.verdict)}`}>
                       {runResult.verdict}
                     </span>
-                    <span className="text-mono-400">Runtime: {runResult.runtimeMs} ms</span>
+                    <span className="text-mono-300 text-sm">Runtime: {runResult.runtimeMs} ms</span>
                   </div>
+
+                  {/* COMPILE ERROR (RUN) */}
+                  {(runResult.verdict === 'Compile Error' ||
+                    runResult.compileError ||
+                    (runResult.error && (!runResult.results || runResult.results.length === 0))) && (
+                    <ErrorDisplay
+                      verdict="Compile Error"
+                      compileError={runResult.compileError || runResult.error}
+                      onJumpToLine={onJumpToLine}
+                    />
+                  )}
+
+                  {/* RUNTIME ERROR BEFORE TESTS (RUN) */}
+                  {runResult.verdict === 'Runtime Error' && (!runResult.results || runResult.results.length === 0) && (
+                    <ErrorDisplay
+                      verdict="Runtime Error"
+                      error={runResult.error}
+                      onJumpToLine={onJumpToLine}
+                    />
+                  )}
 
                   {runResult.results && runResult.results.length > 0 && (
                     <>
@@ -385,7 +440,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                             key={idx}
                             type="button"
                             onClick={() => setSelectedResultCaseIdx(idx)}
-                            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono transition-colors shrink-0 ${
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-colors shrink-0 ${
                               selectedResultCaseIdx === idx
                                 ? 'bg-mono-800 text-mono-100 font-bold border border-mono-700'
                                 : 'bg-mono-900 text-mono-400 border border-mono-800 hover:text-mono-200'
@@ -393,9 +448,9 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                           >
                             <span>Case {idx + 1}</span>
                             {r.passed ? (
-                              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                             ) : (
-                              <XCircle className="w-3 h-3 text-rose-400" />
+                              <XCircle className="w-3.5 h-3.5 text-rose-400" />
                             )}
                           </button>
                         ))}
@@ -407,44 +462,55 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                         if (!cur) return null;
 
                         return (
-                          <div className="p-3.5 rounded-xl bg-mono-900 border border-mono-800 flex flex-col gap-2.5 text-xs">
+                          <div className="p-4 rounded-xl bg-mono-900 border border-mono-800 flex flex-col gap-3 text-sm">
                             <div className="flex flex-col gap-1">
-                              <span className="text-mono-500 font-medium">Input:</span>
-                              <pre className="p-2 rounded bg-mono-950 border border-mono-800 overflow-x-auto text-mono-200">
+                              <span className="text-mono-400 font-medium text-xs">Input:</span>
+                              <pre className="p-3 rounded-lg bg-mono-950 border border-mono-800 overflow-x-auto text-mono-200 text-sm">
                                 {JSON.stringify(cur.input, null, 2)}
                               </pre>
                             </div>
 
-                            <div className="flex flex-col gap-1">
-                              <span className="text-mono-400 font-medium">Output:</span>
-                              <pre className={`p-2 rounded bg-mono-950 border border-mono-800 overflow-x-auto ${cur.passed ? 'text-emerald-300' : 'text-rose-300'}`}>
-                                {cur.actual !== undefined ? JSON.stringify(cur.actual) : 'null'}
-                              </pre>
-                            </div>
+                            {cur.error ? (
+                              <ErrorDisplay
+                                verdict={
+                                  cur.error.includes('Exception') || cur.error.includes('Error')
+                                    ? 'Runtime Error'
+                                    : 'Execution Error'
+                                }
+                                error={cur.error}
+                                stackTrace={cur.stackTrace}
+                                failingInput={cur.input}
+                                onJumpToLine={onJumpToLine}
+                              />
+                            ) : (
+                              <>
+                                <div className="flex flex-col gap-1">
+                                  <span className="text-mono-400 font-medium text-xs">Output:</span>
+                                  <pre
+                                    className={`p-3 rounded-lg bg-mono-950 border border-mono-800 overflow-x-auto text-sm ${
+                                      cur.passed ? 'text-emerald-300' : 'text-rose-300'
+                                    }`}
+                                  >
+                                    {cur.actual !== undefined ? JSON.stringify(cur.actual) : 'null'}
+                                  </pre>
+                                </div>
 
-                            {cur.expected !== undefined && (
-                              <div className="flex flex-col gap-1">
-                                <span className="text-mono-500 font-medium">Expected:</span>
-                                <pre className="p-2 rounded bg-mono-950 border border-mono-800 overflow-x-auto text-emerald-400">
-                                  {JSON.stringify(cur.expected)}
-                                </pre>
-                              </div>
+                                {cur.expected !== undefined && (
+                                  <div className="flex flex-col gap-1">
+                                    <span className="text-mono-400 font-medium text-xs">Expected:</span>
+                                    <pre className="p-3 rounded-lg bg-mono-950 border border-mono-800 overflow-x-auto text-emerald-300 text-sm">
+                                      {JSON.stringify(cur.expected)}
+                                    </pre>
+                                  </div>
+                                )}
+                              </>
                             )}
 
                             {cur.stdout && (
                               <div className="flex flex-col gap-1">
-                                <span className="text-mono-500 font-medium">Stdout:</span>
-                                <pre className="p-2 rounded bg-mono-950 border border-mono-800 overflow-x-auto text-mono-300">
+                                <span className="text-mono-400 font-medium text-xs">Stdout:</span>
+                                <pre className="p-3 rounded-lg bg-mono-950 border border-mono-800 overflow-x-auto text-mono-300 text-sm">
                                   {cur.stdout}
-                                </pre>
-                              </div>
-                            )}
-
-                            {cur.error && (
-                              <div className="flex flex-col gap-1">
-                                <span className="text-rose-400 font-medium">Error:</span>
-                                <pre className="p-2 rounded bg-mono-950 border border-rose-900/60 overflow-x-auto text-rose-300">
-                                  {cur.error}
                                 </pre>
                               </div>
                             )}
@@ -455,7 +521,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                   )}
                 </div>
               ) : (
-                <div className="p-8 text-center text-mono-500 font-mono text-xs">
+                <div className="p-8 text-center text-mono-400 font-mono text-sm">
                   Run or submit code to see test results.
                 </div>
               )}

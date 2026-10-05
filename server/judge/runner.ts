@@ -97,43 +97,52 @@ export async function executeJavaSolution(params: {
       'input.json',
     ];
 
-    const rawOutput = await new Promise<string>((resolve, reject) => {
-      const child = spawn('java', javaArgs, {
-        cwd: runDir,
-        stdio: ['ignore', 'pipe', 'pipe'],
+    let rawOutput = '';
+    try {
+      rawOutput = await new Promise<string>((resolve, reject) => {
+        const child = spawn('java', javaArgs, {
+          cwd: runDir,
+          stdio: ['ignore', 'pipe', 'pipe'],
+        });
+
+        let stdout = '';
+        let stderr = '';
+
+        child.stdout.on('data', (d) => {
+          stdout += d.toString('utf8');
+        });
+
+        child.stderr.on('data', (d) => {
+          stderr += d.toString('utf8');
+        });
+
+        const maxWait = (timeLimitMs + 1000) * tests.length + 5000;
+        const timer = setTimeout(() => {
+          child.kill();
+          reject(new Error('Judge execution timeout'));
+        }, maxWait);
+
+        child.on('close', (code) => {
+          clearTimeout(timer);
+          if (code !== 0 && !stdout.trim()) {
+            reject(new Error(`Java process exited with code ${code}:\n${stderr || stdout}`));
+          } else {
+            resolve(stdout.trim());
+          }
+        });
+
+        child.on('error', (err) => {
+          clearTimeout(timer);
+          reject(err);
+        });
       });
-
-      let stdout = '';
-      let stderr = '';
-
-      child.stdout.on('data', (d) => {
-        stdout += d.toString('utf8');
-      });
-
-      child.stderr.on('data', (d) => {
-        stderr += d.toString('utf8');
-      });
-
-      const maxWait = (timeLimitMs + 1000) * tests.length + 5000;
-      const timer = setTimeout(() => {
-        child.kill();
-        reject(new Error('Judge execution timeout'));
-      }, maxWait);
-
-      child.on('close', (code) => {
-        clearTimeout(timer);
-        if (code !== 0 && !stdout.trim()) {
-          reject(new Error(`Java process exited with code ${code}: ${stderr}`));
-        } else {
-          resolve(stdout.trim());
-        }
-      });
-
-      child.on('error', (err) => {
-        clearTimeout(timer);
-        reject(err);
-      });
-    });
+    } catch (runErr: any) {
+      return {
+        verdict: 'Runtime Error',
+        totalRuntimeMs: 0,
+        error: runErr.message || String(runErr),
+      };
+    }
 
     let parsedOutputs: RawTestOutput[] = [];
     try {
@@ -142,7 +151,7 @@ export async function executeJavaSolution(params: {
       return {
         verdict: 'Runtime Error',
         totalRuntimeMs: 0,
-        error: `Failed to parse judge output: ${rawOutput}`,
+        error: `Failed to parse judge output:\n${rawOutput}`,
       };
     }
 

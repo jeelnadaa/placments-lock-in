@@ -1,5 +1,5 @@
-import React from 'react';
-import CodeMirror from '@uiw/react-codemirror';
+import React, { useRef, useEffect } from 'react';
+import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { java } from '@codemirror/lang-java';
 import { oneDark } from '@codemirror/theme-one-dark';
 
@@ -10,6 +10,8 @@ interface JavaEditorProps {
   minHeight?: string;
   maxHeight?: string;
   placeholder?: string;
+  fontSize?: number;
+  highlightLine?: number | null;
 }
 
 export const JavaEditor: React.FC<JavaEditorProps> = ({
@@ -19,10 +21,36 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
   minHeight = '320px',
   maxHeight = '650px',
   placeholder = '// Enter your Java solution here...\nclass Solution {\n    public ...\n}',
+  fontSize = 15,
+  highlightLine,
 }) => {
+  const cmRef = useRef<ReactCodeMirrorRef>(null);
+
+  useEffect(() => {
+    if (cmRef.current?.view && highlightLine && highlightLine > 0) {
+      try {
+        const view = cmRef.current.view;
+        const doc = view.state.doc;
+        const targetLineNum = Math.min(Math.max(1, highlightLine), doc.lines);
+        const lineInfo = doc.line(targetLineNum);
+        view.dispatch({
+          selection: { anchor: lineInfo.from },
+          scrollIntoView: true,
+        });
+        view.focus();
+      } catch {
+        // ignore navigation errors
+      }
+    }
+  }, [highlightLine]);
+
   return (
-    <div className="rounded-lg border border-mono-800 overflow-hidden bg-mono-950 font-mono text-sm shadow-inner">
+    <div
+      className="rounded-lg border border-mono-800 overflow-hidden bg-mono-950 font-mono shadow-inner"
+      style={{ fontSize: `${fontSize}px` }}
+    >
       <CodeMirror
+        ref={cmRef}
         value={value}
         height="100%"
         minHeight={minHeight}

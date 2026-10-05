@@ -131,6 +131,85 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
   const [runResult, setRunResult] = useState<RunResponse | null>(null);
   const [submitResult, setSubmitResult] = useState<SubmitResponse | null>(null);
 
+  // Active error detection and editor line jumping
+  const [highlightLine, setHighlightLine] = useState<number | null>(null);
+  const [dismissedError, setDismissedError] = useState(false);
+
+  useEffect(() => {
+    setDismissedError(false);
+  }, [runResult, submitResult, isRunning]);
+
+  const activeError = (() => {
+    if (runResult) {
+      if (runResult.verdict === 'Compile Error' || runResult.compileError) {
+        const text = runResult.compileError || runResult.error || 'Compilation failed';
+        const lineMatch = text.match(/(?:[A-Za-z0-9_]+\.java):(\d+)/i);
+        const line = lineMatch ? parseInt(lineMatch[1], 10) : undefined;
+        const msgLines = text.split('\n').filter(Boolean);
+        const summary = msgLines[0]?.replace(/^.*\.java:\d+:\s*(?:error:\s*)?/i, '') || 'Compilation error';
+        return {
+          type: 'Compile Error',
+          line,
+          summary,
+        };
+      }
+      if (runResult.verdict === 'Runtime Error') {
+        const failingCase = runResult.results?.find((r) => !r.passed && (r.error || r.stackTrace));
+        const text = failingCase?.error || runResult.error || 'Runtime error occurred';
+        const trace = failingCase?.stackTrace || '';
+        const lineMatch = (text + '\n' + trace).match(/Solution\.java:(\d+)/i);
+        const line = lineMatch ? parseInt(lineMatch[1], 10) : undefined;
+        return {
+          type: 'Runtime Error',
+          line,
+          summary: text.split('\n')[0] || 'Runtime exception',
+        };
+      }
+      if (runResult.error && (!runResult.results || runResult.results.length === 0)) {
+        return {
+          type: 'Execution Error',
+          line: undefined,
+          summary: runResult.error.split('\n')[0],
+        };
+      }
+    }
+
+    if (submitResult) {
+      if (submitResult.verdict === 'Compile Error' || submitResult.compileError) {
+        const text = submitResult.compileError || submitResult.error || 'Compilation failed';
+        const lineMatch = text.match(/(?:[A-Za-z0-9_]+\.java):(\d+)/i);
+        const line = lineMatch ? parseInt(lineMatch[1], 10) : undefined;
+        const msgLines = text.split('\n').filter(Boolean);
+        const summary = msgLines[0]?.replace(/^.*\.java:\d+:\s*(?:error:\s*)?/i, '') || 'Compilation error';
+        return {
+          type: 'Compile Error',
+          line,
+          summary,
+        };
+      }
+      if (submitResult.verdict === 'Runtime Error') {
+        const text = submitResult.failing?.error || submitResult.error || 'Runtime error occurred';
+        const trace = submitResult.failing?.stackTrace || '';
+        const lineMatch = (text + '\n' + trace).match(/Solution\.java:(\d+)/i);
+        const line = lineMatch ? parseInt(lineMatch[1], 10) : undefined;
+        return {
+          type: 'Runtime Error',
+          line,
+          summary: text.split('\n')[0] || 'Runtime exception',
+        };
+      }
+      if (submitResult.error && !submitResult.failing) {
+        return {
+          type: 'Submission Error',
+          line: undefined,
+          summary: submitResult.error.split('\n')[0],
+        };
+      }
+    }
+
+    return null;
+  })();
+
   // Sample testcases state (allows editing sample cases)
   const [sampleCasesState, setSampleCasesState] = useState<{ inputs: Record<string, unknown>; expected?: unknown }[]>(
     meta ? meta.examples.map((ex) => ({ inputs: ex.input, expected: ex.output })) : []
@@ -252,6 +331,13 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
       }
     } catch (err: any) {
       showToast(err.message || 'Run failed', 'error');
+      setRunResult({
+        verdict: 'Runtime Error',
+        results: [],
+        runtimeMs: 0,
+        error: err.message || 'Run execution failed',
+      });
+      setSubmitResult(null);
     } finally {
       setIsRunning(false);
     }
@@ -316,6 +402,14 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
       onUpdateProgress(progressUpdates);
     } catch (err: any) {
       showToast(err.message || 'Submit failed', 'error');
+      setSubmitResult({
+        verdict: 'Runtime Error',
+        passed: 0,
+        total: 0,
+        runtimeMs: 0,
+        error: err.message || 'Submit execution failed',
+      });
+      setRunResult(null);
     } finally {
       setIsRunning(false);
     }
@@ -906,11 +1000,69 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
             </div>
           </div>
 
+          {/* ACTIVE ERROR CALLOUT BANNER */}
+          {activeError && !dismissedError && (
+            <div className="flex items-center justify-between px-4 py-2 bg-rose-950/90 border-b border-rose-800 text-rose-200 text-xs font-mono select-none">
+              <div className="flex items-center gap-2.5 overflow-hidden text-ellipsis">
+                <span className="px-2 py-0.5 rounded bg-rose-900 border border-rose-700 text-rose-300 font-bold shrink-0">
+                  {activeError.type}
+                </span>
+                {activeError.line !== undefined && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setHighlightLine(activeError.line!);
+                      showToast(`Navigated to line ${activeError.line}`, 'info');
+                    }}
+                    className="px-2 py-0.5 rounded bg-rose-900/60 hover:bg-rose-850 border border-rose-700 text-rose-200 font-bold shrink-0 underline hover:no-underline cursor-pointer transition-colors"
+                    title={`Click to jump to line ${activeError.line} in code editor`}
+                  >
+                    Line {activeError.line}
+                  </button>
+                )}
+                <span className="truncate text-rose-100 font-medium" title={activeError.summary}>
+                  {activeError.summary}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0 ml-3">
+                {activeError.line !== undefined && (
+                  <button
+                    type="button"
+                    onClick={() => setHighlightLine(activeError.line!)}
+                    className="px-2 py-1 rounded bg-rose-900/80 hover:bg-rose-800 border border-rose-700 text-rose-100 text-[11px] font-semibold transition-colors"
+                  >
+                    Jump to Line
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveConsoleTab('result');
+                  }}
+                  className="px-2 py-1 rounded bg-rose-900/80 hover:bg-rose-800 border border-rose-700 text-rose-100 text-[11px] font-semibold transition-colors"
+                >
+                  View in Console ↓
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDismissedError(true)}
+                  className="p-1 rounded hover:bg-rose-900 text-rose-400 hover:text-rose-100 transition-colors"
+                  title="Dismiss banner"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* CODE EDITOR */}
           <div className="flex-1 overflow-auto bg-mono-950">
             <JavaEditor
               value={editorCode}
               onChange={setEditorCode}
+              fontSize={editorFontSize}
+              highlightLine={highlightLine}
               minHeight="280px"
               maxHeight="100%"
             />
@@ -948,6 +1100,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
             isRunning={isRunning}
             onSaveAsVersionClick={() => setSaveModalOpen(true)}
             onAddFailingToCustomCases={handleAddFailingToCustom}
+            onJumpToLine={(line) => setHighlightLine(line)}
           />
         </div>
       </div>

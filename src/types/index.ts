@@ -86,6 +86,7 @@ export interface FailingTestDetail {
   expected?: string;
   stdout?: string;
   error?: string;
+  stackTrace?: string;
 }
 
 export interface Submission {
@@ -147,6 +148,7 @@ export interface TestResultItem {
   stdout?: string;
   runtimeMs?: number;
   error?: string;
+  stackTrace?: string;
 }
 
 export interface RunResponse {
@@ -154,6 +156,7 @@ export interface RunResponse {
   results: TestResultItem[];
   runtimeMs: number;
   error?: string;
+  compileError?: string;
 }
 
 export interface SubmitResponse {

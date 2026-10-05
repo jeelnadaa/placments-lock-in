@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
-import { executeJavaSolution, RawTestOutput } from './judge/runner';
+import { executeJavaSolution, RawTestOutput, JudgeExecutionResult } from './judge/runner';
 import { compareResults } from './judge/comparators';
 import { ProblemMeta, RunResponse, SubmitResponse, TestResultItem } from '../src/types';
 
@@ -93,19 +93,36 @@ export async function handleRunCode(payload: {
   }
 
   // Execute user solution on all provided cases
-  const execResult = await executeJavaSolution({
-    problemMeta: meta,
-    code,
-    tests: casesWithExpected.map((c, idx) => ({ index: idx, inputs: c.inputs })),
-    timeLimitMs: meta.timeLimitMs,
-    memoryLimitMb: meta.memoryLimitMb,
-  });
+  let execResult: JudgeExecutionResult;
+  try {
+    execResult = await executeJavaSolution({
+      problemMeta: meta,
+      code,
+      tests: casesWithExpected.map((c, idx) => ({ index: idx, inputs: c.inputs })),
+      timeLimitMs: meta.timeLimitMs,
+      memoryLimitMb: meta.memoryLimitMb,
+    });
+  } catch (err: any) {
+    return {
+      verdict: 'Runtime Error',
+      results: casesWithExpected.map((c, i) => ({
+        index: i,
+        passed: false,
+        input: c.inputs,
+        expected: c.expected,
+        error: err.message || 'Execution error',
+      })),
+      runtimeMs: 0,
+      error: err.message || String(err),
+    };
+  }
 
   if (execResult.verdict === 'Compile Error') {
     return {
       verdict: 'Compile Error',
       results: [],
       runtimeMs: 0,
+      compileError: execResult.compileError,
       error: execResult.compileError,
     };
   }
@@ -161,6 +178,7 @@ export async function handleRunCode(payload: {
         stdout: out.stdout,
         runtimeMs: out.runtimeMs,
         error: out.error,
+        stackTrace: out.stackTrace,
       });
       allPassed = false;
       if (overallVerdict === 'Accepted') {
@@ -226,13 +244,29 @@ export async function handleSubmitCode(payload: {
   const total = allTests.length;
 
   // Execute user solution on all tests in order
-  const execResult = await executeJavaSolution({
-    problemMeta: meta,
-    code,
-    tests: allTests.map((t, i) => ({ index: i, inputs: t.inputs })),
-    timeLimitMs: meta.timeLimitMs,
-    memoryLimitMb: meta.memoryLimitMb,
-  });
+  let execResult: JudgeExecutionResult;
+  try {
+    execResult = await executeJavaSolution({
+      problemMeta: meta,
+      code,
+      tests: allTests.map((t, i) => ({ index: i, inputs: t.inputs })),
+      timeLimitMs: meta.timeLimitMs,
+      memoryLimitMb: meta.memoryLimitMb,
+    });
+  } catch (err: any) {
+    return {
+      verdict: 'Runtime Error',
+      passed: 0,
+      total,
+      runtimeMs: 0,
+      error: err.message || String(err),
+      failing: {
+        index: 1,
+        input: allTests[0]?.inputs || {},
+        error: err.message || 'Execution error',
+      },
+    };
+  }
 
   if (execResult.verdict === 'Compile Error') {
     return {
@@ -295,6 +329,7 @@ export async function handleSubmitCode(payload: {
           expected: JSON.stringify(t.expected),
           stdout: out.stdout,
           error: out.error,
+          stackTrace: out.stackTrace,
         },
       };
     }
