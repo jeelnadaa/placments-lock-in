@@ -9,6 +9,7 @@ import {
   ArrowRight,
   Sparkles,
   Lock,
+  BookOpen,
 } from 'lucide-react';
 import { Problem, Progress, Settings } from '../../types';
 import { DifficultyBadge, StatusBadge } from '../common/Badge';
@@ -25,6 +26,7 @@ interface DashboardViewProps {
   onUpdateProgress: (problemId: number, updates: Partial<Progress>) => void;
   onNavigateToPlanDay: (day: number) => void;
   onNavigateToUnsolvedBehind: () => void;
+  onOpenGuide?: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
@@ -37,6 +39,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onUpdateProgress,
   onNavigateToPlanDay,
   onNavigateToUnsolvedBehind,
+  onOpenGuide,
 }) => {
   const [isTopicBreakdownOpen, setIsTopicBreakdownOpen] = useState(false);
 
@@ -121,22 +124,36 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </p>
         </div>
 
-        {/* BEHIND SCHEDULE ALERT */}
-        {behindScheduleProblems.length > 0 && (
-          <button
-            type="button"
-            onClick={onNavigateToUnsolvedBehind}
-            className="flex items-center gap-3 p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-200 hover:bg-amber-950/60 transition-colors text-left"
-          >
-            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
-            <div>
-              <div className="text-xs font-semibold text-amber-300">Behind Schedule Alert</div>
-              <div className="text-xs text-amber-200/80 font-mono">
-                {behindScheduleProblems.length} unsolved from earlier days →
+        <div className="flex items-center gap-3 flex-wrap">
+          {onOpenGuide && (
+            <button
+              type="button"
+              onClick={onOpenGuide}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-mono-850 hover:bg-mono-800 border border-mono-700/80 text-xs font-mono text-mono-300 hover:text-white transition-colors shadow-sm"
+              title="Read guide on running Java code locally vs LeetCode/NeetCode links"
+            >
+              <BookOpen className="w-4 h-4 text-emerald-400" />
+              <span>Read This / Guide</span>
+            </button>
+          )}
+
+          {/* BEHIND SCHEDULE ALERT */}
+          {behindScheduleProblems.length > 0 && (
+            <button
+              type="button"
+              onClick={onNavigateToUnsolvedBehind}
+              className="flex items-center gap-3 p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-200 hover:bg-amber-950/60 transition-colors text-left"
+            >
+              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
+              <div>
+                <div className="text-xs font-semibold text-amber-300">Behind Schedule Alert</div>
+                <div className="text-xs text-amber-200/80 font-mono">
+                  {behindScheduleProblems.length} unsolved from earlier days →
+                </div>
               </div>
-            </div>
-          </button>
-        )}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* METRICS ROW */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ExternalLink, CheckCircle2, ChevronRight } from 'lucide-react';
+import { ExternalLink, CheckCircle2, ChevronRight, BookOpen } from 'lucide-react';
 import { Problem, Progress, Settings, ProblemStatus } from '../../types';
 import { DifficultyBadge, StatusBadge } from '../common/Badge';
 import { SpoilerControl } from '../spoilers/SpoilerControl';
@@ -11,6 +11,7 @@ interface PlanViewProps {
   settings?: Settings;
   selectedDay?: number;
   onSelectDay?: (day: number) => void;
+  onOpenGuide?: () => void;
   onOpenProblem: (problemId: number) => void;
   onUpdateProgress: (problemId: number, updates: Partial<Progress>) => void;
 }
@@ -21,6 +22,7 @@ export const PlanView: React.FC<PlanViewProps> = ({
   settings,
   selectedDay: initialSelectedDay,
   onSelectDay,
+  onOpenGuide,
   onOpenProblem,
   onUpdateProgress,
 }) => {
@@ -85,9 +87,22 @@ export const PlanView: React.FC<PlanViewProps> = ({
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-mono-100 tracking-tight">
-            15-Day Blind 75 Study Plan
-          </h1>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-xl font-bold text-mono-100 tracking-tight">
+              15-Day Blind 75 Study Plan
+            </h1>
+            {onOpenGuide && (
+              <button
+                type="button"
+                onClick={onOpenGuide}
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-mono-900 border border-mono-800 text-[11px] font-mono text-emerald-400 hover:text-emerald-300 hover:border-mono-700 transition-colors shadow-xs"
+                title="Read guide on running Java code locally vs LeetCode/NeetCode links"
+              >
+                <BookOpen className="w-3 h-3" />
+                <span>Read This</span>
+              </button>
+            )}
+          </div>
           <p className="text-xs text-mono-400 mt-1">
             5 problems per day from different topic categories to maximize interleaving practice.
           </p>

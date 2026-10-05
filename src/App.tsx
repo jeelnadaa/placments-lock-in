@@ -14,6 +14,7 @@ import { PlanView } from './components/plan/PlanView';
 import { AllProblemsView } from './components/problems/AllProblemsView';
 import { ProblemDetailView } from './components/problems/ProblemDetailView';
 import { SettingsView } from './components/settings/SettingsView';
+import { ReadThisView } from './components/guide/ReadThisView';
 import { Modal } from './components/common/Modal';
 import { ToastProvider, useToast } from './components/common/Toast';
 import { calculateStreaks, toLocalDateString } from './utils/streaks';
@@ -366,6 +367,7 @@ function AppContent() {
                 onNavigateToUnsolvedBehind={() => {
                   setCurrentTab('problems');
                 }}
+                onOpenGuide={() => setCurrentTab('guide')}
               />
             )}
 
@@ -378,6 +380,7 @@ function AppContent() {
                 onSelectDay={handlePlanSelectDay}
                 onOpenProblem={handleOpenProblem}
                 onUpdateProgress={handleUpdateProgress}
+                onOpenGuide={() => setCurrentTab('guide')}
               />
             )}
 
@@ -404,6 +407,16 @@ function AppContent() {
                 onRehideAllSpoilers={handleRehideAllSpoilers}
                 onClearTrack={handleClearTrack}
                 onImportData={handleImportData}
+              />
+            )}
+
+            {currentTab === 'guide' && (
+              <ReadThisView
+                onNavigateTab={(tab) => {
+                  setActiveProblemId(null);
+                  setCurrentTab(tab);
+                }}
+                onOpenSandbox={() => handleOpenProblem(0)}
               />
             )}
           </>

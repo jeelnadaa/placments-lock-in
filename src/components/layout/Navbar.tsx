@@ -1,8 +1,8 @@
 import React from 'react';
-import { LayoutDashboard, Calendar, List, Settings as SettingsIcon, Flame, ShieldCheck, FlaskConical } from 'lucide-react';
+import { LayoutDashboard, Calendar, List, Settings as SettingsIcon, Flame, ShieldCheck, FlaskConical, BookOpen } from 'lucide-react';
 import { Settings } from '../../types';
 
-export type NavigationTab = 'dashboard' | 'plan' | 'problems' | 'settings';
+export type NavigationTab = 'dashboard' | 'plan' | 'problems' | 'settings' | 'guide';
 
 interface NavbarProps {
   currentTab: NavigationTab;
@@ -25,13 +25,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-mono-800 bg-mono-950/85 backdrop-blur-md">
-      <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 lg:gap-6">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3 lg:gap-5">
         {/* LOGO & TITLE */}
         <div className="flex items-center gap-3 cursor-pointer shrink-0" onClick={() => onSelectTab('dashboard')}>
           <div className="w-8 h-8 rounded-lg bg-mono-100 text-mono-950 flex items-center justify-center font-black text-sm tracking-wider shadow-sm shrink-0">
             75
           </div>
-          <div className="flex flex-col shrink-0">
+          <div className="hidden lg:flex flex-col shrink-0">
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm tracking-tight text-mono-100 whitespace-nowrap">BLIND 75 TRACKER</span>
               <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-mono-800 text-mono-300 border border-mono-700 whitespace-nowrap">
@@ -42,8 +42,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* NAVIGATION TABS */}
-        <nav className="flex items-center gap-1 bg-mono-900 border border-mono-800 p-1 rounded-xl text-xs font-medium shrink-0 overflow-x-auto">
+        {/* NAVIGATION TABS — scrollable, can shrink */}
+        <nav className="flex items-center gap-1 bg-mono-900 border border-mono-800 p-1 rounded-xl text-xs font-medium min-w-0 overflow-x-auto scrollbar-thin">
           <button
             type="button"
             onClick={() => onSelectTab('dashboard')}
@@ -96,6 +96,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>Settings</span>
           </button>
 
+          <button
+            type="button"
+            onClick={() => onSelectTab('guide')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all whitespace-nowrap shrink-0 ${
+              currentTab === 'guide'
+                ? 'bg-mono-100 text-mono-950 font-semibold shadow'
+                : 'text-mono-400 hover:text-mono-200 hover:bg-mono-800/50'
+            }`}
+            title="Read This: Guide on running Java code, external links, and study workflow"
+          >
+            <BookOpen className="w-3.5 h-3.5 shrink-0" />
+            <span>Read This</span>
+          </button>
+
           {onOpenSandbox && (
             <button
               type="button"
@@ -109,11 +123,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
         </nav>
 
-        {/* STATS & QUICK ACTIONS */}
-        <div className="flex items-center gap-2.5 shrink-0">
+        {/* SPACER — pushes stats to right edge */}
+        <div className="flex-1 min-w-0" />
+
+        {/* STATS & QUICK ACTIONS — always visible, never clipped */}
+        <div className="flex items-center gap-2 shrink-0">
           {/* Spoiler Safe status indicator */}
           <div
-            className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono border shrink-0 whitespace-nowrap ${
+            className={`hidden xl:flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono border shrink-0 whitespace-nowrap ${
               settings?.spoilerSafeMode !== false
                 ? 'bg-mono-900 border-mono-700/60 text-mono-300'
                 : 'bg-amber-950/40 border-amber-800 text-amber-300'
@@ -137,11 +154,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="text-mono-400">75</span>
           </div>
 
-          {/* User Request: Option to clear track / reset progress */}
+          {/* Reset Track — always visible */}
           <button
             type="button"
             onClick={onClearTrackClick}
-            className="hidden md:inline-flex items-center text-xs font-mono text-mono-400 hover:text-rose-400 border border-transparent hover:border-rose-900/60 px-2 py-1 rounded transition-colors shrink-0 whitespace-nowrap"
+            className="inline-flex items-center text-xs font-mono text-mono-400 hover:text-rose-400 border border-transparent hover:border-rose-900/60 px-2 py-1 rounded transition-colors shrink-0 whitespace-nowrap"
             title="Reset all study progress and saved code"
           >
             Reset Track
