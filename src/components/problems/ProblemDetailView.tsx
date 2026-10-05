@@ -23,6 +23,7 @@ import {
 import confetti from 'canvas-confetti';
 import {
   Problem,
+  ProblemMeta,
   Progress,
   CodeVersion,
   Settings,
@@ -47,6 +48,7 @@ import {
   createNewCodeVersion,
   restoreAsNewVersion,
 } from '../../utils/versioning';
+import { formatParamValue, parseAndValidateParam } from '../../utils/testcaseParser';
 
 interface ProblemDetailViewProps {
   problem: Problem;
@@ -65,6 +67,7 @@ interface ProblemDetailViewProps {
   onMarkBestVersion: (versionId: string) => Promise<void>;
   onAddSubmission: (sub: Submission) => Promise<void>;
   onAddCustomCase: (cc: CustomCase) => Promise<void>;
+  onUpdateCustomCase?: (id: string, inputs: Record<string, string>) => Promise<void>;
   onDeleteCustomCase: (id: string) => Promise<void>;
 }
 
@@ -85,6 +88,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
   onMarkBestVersion,
   onAddSubmission,
   onAddCustomCase,
+  onUpdateCustomCase,
   onDeleteCustomCase,
 }) => {
   const { showToast } = useToast();
@@ -208,15 +212,33 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
     return null;
   })();
 
+  // Helper to initialize sample cases with string inputs for editing
+  interface SampleCaseStateItem {
+    rawInputs: Record<string, string>;
+    inputs?: Record<string, unknown>;
+    expected?: unknown;
+  }
+
+  const createSampleCases = (m: ProblemMeta | undefined): SampleCaseStateItem[] => {
+    if (!m) return [];
+    return m.examples.map((ex) => {
+      const raw: Record<string, string> = {};
+      for (const p of m.params) {
+        raw[p.name] = formatParamValue(ex.input[p.name]);
+      }
+      return {
+        rawInputs: raw,
+        inputs: ex.input,
+        expected: ex.output,
+      };
+    });
+  };
+
   // Sample testcases state (allows editing sample cases)
-  const [sampleCasesState, setSampleCasesState] = useState<{ inputs: Record<string, unknown>; expected?: unknown }[]>(
-    meta ? meta.examples.map((ex) => ({ inputs: ex.input, expected: ex.output })) : []
-  );
+  const [sampleCasesState, setSampleCasesState] = useState<SampleCaseStateItem[]>(createSampleCases(meta));
 
   useEffect(() => {
-    if (meta) {
-      setSampleCasesState(meta.examples.map((ex) => ({ inputs: ex.input, expected: ex.output })));
-    }
+    setSampleCasesState(createSampleCases(meta));
   }, [meta]);
 
   // Save Version Modal state
@@ -305,31 +327,52 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
 
   // Run Code
   const handleRun = async () => {
-    if (!content) {
+    if (!content || !meta) {
       showToast('No judge content configured for this problem yet', 'info');
       return;
     }
+
+    // Build and validate test cases: samples + custom cases
+    const casesToRun: { inputs: Record<string, unknown>; expected?: unknown }[] = [];
+
+    // 1. Validate sample cases
+    for (let sIdx = 0; sIdx < sampleCasesState.length; sIdx++) {
+      const sc = sampleCasesState[sIdx];
+      const parsedInputs: Record<string, unknown> = {};
+      for (const p of meta.params) {
+        const raw = sc.rawInputs[p.name] ?? '';
+        const res = parseAndValidateParam(raw, p.type);
+        if (!res.valid) {
+          showToast(`Case ${sIdx + 1} parameter '${p.name}' is invalid: ${res.error}`, 'error');
+          setActiveConsoleTab('testcase');
+          return;
+        }
+        parsedInputs[p.name] = res.value;
+      }
+      casesToRun.push({ inputs: parsedInputs, expected: sc.expected });
+    }
+
+    // 2. Validate custom cases
+    for (let cIdx = 0; cIdx < customCases.length; cIdx++) {
+      const cc = customCases[cIdx];
+      const parsedInputs: Record<string, unknown> = {};
+      for (const p of meta.params) {
+        const raw = cc.inputs[p.name] ?? '';
+        const res = parseAndValidateParam(raw, p.type);
+        if (!res.valid) {
+          showToast(`Custom ${cIdx + 1} parameter '${p.name}' is invalid: ${res.error}`, 'error');
+          setActiveConsoleTab('testcase');
+          return;
+        }
+        parsedInputs[p.name] = res.value;
+      }
+      casesToRun.push({ inputs: parsedInputs });
+    }
+
     setIsRunning(true);
     setActiveConsoleTab('result');
 
     try {
-      // Build test cases: samples + custom cases
-      const casesToRun: { inputs: Record<string, unknown>; expected?: unknown }[] = [
-        ...sampleCasesState,
-      ];
-
-      for (const cc of customCases) {
-        const parsedInputs: Record<string, unknown> = {};
-        for (const [k, v] of Object.entries(cc.inputs)) {
-          try {
-            parsedInputs[k] = JSON.parse(v);
-          } catch {
-            parsedInputs[k] = v;
-          }
-        }
-        casesToRun.push({ inputs: parsedInputs });
-      }
-
       const res = await runJudgeCases({
         problemId: problem.id,
         code: editorCode,
@@ -1126,13 +1169,25 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
                 }}
                 onDeleteCustomCase={onDeleteCustomCase}
                 onUpdateSampleCase={(idx, paramName, val) => {
-                  const updated = [...sampleCasesState];
-                  try {
-                    updated[idx].inputs[paramName] = JSON.parse(val);
-                  } catch {
-                    updated[idx].inputs[paramName] = val;
-                  }
-                  setSampleCasesState(updated);
+                  setSampleCasesState((prev) => {
+                    const copy = [...prev];
+                    if (!copy[idx]) return prev;
+                    copy[idx] = {
+                      ...copy[idx],
+                      rawInputs: {
+                        ...copy[idx].rawInputs,
+                        [paramName]: val,
+                      },
+                    };
+                    return copy;
+                  });
+                }}
+                onUpdateCustomCase={(id, paramName, val) => {
+                  const target = customCases.find((c) => c.id === id);
+                  if (!target) return;
+                  const newInputs = { ...target.inputs, [paramName]: val };
+                  target.inputs = newInputs;
+                  onUpdateCustomCase?.(id, newInputs);
                 }}
                 runResult={runResult}
                 submitResult={submitResult}

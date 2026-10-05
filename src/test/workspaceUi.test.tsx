@@ -174,4 +174,97 @@ describe('ConsolePanel & Testcase Flow UI', () => {
     fireEvent.click(addFailingBtn);
     expect(onAddFailing).toHaveBeenCalledWith({ nums: [0, 4, 3, 0], target: 0 });
   });
+
+  it('allows typing spaces in testcase input and calls onUpdateSampleCase with exact string', () => {
+    const onUpdateSampleCase = vi.fn();
+    render(
+      <ConsolePanel
+        meta={meta}
+        activeConsoleTab="testcase"
+        setActiveConsoleTab={() => {}}
+        sampleCases={[{ rawInputs: { nums: '[2, 7, 11, 15]', target: '9' } }]}
+        customCases={[]}
+        onAddCustomCase={() => {}}
+        onDeleteCustomCase={() => {}}
+        onUpdateSampleCase={onUpdateSampleCase}
+        runResult={null}
+        submitResult={null}
+        isRunning={false}
+        onSaveAsVersionClick={() => {}}
+        onAddFailingToCustomCases={() => {}}
+      />
+    );
+
+    const inputs = screen.getAllByRole('textbox');
+    const numsInput = inputs[0] as HTMLInputElement;
+    expect(numsInput.value).toBe('[2, 7, 11, 15]');
+
+    // Type with space
+    fireEvent.change(numsInput, { target: { value: '[2,  7,  11]' } });
+    expect(onUpdateSampleCase).toHaveBeenCalledWith(0, 'nums', '[2,  7,  11]');
+  });
+
+  it('allows typing in custom testcase and calls onUpdateCustomCase', () => {
+    const onUpdateCustomCase = vi.fn();
+    render(
+      <ConsolePanel
+        meta={meta}
+        activeConsoleTab="testcase"
+        setActiveConsoleTab={() => {}}
+        sampleCases={[{ rawInputs: { nums: '[1, 2]', target: '3' } }]}
+        customCases={[
+          {
+            id: 'c-1',
+            problemId: 1,
+            inputs: { nums: '[4, 5]', target: '9' },
+            source: 'user',
+            createdAt: new Date().toISOString(),
+          },
+        ]}
+        onAddCustomCase={() => {}}
+        onDeleteCustomCase={() => {}}
+        onUpdateSampleCase={() => {}}
+        onUpdateCustomCase={onUpdateCustomCase}
+        runResult={null}
+        submitResult={null}
+        isRunning={false}
+        onSaveAsVersionClick={() => {}}
+        onAddFailingToCustomCases={() => {}}
+      />
+    );
+
+    // Click Custom 1 chip
+    const customChip = screen.getByText('Custom 1');
+    fireEvent.click(customChip);
+
+    const inputs = screen.getAllByRole('textbox');
+    const numsInput = inputs[0] as HTMLInputElement;
+    expect(numsInput.value).toBe('[4, 5]');
+
+    fireEvent.change(numsInput, { target: { value: '[4,5,6]' } });
+    expect(onUpdateCustomCase).toHaveBeenCalledWith('c-1', 'nums', '[4,5,6]');
+  });
+
+  it('displays inline validation error when typing bracketless list input', () => {
+    render(
+      <ConsolePanel
+        meta={meta}
+        activeConsoleTab="testcase"
+        setActiveConsoleTab={() => {}}
+        sampleCases={[{ rawInputs: { nums: '1, 2, 3', target: '9' } }]}
+        customCases={[]}
+        onAddCustomCase={() => {}}
+        onDeleteCustomCase={() => {}}
+        onUpdateSampleCase={() => {}}
+        runResult={null}
+        submitResult={null}
+        isRunning={false}
+        onSaveAsVersionClick={() => {}}
+        onAddFailingToCustomCases={() => {}}
+      />
+    );
+
+    // Expect inline error message indicating format enclosed in brackets []
+    expect(screen.getByText(/enclosed in brackets \[\]/i)).toBeTruthy();
+  });
 });

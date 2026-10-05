@@ -11,19 +11,22 @@ import {
   Save,
   Maximize2,
   Minimize2,
+  AlertCircle,
 } from 'lucide-react';
 import { CustomCase, ProblemMeta, RunResponse, SubmitResponse } from '../../types';
 import { ErrorDisplay } from './ErrorDisplay';
+import { formatParamValue, parseAndValidateParam } from '../../utils/testcaseParser';
 
 interface ConsolePanelProps {
   meta?: ProblemMeta;
   activeConsoleTab: 'testcase' | 'result';
   setActiveConsoleTab: (tab: 'testcase' | 'result') => void;
-  sampleCases: { inputs: Record<string, unknown>; expected?: unknown }[];
+  sampleCases: { rawInputs?: Record<string, string>; inputs?: Record<string, unknown>; expected?: unknown }[];
   customCases: CustomCase[];
   onAddCustomCase: (inputs: Record<string, string>) => void;
   onDeleteCustomCase: (id: string) => void;
   onUpdateSampleCase: (index: number, paramName: string, value: string) => void;
+  onUpdateCustomCase?: (id: string, paramName: string, value: string) => void;
   runResult: RunResponse | null;
   submitResult: SubmitResponse | null;
   isRunning: boolean;
@@ -43,6 +46,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   onAddCustomCase,
   onDeleteCustomCase,
   onUpdateSampleCase,
+  onUpdateCustomCase,
   runResult,
   submitResult,
   isRunning,
@@ -66,11 +70,47 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   // Total cases count (samples + custom)
   const totalCasesCount = sampleCases.length + customCases.length;
 
+  // Reset selected case when meta (problem) changes
+  useEffect(() => {
+    setSelectedCaseIdx(0);
+  }, [meta?.id]);
+
+  // Keep selectedCaseIdx within valid bounds
+  useEffect(() => {
+    if (totalCasesCount > 0 && selectedCaseIdx >= totalCasesCount) {
+      setSelectedCaseIdx(Math.max(0, totalCasesCount - 1));
+    }
+  }, [totalCasesCount, selectedCaseIdx]);
+
+  const getParamValue = (caseIdx: number, paramName: string): string => {
+    if (caseIdx < sampleCases.length) {
+      const sc = sampleCases[caseIdx];
+      if (!sc) return '';
+      if (sc.rawInputs && sc.rawInputs[paramName] !== undefined) {
+        return sc.rawInputs[paramName];
+      }
+      if (sc.inputs && sc.inputs[paramName] !== undefined) {
+        return formatParamValue(sc.inputs[paramName]);
+      }
+      return '';
+    } else {
+      const customIdx = caseIdx - sampleCases.length;
+      const cc = customCases[customIdx];
+      return cc?.inputs[paramName] ?? '';
+    }
+  };
+
   const handleAddNewCase = () => {
     if (!meta) return;
     const initialInputs: Record<string, string> = {};
     for (const p of meta.params) {
-      if (p.type.includes('[]')) {
+      if (
+        p.type.includes('[]') ||
+        p.type === 'ListNode' ||
+        p.type === 'TreeNode' ||
+        p.type === 'Node' ||
+        p.type.startsWith('List<')
+      ) {
         initialInputs[p.name] = '[]';
       } else if (p.type === 'int' || p.type === 'long') {
         initialInputs[p.name] = '0';
@@ -211,9 +251,10 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                         type="button"
                         onClick={() => {
                           onDeleteCustomCase(cc.id);
-                          if (selectedCaseIdx >= globalIdx && selectedCaseIdx > 0) {
-                            setSelectedCaseIdx(selectedCaseIdx - 1);
-                          }
+                          setSelectedCaseIdx((prev) => {
+                            if (prev >= globalIdx && prev > 0) return prev - 1;
+                            return prev;
+                          });
                         }}
                         className="p-1 rounded text-mono-500 hover:text-rose-400"
                         title="Delete custom case"
@@ -236,53 +277,60 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
 
               {/* PARAMETER INPUTS */}
               {meta ? (
-                <div className="flex flex-col gap-2.5 pt-1">
-                  {selectedCaseIdx < sampleCases.length ? (
-                    // Sample Case
-                    meta.params.map((param) => {
-                      const caseInputs = sampleCases[selectedCaseIdx]?.inputs || {};
-                      const rawVal = JSON.stringify(caseInputs[param.name] ?? '');
-                      return (
-                        <div key={param.name} className="flex flex-col gap-1">
-                          <label className="text-mono-400 font-medium text-[11px]">
-                            {param.name} =
-                          </label>
-                          <input
-                            type="text"
-                            value={rawVal}
-                            onChange={(e) => onUpdateSampleCase(selectedCaseIdx, param.name, e.target.value)}
-                            className="bg-mono-900 border border-mono-800 rounded-lg px-3 py-1.5 text-mono-100 focus:outline-none focus:border-mono-600 font-mono text-xs"
-                          />
-                        </div>
-                      );
-                    })
-                  ) : (
-                    // Custom Case
-                    (() => {
-                      const customIdx = selectedCaseIdx - sampleCases.length;
-                      const customCase = customCases[customIdx];
-                      if (!customCase) return null;
+                <div className="flex flex-col gap-3 pt-1">
+                  {meta.params.map((param) => {
+                    const isCustom = selectedCaseIdx >= sampleCases.length;
+                    const customIdx = selectedCaseIdx - sampleCases.length;
+                    const customCase = isCustom ? customCases[customIdx] : null;
 
-                      return meta.params.map((param) => {
-                        const val = customCase.inputs[param.name] ?? '';
-                        return (
-                          <div key={param.name} className="flex flex-col gap-1">
-                            <label className="text-mono-400 font-medium text-[11px]">
-                              {param.name} =
-                            </label>
-                            <input
-                              type="text"
-                              value={val}
-                              onChange={(e) => {
+                    const val = getParamValue(selectedCaseIdx, param.name);
+                    const validation = parseAndValidateParam(val, param.type);
+                    const hasError = val.trim() !== '' && !validation.valid;
+
+                    return (
+                      <div key={param.name} className="flex flex-col gap-1">
+                        <div className="flex items-center justify-between">
+                          <label className="text-mono-400 font-medium text-[11px] flex items-center gap-1.5">
+                            <span className="text-mono-200 font-semibold">{param.name} =</span>
+                            <span className="text-mono-500 font-normal">({param.type})</span>
+                          </label>
+                          {hasError && (
+                            <span className="text-[11px] text-rose-400 font-mono flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3 shrink-0" />
+                              <span>{validation.error}</span>
+                            </span>
+                          )}
+                        </div>
+                        <input
+                          type="text"
+                          value={val}
+                          onChange={(e) => {
+                            if (isCustom && customCase) {
+                              if (onUpdateCustomCase) {
+                                onUpdateCustomCase(customCase.id, param.name, e.target.value);
+                              } else {
                                 customCase.inputs[param.name] = e.target.value;
-                              }}
-                              className="bg-mono-900 border border-mono-800 rounded-lg px-3 py-1.5 text-mono-100 focus:outline-none focus:border-mono-600 font-mono text-xs"
-                            />
-                          </div>
-                        );
-                      });
-                    })()
-                  )}
+                              }
+                            } else {
+                              onUpdateSampleCase(selectedCaseIdx, param.name, e.target.value);
+                            }
+                          }}
+                          className={`bg-mono-900 border rounded-lg px-3 py-1.5 text-mono-100 focus:outline-none font-mono text-xs transition-colors ${
+                            hasError
+                              ? 'border-rose-700/80 focus:border-rose-500'
+                              : 'border-mono-800 focus:border-mono-600'
+                          }`}
+                          placeholder={`e.g. ${
+                            param.type.includes('[]') || param.type === 'ListNode'
+                              ? '[1, 2, 3] or [1,2,3]'
+                              : param.type === 'int'
+                              ? '0'
+                              : '""'
+                          }`}
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-mono-500 italic">No structured test parameters available for this problem.</p>

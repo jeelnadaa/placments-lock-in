@@ -525,6 +525,7 @@ public class Judge {
 
         String className = rootMap.get("className").asString();
         String methodName = rootMap.containsKey("methodName") ? rootMap.get("methodName").asString() : "";
+        String returnType = rootMap.containsKey("returnType") ? rootMap.get("returnType").asString() : "";
         String kind = rootMap.containsKey("kind") ? rootMap.get("kind").asString() : "function";
         int timeLimitMs = rootMap.containsKey("timeLimitMs") ? rootMap.get("timeLimitMs").asInt() : 2000;
 
@@ -681,7 +682,11 @@ public class Judge {
                 }
             } else {
                 item.append("\"verdict\":\"OK\",");
-                item.append("\"actual\":").append(toJson(resultHolder[0]));
+                if (resultHolder[0] == null && ("ListNode".equals(returnType) || "TreeNode".equals(returnType) || "Node".equals(returnType))) {
+                    item.append("\"actual\":[]");
+                } else {
+                    item.append("\"actual\":").append(toJson(resultHolder[0]));
+                }
             }
             item.append("}");
             resultsJson.add(item.toString());

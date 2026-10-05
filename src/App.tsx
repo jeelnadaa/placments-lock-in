@@ -217,6 +217,10 @@ function AppContent() {
     await db.customCases.add(cc);
   };
 
+  const handleUpdateCustomCase = async (id: string, inputs: Record<string, string>) => {
+    await db.customCases.update(id, { inputs });
+  };
+
   const handleDeleteCustomCase = async (id: string) => {
     await db.customCases.delete(id);
   };
@@ -347,6 +351,7 @@ function AppContent() {
             onMarkBestVersion={handleMarkBestVersion}
             onAddSubmission={handleAddSubmission}
             onAddCustomCase={handleAddCustomCase}
+            onUpdateCustomCase={handleUpdateCustomCase}
             onDeleteCustomCase={handleDeleteCustomCase}
           />
         ) : (

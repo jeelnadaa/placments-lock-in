@@ -18,6 +18,15 @@ describe('Judge Comparators', () => {
     expect(compareResults([1, 2, 2], [1, 1, 2], 'unordered')).toBe(false);
   });
 
+  it('matches null and [] equivalently for empty linked lists or data structures across languages', () => {
+    expect(compareResults(null, [], 'exact')).toBe(true);
+    expect(compareResults([], null, 'exact')).toBe(true);
+    expect(compareResults('null', [], 'exact')).toBe(true);
+    expect(compareResults([], 'null', 'exact')).toBe(true);
+    expect(compareResults(null, [1], 'exact')).toBe(false);
+    expect(compareResults([1], null, 'exact')).toBe(false);
+  });
+
   it('unordered-nested comparator matches 2D arrays with inner and outer permuted', () => {
     const actual = [[-1, 0, 1], [-1, -1, 2]];
     const expected = [[2, -1, -1], [0, 1, -1]];
@@ -63,6 +72,29 @@ class Solution {
     expect(res.total).toBeGreaterThanOrEqual(15);
     expect(res.failing).toBeUndefined();
     expect(res.runtimeMs).toBeGreaterThanOrEqual(0);
+  }, 15000);
+
+  // Test Problem #206 Reverse Linked List: handles empty list returning null
+  it('Problem #206 Reverse Linked List: Solution returning null for 0 nodes passes empty testcase', async () => {
+    const code = `
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode nextTemp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextTemp;
+        }
+        return prev;
+    }
+}
+`;
+    const res = await handleSubmitCode({ problemId: 206, code });
+    expect(res.verdict).toBe('Accepted');
+    expect(res.passed).toBe(res.total);
+    expect(res.failing).toBeUndefined();
   }, 15000);
 
   // Test Wrong Answer verdict on Pilot #1 (Two Sum)

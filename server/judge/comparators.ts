@@ -2,10 +2,24 @@ import { ComparatorType } from '../../src/types';
 
 /**
  * Deep equality comparison with tolerance for floating points
+ * and equivalence for empty data structures (null/None/nil vs []).
  */
 export function deepEqual(a: unknown, b: unknown): boolean {
   if (a === b) return true;
-  if (a == null || b == null) return a === b;
+
+  // In DSA problems (Reverse Linked List, Trees, etc.), returning null (or None/nil)
+  // when nodes are zero is semantically identical to the testcase representation [] (empty list).
+  const isEmptyCollectionOrNull = (val: unknown) =>
+    val === null ||
+    val === undefined ||
+    val === 'null' ||
+    (Array.isArray(val) && val.length === 0);
+
+  if (isEmptyCollectionOrNull(a) && isEmptyCollectionOrNull(b)) {
+    return true;
+  }
+
+  if (a == null || b == null) return false;
 
   if (typeof a === 'number' && typeof b === 'number') {
     return Math.abs(a - b) < 1e-6;
@@ -38,6 +52,7 @@ export function deepEqual(a: unknown, b: unknown): boolean {
  * Normalizes an array/value for unordered comparison
  */
 export function normalizeUnordered(arr: unknown): unknown[] {
+  if (arr == null) return [];
   if (!Array.isArray(arr)) return [arr];
   return [...arr].sort((x, y) => JSON.stringify(x).localeCompare(JSON.stringify(y)));
 }
@@ -47,6 +62,7 @@ export function normalizeUnordered(arr: unknown): unknown[] {
  * Sorts each inner list, then sorts the outer list
  */
 export function normalizeUnorderedNested(arr: unknown): unknown[] {
+  if (arr == null) return [];
   if (!Array.isArray(arr)) return [arr];
   const sortedInner = arr.map((item) => {
     if (Array.isArray(item)) {
