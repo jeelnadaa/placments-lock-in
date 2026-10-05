@@ -6,9 +6,9 @@ import { indentUnit } from '@codemirror/language';
 import { EditorState, Prec } from '@codemirror/state';
 import { keymap, EditorView } from '@codemirror/view';
 import { indentLess } from '@codemirror/commands';
-import { autocompletion, acceptCompletion } from '@codemirror/autocomplete';
+import { autocompletion, acceptCompletion, startCompletion } from '@codemirror/autocomplete';
 import { linter, lintGutter } from '@codemirror/lint';
-import { javaCompletionSource } from './javaCompletions';
+import { javaCompletionSource, prefetchJavaReflection } from './javaCompletions';
 import { javaLinter } from './javaLinter';
 
 interface JavaEditorProps {
@@ -37,6 +37,10 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
   const cmRef = useRef<ReactCodeMirrorRef>(null);
 
   useEffect(() => {
+    prefetchJavaReflection();
+  }, []);
+
+  useEffect(() => {
     if (cmRef.current?.view && highlightLine && highlightLine > 0) {
       try {
         const view = cmRef.current.view;
@@ -59,6 +63,7 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
     // Custom Tab behavior:
     // 1. If autocomplete popup is active, accept completion.
     // 2. Otherwise at any position/empty space, insert exactly 4 spaces.
+    // 3. Dot key triggers autocompletion suggestions immediately.
     const customTabKeymap = Prec.highest(
       keymap.of([
         {
@@ -74,6 +79,19 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
         {
           key: 'Shift-Tab',
           run: indentLess,
+        },
+        {
+          key: '.',
+          run: (view) => {
+            setTimeout(() => {
+              try {
+                startCompletion(view);
+              } catch {
+                // ignore
+              }
+            }, 10);
+            return false;
+          },
         },
       ])
     );
@@ -162,6 +180,7 @@ export const JavaEditor: React.FC<JavaEditorProps> = ({
           override: [javaCompletionSource],
           defaultKeymap: true,
           icons: true,
+          activateOnTyping: true,
         })
       );
     }

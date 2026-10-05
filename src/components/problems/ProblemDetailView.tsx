@@ -111,14 +111,90 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
 
   // Editor states
   const starterCode = content?.starterCode || `class Solution {\n    // Solution for ${problem.id}. ${problem.title}\n    \n}`;
-  const latestVersion = [...versions].sort((a, b) => b.versionNumber - a.versionNumber)[0];
-  const [editorCode, setEditorCode] = useState<string>(latestVersion ? latestVersion.code : starterCode);
+
+  // Helper to load persisted draft code across browser sessions
+  const getPersistedCode = (probId: number, starter: string): string => {
+    try {
+      const savedLocal = localStorage.getItem(`lockedin_code_${probId}`);
+      if (savedLocal !== null && savedLocal !== undefined && savedLocal.length > 0) {
+        return savedLocal;
+      }
+    } catch {
+      // ignore localStorage errors
+    }
+    if (progress?.problemId === probId && progress?.currentCode && progress.currentCode.length > 0) {
+      return progress.currentCode;
+    }
+    const latest = [...versions].filter((v) => v.problemId === probId).sort((a, b) => b.versionNumber - a.versionNumber)[0];
+    if (latest?.code && latest.code.length > 0) {
+      return latest.code;
+    }
+    return starter;
+  };
+
+  const [editorCode, setEditorCode] = useState<string>(() => getPersistedCode(problem.id, starterCode));
+  const debounceSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const currentProblemIdRef = useRef(problem.id);
+  const editorCodeRef = useRef(editorCode);
+  editorCodeRef.current = editorCode;
 
   // Sync editor when problem changes
   useEffect(() => {
-    const latest = [...versions].sort((a, b) => b.versionNumber - a.versionNumber)[0];
-    setEditorCode(latest ? latest.code : starterCode);
-  }, [problem.id, versions, starterCode]);
+    // If switching problem, flush pending save for previous problem
+    if (currentProblemIdRef.current !== problem.id) {
+      if (debounceSaveTimerRef.current) {
+        clearTimeout(debounceSaveTimerRef.current);
+      }
+      try {
+        localStorage.setItem(`lockedin_code_${currentProblemIdRef.current}`, editorCodeRef.current);
+      } catch {
+        // ignore
+      }
+      currentProblemIdRef.current = problem.id;
+    }
+
+    const code = getPersistedCode(problem.id, starterCode);
+    setEditorCode(code);
+    editorCodeRef.current = code;
+  }, [problem.id]);
+
+  // Handler for all user keystrokes in editor
+  const handleEditorCodeChange = (newCode: string) => {
+    setEditorCode(newCode);
+    editorCodeRef.current = newCode;
+    try {
+      localStorage.setItem(`lockedin_code_${problem.id}`, newCode);
+    } catch (e) {
+      console.warn('Failed saving to localStorage', e);
+    }
+
+    if (debounceSaveTimerRef.current) {
+      clearTimeout(debounceSaveTimerRef.current);
+    }
+    debounceSaveTimerRef.current = setTimeout(() => {
+      onUpdateProgress({ currentCode: newCode });
+    }, 500);
+  };
+
+  // Flush code to localStorage and DB whenever user navigates or closes the browser tab
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      try {
+        localStorage.setItem(`lockedin_code_${problem.id}`, editorCodeRef.current);
+      } catch {
+        // ignore
+      }
+      onUpdateProgress({ currentCode: editorCodeRef.current });
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      if (debounceSaveTimerRef.current) {
+        clearTimeout(debounceSaveTimerRef.current);
+      }
+    };
+  }, [problem.id, onUpdateProgress]);
 
   // Editor Toolbar settings
   const [assistMode, setAssistMode] = useState(true);
@@ -545,7 +621,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
       .split('\n')
       .map((line) => line.replace(/\t/g, '    ').trimEnd())
       .join('\n');
-    setEditorCode(formatted);
+    handleEditorCodeChange(formatted);
     showToast('Code formatted', 'info');
   };
 
@@ -872,7 +948,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
                 <SubmissionsTable
                   submissions={submissions}
                   onSaveAsVersion={(code) => {
-                    setEditorCode(code);
+                    handleEditorCodeChange(code);
                     setSaveModalOpen(true);
                   }}
                 />
@@ -957,6 +1033,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
                               onClick={() => {
                                 const restored = restoreAsNewVersion(v, versions);
                                 onSaveNewVersion(restored);
+                                handleEditorCodeChange(restored.code);
                                 showToast(`Restored v${v.versionNumber} as v${restored.versionNumber}`, 'success');
                               }}
                               className="p-1 rounded text-mono-400 hover:text-mono-100"
@@ -1118,7 +1195,7 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
               <div className="flex-1 min-h-0 overflow-hidden bg-mono-950 flex flex-col">
                 <JavaEditor
                   value={editorCode}
-                  onChange={setEditorCode}
+                  onChange={handleEditorCodeChange}
                   fontSize={editorFontSize}
                   highlightLine={highlightLine}
                   assistMode={assistMode}
@@ -1343,7 +1420,14 @@ export const ProblemDetailView: React.FC<ProblemDetailViewProps> = ({
             <button
               type="button"
               onClick={() => {
+                try {
+                  localStorage.removeItem(`lockedin_code_${problem.id}`);
+                } catch {
+                  // ignore
+                }
                 setEditorCode(starterCode);
+                editorCodeRef.current = starterCode;
+                onUpdateProgress({ currentCode: starterCode });
                 setResetConfirmModalOpen(false);
                 showToast('Reset editor to starter code', 'info');
               }}

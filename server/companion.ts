@@ -1,10 +1,13 @@
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 import { createRequire } from 'module';
 import { executeJavaSolution, RawTestOutput, JudgeExecutionResult } from './judge/runner';
 import { compareResults } from './judge/comparators';
 import { ProblemMeta, RunResponse, SubmitResponse, TestResultItem } from '../src/types';
 
+const execAsync = promisify(exec);
 const req = createRequire(import.meta.url);
 
 export function loadProblemMeta(problemId: number): ProblemMeta {
@@ -386,4 +389,30 @@ export async function handleSubmitCode(payload: {
     total,
     runtimeMs: totalRuntime,
   };
+}
+
+const reflectionCache = new Map<string, any[]>();
+
+/**
+ * Dynamically reflect on any class in the host Java 21 runtime.
+ */
+export async function handleReflectClass(payload: { className: string }): Promise<any[]> {
+  const { className } = payload;
+  if (!className || typeof className !== 'string') return [];
+  const clean = className.trim();
+  if (reflectionCache.has(clean)) {
+    return reflectionCache.get(clean)!;
+  }
+
+  try {
+    const rootDir = process.cwd();
+    const scriptPath = path.join(rootDir, 'server', 'judge', 'Reflector.java');
+    const { stdout } = await execAsync(`java "${scriptPath}" "${clean}"`, { timeout: 5000 });
+    const parsed = JSON.parse(stdout.trim() || '[]');
+    reflectionCache.set(clean, parsed);
+    return parsed;
+  } catch (err) {
+    console.error('Reflector failed for', clean, err);
+    return [];
+  }
 }

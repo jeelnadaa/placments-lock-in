@@ -62,6 +62,23 @@ export async function initDatabase(): Promise<void> {
  * User-requested feature: clear track and reset all progress.
  */
 export async function clearAllUserData(): Promise<void> {
+  try {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('lockedin_code_')) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach((k) => localStorage.removeItem(k));
+  } catch (e) {
+    console.warn('Failed clearing localStorage drafts', e);
+  }
+
+  if (typeof indexedDB === 'undefined') {
+    return;
+  }
+
   await db.transaction('rw', db.progress, db.codeVersions, db.submissions, db.customCases, db.settings, async () => {
     await db.progress.clear();
     await db.codeVersions.clear();

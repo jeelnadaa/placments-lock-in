@@ -1,5 +1,5 @@
 import { Plugin } from 'vite';
-import { handleRunCode, handleSubmitCode } from './companion';
+import { handleRunCode, handleSubmitCode, handleReflectClass } from './companion';
 
 export function judgeCompanionPlugin(): Plugin {
   return {
@@ -31,6 +31,9 @@ export function judgeCompanionPlugin(): Plugin {
               res.end(JSON.stringify(result));
             } else if (req.url === '/api/judge/submit') {
               const result = await handleSubmitCode(payload);
+              res.end(JSON.stringify(result));
+            } else if (req.url === '/api/judge/reflect') {
+              const result = await handleReflectClass(payload);
               res.end(JSON.stringify(result));
             } else {
               res.statusCode = 404;

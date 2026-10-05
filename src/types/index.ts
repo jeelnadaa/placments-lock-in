@@ -27,6 +27,7 @@ export interface Progress {
   attempts?: number;
   firstAcceptedAt?: string;
   timeToAcceptMs?: number;
+  currentCode?: string;
 }
 
 export interface CodeVersion {
