@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   db,
@@ -17,6 +17,22 @@ import { SettingsView } from './components/settings/SettingsView';
 import { Modal } from './components/common/Modal';
 import { ToastProvider, useToast } from './components/common/Toast';
 import { calculateStreaks, toLocalDateString } from './utils/streaks';
+import { calculateCurrentPlanDay } from './utils/schedule';
+
+const STORAGE_KEY_LAST_PLAN_DAY = 'locked_in_last_plan_day';
+
+function getLastPlanDayFromStorage(): number {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY_LAST_PLAN_DAY) || localStorage.getItem('blind75_last_plan_day');
+    if (saved) {
+      const parsed = parseInt(saved, 10);
+      if (parsed >= 1 && parsed <= 15) return parsed;
+    }
+  } catch {
+    // ignore
+  }
+  return 0;
+}
 
 const TEST_PROBLEM_0: Problem = {
   id: 0,
@@ -41,9 +57,20 @@ function AppContent() {
   // Navigation and active states
   const [currentTab, setCurrentTab] = useState<NavigationTab>('dashboard');
   const [activeProblemId, setActiveProblemId] = useState<number | null>(null);
-  const [planSelectedDay, setPlanSelectedDay] = useState<number>(1);
+  const [planSelectedDay, setPlanSelectedDay] = useState<number>(() => getLastPlanDayFromStorage());
   const [clearTrackModalOpen, setClearTrackModalOpen] = useState(false);
   const [clearConfirmText, setClearConfirmText] = useState('');
+
+  const handlePlanSelectDay = useCallback((day: number) => {
+    if (day >= 1 && day <= 15) {
+      setPlanSelectedDay(day);
+      try {
+        localStorage.setItem(STORAGE_KEY_LAST_PLAN_DAY, String(day));
+      } catch {
+        // ignore
+      }
+    }
+  }, []);
 
   // Live query data from Dexie
   const problems = useLiveQuery(() => db.problems.toArray(), [], [] as Problem[]);
@@ -211,6 +238,13 @@ function AppContent() {
 
   const handleClearTrack = async () => {
     await clearAllUserData();
+    try {
+      localStorage.removeItem(STORAGE_KEY_LAST_PLAN_DAY);
+      localStorage.removeItem('blind75_last_plan_day');
+    } catch {
+      // ignore
+    }
+    setPlanSelectedDay(0);
     setActiveProblemId(null);
   };
 
@@ -326,7 +360,7 @@ function AppContent() {
                 onOpenProblem={handleOpenProblem}
                 onUpdateProgress={handleUpdateProgress}
                 onNavigateToPlanDay={(day) => {
-                  setPlanSelectedDay(day);
+                  handlePlanSelectDay(day);
                   setCurrentTab('plan');
                 }}
                 onNavigateToUnsolvedBehind={() => {
@@ -340,7 +374,8 @@ function AppContent() {
                 problems={problems}
                 progressMap={progressMap}
                 settings={settings}
-                selectedDay={planSelectedDay}
+                selectedDay={planSelectedDay > 0 ? planSelectedDay : calculateCurrentPlanDay(settings.startDate)}
+                onSelectDay={handlePlanSelectDay}
                 onOpenProblem={handleOpenProblem}
                 onUpdateProgress={handleUpdateProgress}
               />

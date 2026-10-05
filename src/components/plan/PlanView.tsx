@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ExternalLink, CheckCircle2, ChevronRight } from 'lucide-react';
 import { Problem, Progress, Settings, ProblemStatus } from '../../types';
 import { DifficultyBadge, StatusBadge } from '../common/Badge';
@@ -10,6 +10,7 @@ interface PlanViewProps {
   progressMap: Map<number, Progress>;
   settings?: Settings;
   selectedDay?: number;
+  onSelectDay?: (day: number) => void;
   onOpenProblem: (problemId: number) => void;
   onUpdateProgress: (problemId: number, updates: Partial<Progress>) => void;
 }
@@ -19,12 +20,44 @@ export const PlanView: React.FC<PlanViewProps> = ({
   progressMap,
   settings,
   selectedDay: initialSelectedDay,
+  onSelectDay,
   onOpenProblem,
   onUpdateProgress,
 }) => {
   const startDate = settings?.startDate || '';
   const currentPlanDay = calculateCurrentPlanDay(startDate);
   const [activeDay, setActiveDay] = useState<number>(initialSelectedDay || currentPlanDay);
+  const activeTabRef = useRef<HTMLButtonElement | null>(null);
+
+  // Sync if selectedDay prop changes (e.g. from Dashboard or parent)
+  useEffect(() => {
+    if (initialSelectedDay && initialSelectedDay >= 1 && initialSelectedDay <= 15) {
+      setActiveDay(initialSelectedDay);
+    }
+  }, [initialSelectedDay]);
+
+  // Keep parent in sync with active day
+  useEffect(() => {
+    if (activeDay >= 1 && activeDay <= 15) {
+      onSelectDay?.(activeDay);
+    }
+  }, [activeDay, onSelectDay]);
+
+  // Scroll active day into view in the horizontal tabs bar if needed
+  useEffect(() => {
+    if (activeTabRef.current) {
+      activeTabRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }, [activeDay]);
+
+  const handleSelectDay = (day: number) => {
+    setActiveDay(day);
+    onSelectDay?.(day);
+  };
 
   const spoilerSafeMode = settings?.spoilerSafeMode !== false;
 
@@ -60,54 +93,105 @@ export const PlanView: React.FC<PlanViewProps> = ({
           </p>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-mono-900 border border-mono-800 text-xs font-mono text-mono-300">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-mono-900/90 border border-mono-800 text-xs font-mono shadow-sm">
           <span className="font-bold text-mono-100">Day {activeDay}</span>
-          <span className="text-mono-500">•</span>
-          <span>5 Problems</span>
+          <span className="text-mono-600">•</span>
+          <span className="text-mono-400">
+            {dayStats[activeDay - 1]?.solved}/5 Solved
+          </span>
+          {activeDay === currentPlanDay && (
+            <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-mono-800 text-mono-200 border border-mono-700">
+              Today
+            </span>
+          )}
         </div>
       </div>
 
       {/* DAY SELECTOR TABS (DAY 1 TO 15) */}
-      <div className="flex items-center gap-2 overflow-x-auto py-2 scrollbar-thin">
+      <div className="flex items-center gap-2.5 overflow-x-auto py-2.5 px-0.5 scrollbar-thin">
         {dayStats.map((stat) => {
           const isActive = stat.day === activeDay;
+          const pct = Math.round((stat.solved / stat.total) * 100);
+
           return (
             <button
               key={stat.day}
+              ref={isActive ? activeTabRef : undefined}
               type="button"
-              onClick={() => setActiveDay(stat.day)}
-              className={`flex flex-col items-center justify-between min-w-[76px] px-3 py-2 rounded-xl border transition-all shrink-0 ${
+              onClick={() => handleSelectDay(stat.day)}
+              className={`group flex flex-col justify-between min-w-[110px] sm:min-w-[118px] h-[78px] p-2.5 sm:p-3 rounded-xl border transition-all shrink-0 text-left ${
                 isActive
-                  ? 'bg-mono-100 text-mono-950 border-mono-100 font-bold shadow-lg ring-2 ring-mono-100/30'
-                  : 'bg-mono-900 text-mono-400 border-mono-800 hover:border-mono-700 hover:text-mono-200'
+                  ? 'bg-mono-850 border-mono-300 text-mono-100 ring-2 ring-mono-100/20 shadow-lg'
+                  : 'bg-mono-900/90 border-mono-800 text-mono-400 hover:border-mono-700 hover:bg-mono-850/80 hover:text-mono-200 shadow-sm'
               }`}
             >
-              <div className="h-4 flex items-center justify-center">
-                {stat.isToday ? (
-                  <span
-                    className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider uppercase ${
-                      isActive
-                        ? 'bg-mono-950 text-white'
-                        : 'bg-mono-800 text-mono-200 border border-mono-700'
-                    }`}
-                  >
-                    TODAY
-                  </span>
-                ) : (
-                  <span className="text-[9px] opacity-0 select-none">PAD</span>
-                )}
+              {/* TOP ROW: DAY TITLE & STATUS BADGES */}
+              <div className="flex items-center justify-between gap-1.5 w-full">
+                <span
+                  className={`text-xs font-mono font-bold tracking-tight ${
+                    isActive ? 'text-white' : 'text-mono-200 group-hover:text-white'
+                  }`}
+                >
+                  Day {stat.day}
+                </span>
+
+                <div className="flex items-center gap-1 shrink-0">
+                  {stat.isToday && (
+                    <span
+                      className={`px-1.5 py-0.5 rounded text-[8.5px] font-mono font-extrabold tracking-wider uppercase ${
+                        isActive
+                          ? 'bg-mono-100 text-mono-950 shadow-xs'
+                          : 'bg-mono-800 text-mono-200 border border-mono-700'
+                      }`}
+                    >
+                      TODAY
+                    </span>
+                  )}
+                  {stat.isCompleted && (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  )}
+                </div>
               </div>
-              <span className="text-xs font-mono font-semibold mt-0.5">Day {stat.day}</span>
-              <div className="flex items-center gap-1 mt-1 text-[11px] font-mono">
-                {stat.isCompleted ? (
-                  <CheckCircle2
-                    className={`w-3.5 h-3.5 ${isActive ? 'text-black' : 'text-emerald-400'}`}
+
+              {/* BOTTOM ROW: SOLVED COUNT & MINI PROGRESS BAR */}
+              <div className="flex flex-col gap-1.5 w-full mt-auto">
+                <div className="flex items-center justify-between text-[11px] font-mono leading-none">
+                  {stat.isCompleted ? (
+                    <span className="text-emerald-400 font-medium">5/5 Solved</span>
+                  ) : stat.solved > 0 ? (
+                    <span className={isActive ? 'text-mono-200 font-medium' : 'text-mono-300'}>
+                      {stat.solved}/5 solved
+                    </span>
+                  ) : (
+                    <span className={isActive ? 'text-mono-400' : 'text-mono-500'}>
+                      0/5 solved
+                    </span>
+                  )}
+
+                  {stat.solved > 0 && !stat.isCompleted && (
+                    <span className="text-[10px] text-mono-500 font-mono">
+                      {pct}%
+                    </span>
+                  )}
+                </div>
+
+                {/* PROGRESS TRACK */}
+                <div
+                  className={`w-full h-1 rounded-full overflow-hidden ${
+                    isActive ? 'bg-mono-800' : 'bg-mono-850'
+                  }`}
+                >
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${
+                      stat.isCompleted
+                        ? 'bg-emerald-400'
+                        : isActive
+                        ? 'bg-mono-200'
+                        : 'bg-mono-500'
+                    }`}
+                    style={{ width: `${pct}%` }}
                   />
-                ) : (
-                  <span className={isActive ? 'text-mono-800 font-medium' : 'text-mono-500'}>
-                    {stat.solved}/{stat.total}
-                  </span>
-                )}
+                </div>
               </div>
             </button>
           );
